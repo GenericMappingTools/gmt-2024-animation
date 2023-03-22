@@ -21,7 +21,7 @@ help::
 #!
 #---------------------------------------------------------------------------
 # List of scripts creating illustrations
-FIG=	Fig_events_curves.sh	Fig_movie_progress.sh	Fig_title_fade.sh
+FIG=	Fig_canvas.sh	Fig_events_curves.sh	Fig_movie_progress.sh	Fig_title_fade.sh
 
 # List of scripts creating animations
 MOVIE=	Movie_events.sh
