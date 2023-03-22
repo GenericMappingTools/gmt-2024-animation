@@ -3,6 +3,7 @@
 # ILlustration of the time-line of a movie with optional title
 # and fade sequence.
 #
+# Wessel, Esteban, & Delaviel-Anger, 2023
 
 # Determine if we need to specify an output directory or not
 if [ "X${1}" = "X" ]; then

@@ -2,7 +2,7 @@
 
 The Generic Mapping Tools and Animations for the Masses
 
-	P. Wessel, F. Esteban, and G. Avenger-D...
+	P. Wessel, F. Esteban, and G. Delaviel-Anger
 	
 Illustration and movie scripts for 2023 publication on GMT animations
 

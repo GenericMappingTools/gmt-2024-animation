@@ -1,7 +1,7 @@
 #
 # Makefile for
 #
-# Wessel, P., Esteban, F. and A-D, G., 2023
+# Wessel, P., Esteban, F. and Delaviel-Anger, G., 2023
 #   The Generic Mapping Tools and Animations for the Masses,
 #	<journal TBD>
 #

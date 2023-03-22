@@ -2,6 +2,8 @@
 #
 # Movie_events.sh
 #
+# Wessel, Esteban, & Delaviel-Anger, 2023
+#
 # Create a short MP4 showing the life of two simple events.
 # Both events starts at 0 and ends at 1, but we add rise
 # and fade and coda to one of them (red) and let the other

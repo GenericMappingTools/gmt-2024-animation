@@ -2,11 +2,13 @@
 #
 # Makes a plot of the six movie progress indicators available
 #
+# Wessel, Esteban, & Delaviel-Anger, 2023
+#
 # Make dummy map script for static "movie"
 cat << EOF > map.sh
 gmt begin
 	gmt set GMT_THEME cookbook
-	gmt basemap -R0/10/0/5 -JX7.6i/3.4i -Bafg -BWSrt+gbeige
+	gmt basemap -R0/10/0/5 -JX7.6i/3.4i -Bafg -BWSrt+glightgray
 gmt end
 EOF
 if [ "X{$1}" = "X" ]; then
