@@ -7,10 +7,10 @@
 # Create a short MP4 showing the life of two simple events.
 # Both events starts at 0 and ends at 1, but we add rise
 # and fade and coda to one of them (red) and let the other
-# be plain (blue) and only show from 0-1.
+# be plain (green) and only show from 0-1.
 
 echo 20 6 0 1 Red Label  > red.txt
-echo  0 6 0 1 Blue Label > blue.txt
+echo  0 6 0 1 Green Label > green.txt
 cat <<- EOF > labels.txt
 -0.125 2 RISE
 0.125 2 PLATEAU
@@ -49,7 +49,7 @@ gmt begin
 	gmt math -T1.1/1.25/0.05 1 T 1 SUB 0.25 DIV SUB 0.75 MUL 0.25 ADD = >> size_vs_time.txt
 	# Code (t = 1.25 to 1.5 symbol size stays at 0.25 during code)
 	gmt math -T1.3/1.5/0.1 0.25 = >> size_vs_time.txt
-	gmt plot -R-0.5/1.5/-0.1/2.1 -JX13.2c/2c -X4.4c -Y2.25c stepfunction.txt -W5p,lightblue@50
+	gmt plot -R-0.5/1.5/-0.1/2.1 -JX13.2c/2c -X4.4c -Y2.25c stepfunction.txt -W5p,green@50
 	gmt plot size_vs_time.txt -W1p,red -BW -Bafg0.25+l"Size scale"
 	gmt text -F+f8p+jBC -Dj6p -N labels.txt
 gmt end
@@ -58,15 +58,15 @@ cat << 'EOF' > main.sh
 gmt begin
 	gmt events red.txt -T${MOVIE_COL0} -R-20/40/1/9 -JX20c/10c -B -Es+r0.25+p0.25+d0.25+f0.25 \
 		-Et+o0.25 -Sc2c -Gred -W1p -Ms2+c0.25 -Mi1+c-0.5 -Mt100+c50 -F+f18p+jBC -Dj3c -L -X1c -Y1c
-	gmt events blue.txt -T${MOVIE_COL0} -Sc2c -Gblue -W1p -F+f18p+jBC -Dj3c -L -E
+	gmt events green.txt -T${MOVIE_COL0} -Sc2c -Ggreen -W1p -F+f18p+jBC -Dj3c -L -E
 	gmt sample1d size_vs_time.txt -T${MOVIE_COL0}, -Fl | gmt plot -Sc4p -Gred -R-0.5/1.5/-0.1/2.1 \
 	-JX13.2c/2c -N -X3.4c -Y1.25c
-	gmt sample1d normal.txt -T${MOVIE_COL0}, -Fl | gmt plot -Sc2p -Gblue -N
+	gmt sample1d normal.txt -T${MOVIE_COL0}, -Fl | gmt plot -Sc2p -Ggreen -N
 gmt end
 EOF
 gmt movie -C22cx12cx100 main.sh -Sbpre.sh -NMovie_events -T-0.5/1.5/0.01 -D24 -Fmp4 -Lc0 -Lf+jTR \
 -Pf+jBC+o0/1.5c+ac -M150,png -Zs
-rm -f blue.txt red.txt normal.txt labels.txt stepfunction.txt
+rm -f green.txt red.txt normal.txt labels.txt stepfunction.txt
 mkdir -p mp4
 mv -f Movie_events.mp4 mp4
 mv -f Movie_events.png png
