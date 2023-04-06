@@ -7,11 +7,11 @@ gmt set PROJ_ELLIPSOID Sphere
 
 # Escalas del viaje
 cat << 'FILE' > cities.txt
-40.711913, -74.007135, New York
-47.561598, -52.712229, St Johns (Terranova)
-37.741556, -25.696368, Sao Miguel (Azores)
-38.775808, -9.135406, Lisboa (Portugal)
-45.502971, 12.342151, Venecia (Italia)
+40.712, -74.007, New York
+47.562, -52.712, St Johns (Terranova)
+37.742, -25.696, Sao Miguel (Azores)
+38.776, -9.135, Lisboa (Portugal)
+45.503,  12.342, Venecia (Italia)
 FILE
     L=$(gmt mapproject -G+uk cities.txt  --PROJ_ELLIPSOID=Sphere | gmt convert -El -o2)
     dx=$(gmt math -Q ${L} 30 24 MUL DIV =)
