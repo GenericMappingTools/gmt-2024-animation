@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-title=IndianaJones_Flight_NY-Venice
+title=IndianaJones_Flight
 
 cat << 'EOF' > pre.sh
 gmt begin
@@ -14,18 +14,18 @@ gmt begin
 	 12.342	45.503	Venice (Italy)
 	FILE
     animation_duration=30  # in seconds
-    dist_to_Venice=$(gmt mapproject -G+uk cities.txt | gmt convert -El -o2)
-    line_increment=$(gmt math -Q ${dist_to_Venice} ${animation_duration} ${MOVIE_RATE} MUL DIV =)
-    gmt sample1d cities.txt -T${line_increment}k+a > time.txt
+    dist_to_Venice=$(gmt mapproject -G+uk cities.txt | gmt convert -El -o2)  # in km
+    line_increment_per_frame=$(gmt math -Q ${dist_to_Venice} ${animation_duration} ${MOVIE_RATE} MUL DIV =)  # in km
+    gmt sample1d cities.txt -T${line_increment_per_frame}k+a > distance_vs_frame.txt
 gmt end
 EOF
 
 cat << 'EOF' > main.sh
 gmt begin
 	gmt coast -R480/270+uk -JG${MOVIE_COL0}/${MOVIE_COL1}/${MOVIE_WIDTH} -Bg0 -Df -G200 -Sdodgerblue2 -N1/0.2,- -Y0 -X0
-	gmt events time.txt -Ar -T${MOVIE_COL2} -Es -W2p,red
+	gmt events distance_vs_frame.txt -Ar -T${MOVIE_COL2} -Es -W3p,red
 gmt end
 EOF
 
 #	Create animation
-gmt movie main.sh -Sbpre.sh -N$title -Ttime.txt -Chd -Fmp4 -Zs
+gmt movie main.sh -Sbpre.sh -N${title} -Tdistance_vs_frame.txt -Chd -Fmp4 -Zs -Vi
