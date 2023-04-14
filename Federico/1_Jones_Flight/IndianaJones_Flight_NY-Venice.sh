@@ -3,29 +3,29 @@ title=IndianaJones_Flight_NY-Venice
 
 cat << 'EOF' > pre.sh
 gmt begin
-gmt set PROJ_ELLIPSOID Sphere
+	gmt set PROJ_ELLIPSOID Sphere
 
-# Escalas del viaje
-cat << 'FILE' > cities.txt
-40.712, -74.007, New York
-47.562, -52.712, St Johns (Terranova)
-37.742, -25.696, Sao Miguel (Azores)
-38.776, -9.135, Lisboa (Portugal)
-45.503,  12.342, Venecia (Italia)
-FILE
-    L=$(gmt mapproject -G+uk cities.txt  --PROJ_ELLIPSOID=Sphere | gmt convert -El -o2)
-    dx=$(gmt math -Q ${L} 30 24 MUL DIV =)
-    gmt sample1d "cities.txt" -I${dx}k -fg -i1,0 | gmt mapproject -G+uk > "tmp_time.txt"
-    gmt events -Rd "tmp_time.txt" -Ar100c > tmp_points.txt
+	# Dr. Jones stopover cities
+	cat <<- 'FILE' > cities.txt
+	-74.007	40.712	New York (USA)
+	-52.712	47.562	St Johns (Terranova)
+	-25.696	37.742	Sao Miguel (Azores)
+	-9.135	38.776	Lisbon (Portugal)
+	 12.342	45.503	Venice (Italy)
+	FILE
+    animation_duration=30  # in seconds
+    dist_to_Venice=$(gmt mapproject -G+uk cities.txt | gmt convert -El -o2)
+    line_increment=$(gmt math -Q ${dist_to_Venice} ${animation_duration} ${MOVIE_RATE} MUL DIV =)
+    gmt sample1d cities.txt -T${line_increment}k+a > time.txt
 gmt end
 EOF
 
 cat << 'EOF' > main.sh
 gmt begin
-    gmt coast -R-800/800/-450/450+uk -JG${MOVIE_COL0}/${MOVIE_COL1}/24c -Bg0 -Df -G200 -Sdodgerblue2 -N1/0.2,- -Y0p -X0p
-    gmt events tmp_time.txt -Ar -T${MOVIE_COL2} -Es -W2p,red
+	gmt coast -R480/270+uk -JG${MOVIE_COL0}/${MOVIE_COL1}/${MOVIE_WIDTH} -Bg0 -Df -G200 -Sdodgerblue2 -N1/0.2,- -Y0 -X0
+	gmt events time.txt -Ar -T${MOVIE_COL2} -Es -W2p,red
 gmt end
 EOF
 
 #	Create animation
-gmt movie main.sh -Sbpre.sh -N$title -Ttmp_time.txt -Chd -Vi -Ml,png -Fmp4 -Zs
+gmt movie main.sh -Sbpre.sh -N$title -Ttime.txt -Chd -Fmp4 -Zs
