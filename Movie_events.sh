@@ -74,7 +74,7 @@ gmt end
 EOF
 # Run the movie and add frame counter and horizontal time-progress bar
 gmt movie -C22cx12cx100 main.sh -Sbpre.sh -NMovie_events -T-0.5/1.5/0.01 -D24 -Fmp4 -Lc0 -Lf+jTR \
--Pf+jBC+o0/1.5c+ac -M150,png -Zs
+-Pf+jBC+o0/1.5c+ac -M150,png -Zs -V
 # Delete temporary files
 rm -f green.txt red.txt normal.txt labels.txt stepfunction.txt
 mkdir -p mp4
