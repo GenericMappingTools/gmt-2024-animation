@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-title=IndianaJones_Flight_NY-Venice
+title=IndianaJones_Flight_Complex
 
 # File with variables used 
 cat << 'EOF' > in.sh
