@@ -37,4 +37,4 @@ gmt end
 EOF
 
 #	Create animation
-gmt movie main.sh -Iin.sh -Sbpre.sh -N${title} -Tdistance_vs_frame.txt -Chd -Vi -D24 -H4 -Ml,png -Fmp4 -Zs
+gmt movie main.sh -Iin.sh -Sbpre.sh -N${title} -Tdistance_vs_frame.txt -Chd -Vi -D24 -H4 -Ml,png -Fmp4 -K+p -Zs
