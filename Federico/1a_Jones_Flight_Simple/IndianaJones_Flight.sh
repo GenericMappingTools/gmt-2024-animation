@@ -14,7 +14,7 @@ EOF
 
 cat << 'EOF' > pre.sh
 gmt begin
-    gmt sample1d cities.txt -T10k+a > distance_vs_frame.txt -AR+l
+    gmt sample1d cities.txt -T10k+a > distance_vs_frame.txt
 gmt end
 EOF
 
@@ -26,4 +26,4 @@ gmt end
 EOF
 
 #	Create animation
-gmt movie main.sh -Iin.sh -Sbpre.sh -NIndianaJones_Flight -Tdistance_vs_frame.txt -CHD -Fmp4 -Zs -Vi
+gmt movie main.sh -Iin.sh -Sbpre.sh -NIndianaJones_Flight -Tdistance_vs_frame.txt -Cfhd -Fmp4 -Zs -Vi
