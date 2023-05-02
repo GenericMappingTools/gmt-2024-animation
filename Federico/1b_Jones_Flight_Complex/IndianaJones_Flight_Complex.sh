@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+title=IndianaJones_Flight_Complex_WIP
 
 # File with variables used 
 cat << 'EOF' > in.sh
@@ -14,6 +15,21 @@ cat << 'EOF' > in.sh
     animation_duration=30  # in seconds
 EOF
 
+# 1. Make a title slide explaining things
+cat << 'EOF' > title.sh
+gmt begin
+	echo "12 11.5 Dr. Jones flight to Venice on his Last Crusade" | gmt text -R0/24/0/13.5 -Jx1c -F+f26p,Helvetica-Bold+jCB -X0 -Y0
+	gmt text -M -F+f14p <<- END
+	> 12 6.5 16p 20c j
+	We will simulate the flight path from New York to Venice trough three stopovers.
+	We first do some maths to have a fix duration of the movie. 
+    Then, we interpolate between the cities along a rhumb line.
+	We also make a separate file for the label.
+	Finally we make a Mercator map a map centered on the changing longitude and latitude.
+    We draw the path with a red lines. The name of the cities will appear along with a circle showing its location.
+	END
+gmt end #show
+EOF
 cat << 'EOF' > pre.sh
 gmt begin
 	gmt set PROJ_ELLIPSOID Sphere
@@ -36,4 +52,10 @@ gmt end
 EOF
 
 #	Create animation
-gmt movie main.sh -Iin.sh -Sbpre.sh -NIndianaJones_Flight_Complex -Tdistance_vs_frame.txt -Cfhd -Fmp4 -Zs -Vi -D24 -K+p
+#gmt movie main.sh -Iin.sh -Sbpre.sh -NIndianaJones_Flight_Complex -Tdistance_vs_frame.txt -Cfhd -Fmp4 -Zs -Vi -D60 -K+p
+gmt movie main.sh -Iin.sh -Sbpre.sh -N${title} -Tdistance_vs_frame.txt -Etitle.sh+d6s+fo1s+gwhite -C480p -Fmp4 -Vi -D24 -K+gblack+p -Zs
+
+#	Add audio track
+    #ffmpeg -loglevel warning -ss 14 -i RaidersMarch.mp3 cut.mp3
+#    ffmpeg -loglevel warning -i $title.mp4 -y -i trim.mp3 ${title}_final.mp4
+
