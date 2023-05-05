@@ -12,7 +12,8 @@ cat << 'EOF' > in.sh
 	 12.342	45.503	Venice
 	FILE
 
-    animation_duration=30  # in seconds
+    animation_duration=26.963  # in seconds
+
 EOF
 
 # 1. Make a title slide explaining things
@@ -34,7 +35,7 @@ cat << 'EOF' > pre.sh
 gmt begin
 	gmt set PROJ_ELLIPSOID Sphere
 	dist_to_Venice=$(gmt mapproject -G+uk cities.txt | gmt convert -El -o2)
-    line_increment_per_frame=$(gmt math -Q ${dist_to_Venice} ${animation_duration} ${MOVIE_RATE} MUL DIV =)  # in km
+    line_increment_per_frame=$(gmt math -Q ${dist_to_Venice} -1 ${animation_duration} ${MOVIE_RATE} MUL ADD DIV =) # in km
     gmt sample1d cities.txt -T${line_increment_per_frame}k+a > distance_vs_frame.txt -AR+l
     gmt mapproject cities.txt -G+uk > labels.txt
 gmt end
@@ -46,16 +47,14 @@ gmt begin
    	gmt events distance_vs_frame.txt -W3p,red -T${MOVIE_COL2} -Es -Ar
 
 #   Plot labels
-#   gmt events labels.txt -T${MOVIE_COL2} -L500 -Mt100+c100 -F+f18p+jTC -Dj1c -Et+r100+f100+o-250                # Paul's original commando
     gmt events labels.txt -T${MOVIE_COL2} -L500 -Mt100+c100 -F+f18p+jTC -Dj1c -E+r100+f100+o-250 -Gred -Sc0.3c   # Modified to plot also the circles
 gmt end
 EOF
 
 #	Create animation
 #gmt movie main.sh -Iin.sh -Sbpre.sh -NIndianaJones_Flight_Complex -Tdistance_vs_frame.txt -Cfhd -Fmp4 -Zs -Vi -D60 -K+p
-gmt movie main.sh -Iin.sh -Sbpre.sh -N${title} -Tdistance_vs_frame.txt -Etitle.sh+d6s+fo1s+gwhite -C480p -Fmp4 -Vi -D24 -K+gblack+p -Zs
+gmt movie main.sh -Iin.sh -Sbpre.sh -N${title} -Tdistance_vs_frame.txt -Etitle.sh+d6s+fo1s -Cfhd -Fmp4 -Vi -D48 -K+p -Zs
 
 #	Add audio track
     #ffmpeg -loglevel warning -ss 14 -i RaidersMarch.mp3 cut.mp3
 #    ffmpeg -loglevel warning -i $title.mp4 -y -i trim.mp3 ${title}_final.mp4
-

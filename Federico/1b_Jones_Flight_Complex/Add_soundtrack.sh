@@ -5,11 +5,16 @@
 
 infile=RaidersMarch.mp3
 outfile=trim.mp3
-begin=0 # seconds
+begin=0.478 # seconds
+begin=0.5 # seconds
 #duration=30 # seconds
 #ffprobe -i IndianaJones_Flight_Complex_WIP.mp4 -show_entries format=duration -v quiet -of csv="p=0"
 duration=$(ffprobe -i IndianaJones_Flight_Complex_WIP.mp4 -show_entries format=duration -v quiet -of csv="p=0")
+echo $duration
 video=IndianaJones_Flight_Complex_WIP
+#video=WIP3
 
 ffmpeg -loglevel warning -ss $begin -y -i $infile -t $duration $outfile
 ffmpeg -loglevel warning -i ${video}.mp4 -y -i $outfile ${video}_final.mp4
+
+rm $outfile
