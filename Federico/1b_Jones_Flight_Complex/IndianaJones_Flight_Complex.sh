@@ -13,6 +13,7 @@ cat << 'EOF' > in.sh
 	FILE
 
     animation_duration=26.963  # in seconds
+    animation_duration=27 # in seconds
 
 EOF
 
@@ -52,9 +53,16 @@ gmt end
 EOF
 
 #	Create animation
-#gmt movie main.sh -Iin.sh -Sbpre.sh -NIndianaJones_Flight_Complex -Tdistance_vs_frame.txt -Cfhd -Fmp4 -Zs -Vi -D60 -K+p
-gmt movie main.sh -Iin.sh -Sbpre.sh -N${title} -Tdistance_vs_frame.txt -Etitle.sh+d6s+fo1s -Cfhd -Fmp4 -Vi -D48 -K+p -Zs
+gmt movie main.sh -Iin.sh -Sbpre.sh -Ntmp_${title} -Tdistance_vs_frame.txt -Etitle.sh+d6s+fo1s -Cfhd -Fmp4 -Vi -D60 -K+p -Zs
 
 #	Add audio track
-    #ffmpeg -loglevel warning -ss 14 -i RaidersMarch.mp3 cut.mp3
-#    ffmpeg -loglevel warning -i $title.mp4 -y -i trim.mp3 ${title}_final.mp4
+# Get lenght of the animation    
+duration=$(ffprobe -i tmp_${title}.mp4 -show_entries format=duration -v quiet -of csv="p=0")
+
+# Trim soundtrack from the 0.5 seconds
+ffmpeg -loglevel warning -ss 0.5 -y -i RaidersMarch.mp3 -t $duration tmp_trim.mp3
+
+# Add soundtrack
+ffmpeg -loglevel warning -i tmp_${title}.mp4 -y -i tmp_trim.mp3 ${title}.mp4
+
+rm tmp_*
