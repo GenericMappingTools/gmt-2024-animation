@@ -20,16 +20,18 @@ EOF
 # 1. Make a title slide explaining things
 cat << 'EOF' > title.sh
 gmt begin
-	echo "12 11.5 Dr. Jones flight to Venice on his Last Crusade" | gmt text -R0/24/0/13.5 -Jx1c -F+f26p,Helvetica-Bold+jCB -X0 -Y0
+	echo "12 11.5 Dr. Jones' flight to Venice on his Last Crusade" | gmt text -R0/24/0/13.5 -Jx1c -F+f26p,Helvetica-Bold+jCB -X0 -Y0
 	gmt text -M -F+f14p <<- END
 	> 12 6.5 16p 20c j
 	We will simulate the flight path from New York to Venice trough three stopovers.
-	We first do some maths to have a fix duration of the movie. 
+	First, we do some calculations to set a fixed duration of the movie. 
     Then, we interpolate between the cities along a rhumb line.
-	We also make a separate file for the label.
-	Finally we make a Mercator map a map centered on the changing longitude and latitude.
-    We draw the path with a red lines. The name of the cities will appear along with a circle showing its location.
+	We also make a separate file for the labels.
+	Finally, we make a Mercator map centered on the changing longitude and latitude.
+    We draw the path with a red line. The name of the cities will appear along with a circle showing its location.
 	END
+	# Place the GMT logo at the bottom center
+	gmt logo -DjBC+w6c+o0/1c
 gmt end #show
 EOF
 cat << 'EOF' > pre.sh
@@ -56,13 +58,13 @@ EOF
 gmt movie main.sh -Iin.sh -Sbpre.sh -Ntmp_${title} -Tdistance_vs_frame.txt -Etitle.sh+d6s+fo1s -Cfhd -Fmp4 -Vi -D60 -K+p -Zs
 
 #	Add audio track
-# Get lenght of the animation    
+# Get length of the animation    
 duration=$(ffprobe -i tmp_${title}.mp4 -show_entries format=duration -v quiet -of csv="p=0")
 
-# Trim soundtrack from the 0.5 seconds
+# Trim soundtrack from the 0.5 seconds time point
 ffmpeg -loglevel warning -ss 0.5 -y -i RaidersMarch.mp3 -t $duration tmp_trim.mp3
 
-# Add soundtrack
+# Add soundtrack to the animation
 ffmpeg -loglevel warning -i tmp_${title}.mp4 -y -i tmp_trim.mp3 ${title}.mp4
 
 rm tmp_*
