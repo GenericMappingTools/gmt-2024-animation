@@ -11,10 +11,8 @@ cat << 'EOF' > in.sh
 	-9.135	38.776	Lisbon
 	 12.342	45.503	Venice
 	FILE
-
-    animation_duration=26.963  # in seconds
+     
     animation_duration=27 # in seconds
-
 EOF
 
 # 1. Make a title slide explaining things
@@ -31,8 +29,9 @@ gmt begin
     We draw the path with a red line. The name of the cities will appear along with a circle showing its location.
 	END
 	# Place the GMT logo at the bottom center
+    gmt image indiana-jones-logo.png -DjBR+jBR+w9c+o2/1c
 	gmt logo -DjBC+w6c+o0/1c
-gmt end #show
+gmt end
 EOF
 cat << 'EOF' > pre.sh
 gmt begin
