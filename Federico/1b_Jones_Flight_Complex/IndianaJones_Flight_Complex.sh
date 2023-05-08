@@ -30,7 +30,7 @@ gmt begin
 	END
 	# Place the GMT logo at the bottom center
     gmt image indiana-jones-logo.png -DjBR+jBR+w9c+o2/1c
-	gmt logo -DjBC+w6c+o0/1c
+	gmt logo -DjBL+w6c+o0/1c
 gmt end
 EOF
 cat << 'EOF' > pre.sh
