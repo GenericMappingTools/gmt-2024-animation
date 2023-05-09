@@ -46,7 +46,6 @@ gmt end
 EOF
 cat << 'EOF' > pre.sh
 gmt begin
-	#gmt set PROJ_ELLIPSOID Sphere
 	# Get length of travel and compute line increment in km per frame
 	dist_to_Venice=$(gmt mapproject -G+uk cities.txt | gmt convert -El -o2)
     line_increment_per_frame=$(gmt math -Q ${dist_to_Venice} -1 ${animation_duration} ${MOVIE_RATE} MUL ADD DIV =) # in km
@@ -64,21 +63,14 @@ gmt begin
 	# Draw the flight path from start to now
    	gmt events distance_vs_frame.txt -W3p,red -T${MOVIE_COL2} -Es -Ar
 	# Plot labels that appear/disappear when plan reaches the cities
-    gmt events labels.txt -T${MOVIE_COL2} -L500 -Mt100+c100 -F+f18p+jTC -Dj1c -E+r100+f100+o-250 -Gred -Sc0.3c   # Modified to plot also the circles
+    gmt events labels.txt -T${MOVIE_COL2} -L500 -Mt100+c100 -F+f18p+jTC -Dj1c -E+r100+f100+o-250 -Gred -Sc0.3c
 gmt end
 EOF
 
 #	Create animation
 gmt movie main.sh -Iin.sh -Sbpre.sh -Ntmp_${title} -Tdistance_vs_frame.txt -Etitle.sh+d6s+fo1s -Cfhd -Fmp4 -Vi -D60 -K+p -Zs
 
-#	Add audio track
-# Get length of the animation    
-duration=$(ffprobe -i tmp_${title}.mp4 -show_entries format=duration -v quiet -of csv="p=0")
-
-# Trim soundtrack from the 0.5 seconds time point
-ffmpeg -loglevel warning -ss 0.5 -y -i RaidersMarch.mp3 -t $duration tmp_trim.mp3
-
 # Add soundtrack to the animation
-ffmpeg -loglevel warning -i tmp_${title}.mp4 -y -i tmp_trim.mp3 ${title}.mp4
+ffmpeg -loglevel warning -i tmp_${title}.mp4 -y -i RaidersMarch_trim.mp3 ${title}.mp4
 
 rm tmp_*
