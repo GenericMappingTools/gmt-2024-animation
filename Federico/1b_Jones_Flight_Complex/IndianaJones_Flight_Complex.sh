@@ -6,9 +6,9 @@
 #
 # Create a more complex Indiana Jones flight animation where
 # we make some further changes to the initial animation:
-# 1. Add a title sequences to explain what the movie illustrates.
-# 2. Plot a city circle and label when plan is within 250 km of city
-# 3. Add the Raiders of the Lost Arc soundtrack
+#   1. Add a title sequences to explain what the movie illustrates.
+#   2. Plot a city circle and label when plane is within 250 km of city
+#   3. Add the Raiders of the Lost Arc soundtrack
 
 title=IndianaJones_Flight_Complex
 
