@@ -1,4 +1,15 @@
 #!/usr/bin/env bash
+#
+# Movie_events.sh
+#
+# Wessel, Esteban, & Delaviel-Anger, 2023
+#
+# Create a more complex Indiana Jones flight animation where
+# we make some further changes to the initial animation:
+# 1. Add a title sequences to explain what the movie illustrates.
+# 2. Plot a city circle and label when plan is within 250 km of city
+# 3. Add the Raiders of the Lost Arc soundtrack
+
 title=IndianaJones_Flight_Complex
 
 # File with variables used 
@@ -28,27 +39,31 @@ gmt begin
 	Finally, we make a Mercator map centered on the changing longitude and latitude.
     We draw the path with a red line. The name of the cities will appear along with a circle showing its location.
 	END
-	# Place the GMT logo at the bottom center
+	# Place the GMT logo and Indiana Jones movie logo along the bottom
     gmt image indiana-jones-logo.png -DjBR+jBR+w9c+o2/1c
-	gmt logo -DjBL+w6c+o0/1c
+	gmt logo -DjBL+w6c+o2c/1c
 gmt end
 EOF
 cat << 'EOF' > pre.sh
 gmt begin
-	gmt set PROJ_ELLIPSOID Sphere
+	#gmt set PROJ_ELLIPSOID Sphere
+	# Get length of travel and compute line increment in km per frame
 	dist_to_Venice=$(gmt mapproject -G+uk cities.txt | gmt convert -El -o2)
     line_increment_per_frame=$(gmt math -Q ${dist_to_Venice} -1 ${animation_duration} ${MOVIE_RATE} MUL ADD DIV =) # in km
+    # Resample path between cities using rhumbline interpolation
     gmt sample1d cities.txt -T${line_increment_per_frame}k+a > distance_vs_frame.txt -AR+l
+    # Compute distance to each city to know when to place labels
     gmt mapproject cities.txt -G+uk > labels.txt
 gmt end
 EOF
 
 cat << 'EOF' > main.sh
 gmt begin
+	# Lay down land/ocean background map for the frame
 	gmt coast -JM${MOVIE_COL0}/${MOVIE_COL1}/${MOVIE_WIDTH} -Y0 -X0 -R480/270+uk -G200 -Sdodgerblue2 -N1/0.2,- 
+	# Draw the flight path from start to now
    	gmt events distance_vs_frame.txt -W3p,red -T${MOVIE_COL2} -Es -Ar
-
-#   Plot labels
+	# Plot labels that appear/disappear when plan reaches the cities
     gmt events labels.txt -T${MOVIE_COL2} -L500 -Mt100+c100 -F+f18p+jTC -Dj1c -E+r100+f100+o-250 -Gred -Sc0.3c   # Modified to plot also the circles
 gmt end
 EOF
