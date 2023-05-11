@@ -21,7 +21,7 @@ EOF
 cat << 'EOF' > main.sh
 gmt begin
 	gmt coast -JM${MOVIE_COL0}/${MOVIE_COL1}/${MOVIE_WIDTH} -Y0 -X0 -R480/270+uk -G200 -Sdodgerblue2 -N1/0.2,- 
-	gmt events distance_vs_frame.txt -W3p,red -T${MOVIE_COL2} -Es
+	gmt events distance_vs_frame.txt -W3p,red -T${MOVIE_COL2} -Es -Ar
 gmt end
 EOF
 
