@@ -8,16 +8,14 @@
 
 help::
 		@grep '^#!' Makefile | cut -c3-
-#!-------------------- MAKE HELP FOR PAPER --------------------
-#!
+#!-------------------- MAKE HELP FOR ANIMATION PAPER REPO --------------------
 #!
 #!make <target>, where <target> can be:
 #!
 #!pdf           : Just build or update PDF figures for the paper
 #!png           : Just build or update PNG figures for the paper
 #!mp4           : Just build or update MP4 animations for the paper
-#!clean         : Clean up and remove created Latex files of all types, except figs and calc
-#!spotless      : As clean, but also delete all created PDF, JPG and PNG figures
+#!clean         : Delete all created PDF, PNG and MP4 products
 #!
 #---------------------------------------------------------------------------
 # List of scripts creating illustrations
