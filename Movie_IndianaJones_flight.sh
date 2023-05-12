@@ -34,3 +34,8 @@ EOF
 
 #	Create animation
 gmt movie main.sh -Iin.sh -Sbpre.sh -NMovie_IndianaJones_flight -Tdistance_vs_frame.txt -Cfhd -Fmp4 -Zs -Vi
+
+mkdir -p mp4
+mv -f Movie_IndianaJones_flight.mp4 mp4
+mkdir -p png
+mv -f Movie_IndianaJones_flight.png png

@@ -75,3 +75,8 @@ ffmpeg -loglevel warning -i tmp_${title}.mp4 -y -i IndianaJones_RaidersMarch.mp3
 
 # Delete temporary files
 rm -f tmp_Movie_IndianaJones_flight_complex.mp4
+
+mkdir -p mp4
+mv -f Movie_IndianaJones_flight_complex.mp4 mp4
+mkdir -p png
+mv -f Movie_IndianaJones_flight_complex.png png
