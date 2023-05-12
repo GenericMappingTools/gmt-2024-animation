@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# ILlustration of the time-line of a movie with optional title
+# Illustration of the time-line of a movie with optional title
 # and fade sequence.
 #
 # Wessel, Esteban, & Delaviel-Anger, 2023
