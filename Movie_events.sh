@@ -79,5 +79,6 @@ gmt movie -C22cx12cx100 main.sh -Sbpre.sh -NMovie_events -T-0.5/1.5/0.01 -D24 -F
 rm -f green.txt red.txt normal.txt labels.txt stepfunction.txt
 mkdir -p mp4
 mv -f Movie_events.mp4 mp4
+mkdir -p png
 mv -f Movie_events.png png
 open mp4/Movie_events.mp4
