@@ -66,16 +66,9 @@ gmt begin
     gmt events labels.txt -T${MOVIE_COL2} -L500 -Mt100+c100 -F+f18p+jTC -Dj1c -E+r100+f100+o-250 -Gred -Sc0.3c
 gmt end
 EOF
-
 #	Create animation
-gmt movie main.sh -Iin.sh -Sbpre.sh -Ntmp_${title} -Tdistance_vs_frame.txt -Etitle.sh+d6s+fo1s -Cfhd -Fmp4 -Vi -D60 -K+p -Zs
-
-# Add soundtrack to the animation
-ffmpeg -loglevel warning -i tmp_${title}.mp4 -y -i IndianaJones_RaidersMarch.mp3 ${title}.mp4
-
-# Delete temporary files
-rm -f tmp_Movie_IndianaJones_flight_complex.mp4
-
+gmt movie main.sh -AIndianaJones_RaidersMarch.mp3+e -Iin.sh -Sbpre.sh -N${title} -Tdistance_vs_frame.txt -Mm,png -Etitle.sh+d6s+fo1s -Cfhd -Fmp4 -Vi -D60 -K+p -Zs
+# Place animation
 mkdir -p mp4
 mv -f Movie_IndianaJones_flight_complex.mp4 mp4
 mkdir -p png
