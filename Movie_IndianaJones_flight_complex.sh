@@ -10,8 +10,6 @@
 #   2. Plot a city circle and label when plane is within 250 km of city
 #   3. Add the Raiders of the Lost Arc soundtrack
 
-title=Movie_IndianaJones_flight_complex
-
 # 1. File with variables used 
 cat << 'EOF' > in.sh
 	# Dr. Jones stopover cities
@@ -67,7 +65,7 @@ gmt begin
 gmt end
 EOF
 #	Create animation
-gmt movie main.sh -AIndianaJones_RaidersMarch.mp3+e -Iin.sh -Sbpre.sh -N${title} -Tdistance_vs_frame.txt -Mm,png -Etitle.sh+d6s+fo1s -Cfhd -Fmp4 -Vi -D60 -K+p -Zs
+gmt movie main.sh -AIndianaJones_RaidersMarch.mp3+e -Iin.sh -Sbpre.sh -NMovie_IndianaJones_flight_complex -Tdistance_vs_frame.txt -Mm,png -Etitle.sh+d6s+fo1s -Cfhd -Fmp4 -Vi -D60 -K+p -Zs
 # Place animation
 mkdir -p mp4
 mv -f Movie_IndianaJones_flight_complex.mp4 mp4
