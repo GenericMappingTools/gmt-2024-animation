@@ -16,7 +16,7 @@ gmt begin
 #	1. Reordenar datos y agrandar
 	gmt convert Messi_Goals.txt -i1,2,3,3+s500,0 > temp_q.txt
 
-#   2. Create file with accumulative sum for the the TL label
+#   2. Create file with accumulative sum for the TL label
    #gmt math Messi_Goals.txt -C3 SUM -o0,3 = label.txt
 
 #	2. Crear lista de fechas para la animacion: Inicio/Fin/Intervalo. o: meses. y: años
