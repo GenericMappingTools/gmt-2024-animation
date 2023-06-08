@@ -17,16 +17,9 @@ gmt begin
 	gmt convert Messi_Goals.txt -i1,2,3,3+s500,0 > temp_q.txt
 
 #   2. Create file with accumulative sum for the TL label
-   #gmt math Messi_Goals.txt -C3 SUM -o0,3 = label.txt
+    gmt math Messi_Goals.txt -C3 SUM -o0,3 = | gmt sample1d -fT --TIME_UNIT=d -I1 -Fe -qo0:3: > times.txt
 
-#	2. Crear lista de fechas para la animacion: Inicio/Fin/Intervalo. o: meses. y: años
-	#gmt math -o0 -T2004-01-01T/2023-07-01T/1d T = times.txt
-  	#gmt math -o0 -T2018-01-01T/2023-07-01T/7d T = times.txt
-
-#   2. Interpolate data every 3d
-    #gmt sample1d Messi_Goals.txt -fT t7-01T/7d T = times.txt
-    gmt sample1d Messi_Goals.txt -fT --TIME_UNIT=d -I3 -Fe -o0,4 > times.txt
-
+#   3. Create static map
     gmt basemap -R\${REGION} -J\${PROJ}/\${MOVIE_WIDTH} -B+n -Y\${Y} -X0
 
 ##	a. Crear grilla para sombreado a partir del DEM
@@ -35,11 +28,9 @@ gmt begin
 ##	b. Graficar imagen satelital 
 #	gmt grdimage  @earth_day_05m -Itmp_intens.nc
     gmt grdimage  @earth_day_15m
-
 	gmt coast -Df -N1/thinnest
 
     gmt makecpt -Chot -T1/7/1 -I -H > temp_q.cpt
-
 gmt end
 EOF
 
@@ -56,11 +47,11 @@ EOF
 # 	3. Run the movie
 	gmt movie main.sh -Iin.sh -Sbpre.sh -Cfhd -Ttimes.txt -NMovie_Messi -H2 -D24 -Ml,png -Vi -Zs -Gred -Fmp4 \
 	-Lc0+jTR+o0.3/0.3+gwhite+h+r --FONT_TAG=14p,Helvetica,black --FORMAT_CLOCK_MAP=- --FORMAT_DATE_MAP=dd-mm-yyyy       \
-	#-Lc1+jTL+o0.3/0.3+gwhite+h+r
+	-Lc1+jTL+o0.3/0.3+gwhite+h+r
 
 # Place animation
 mkdir -p mp4
-mv -f Movie_IndianaJones_flight_complex.mp4 mp4
+mv -f Movie_Messi.mp4 mp4
 mkdir -p png
-mv -f Movie_IndianaJones_flight_complex.png png
+mv -f Movie_Messi.png png
 
