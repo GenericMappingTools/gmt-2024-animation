@@ -17,19 +17,16 @@ gmt begin
 	gmt convert Messi_Goals.txt -i1,2,3,3+s500,0 > temp_q.txt
 
 #   2. Create file with accumulative sum for the TL label
-    gmt math Messi_Goals.txt -C3 SUM -o0,3 = | gmt sample1d -fT --TIME_UNIT=d -I1 -Fe -qo0:3: > times.txt
+    gmt math Messi_Goals.txt -C3 SUM -o0,3 = | gmt sample1d $(gmt info Messi_Goals.txt -T3d) -Fe -fT > times.txt
 
 #   3. Create static map
     gmt basemap -R\${REGION} -J\${PROJ}/\${MOVIE_WIDTH} -B+n -Y\${Y} -X0
 
-##	a. Crear grilla para sombreado a partir del DEM
 #	gmt grdgradient @earth_relief_05m -Nt1.2 -A270 -Gtmp_intens.nc
-
-##	b. Graficar imagen satelital 
 #	gmt grdimage  @earth_day_05m -Itmp_intens.nc
-    gmt grdimage  @earth_day_15m
-	gmt coast -Df -N1/thinnest
+    gmt grdimage  @earth_day_15m  # To use while testing the script. Must be deleted for final version.
 
+	gmt coast -Df -N1/thinnest
     gmt makecpt -Chot -T1/7/1 -I -H > temp_q.cpt
 gmt end
 EOF
