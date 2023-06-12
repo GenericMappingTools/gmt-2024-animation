@@ -16,7 +16,7 @@ gmt begin
 #	1. Reordenar datos y agrandar
 	gmt convert Messi_Goals.txt -i1,2,3,3+s500,0 > temp_q.txt
 
-#   2. Create file with accumulative sum for the TL label
+#   2. Create file with dates and accumulative sum for the labels
     gmt math Messi_Goals.txt -C3 SUM -o0,3 = | gmt sample1d $(gmt info Messi_Goals.txt -T3d) -Fe -fT > times.txt
 
 #   3. Create static map
@@ -24,7 +24,7 @@ gmt begin
 
 #	gmt grdgradient @earth_relief_05m -Nt1.2 -A270 -Gtmp_intens.nc
 #	gmt grdimage  @earth_day_05m -Itmp_intens.nc
-    gmt grdimage  @earth_day_15m  # To use while testing the script. Must be deleted for final version.
+    gmt grdimage  @earth_day_15m  # Lower resolution image to use while testing the script. Must be deleted for final version.
 
 	gmt coast -Df -N1/thinnest
     gmt makecpt -Chot -T1/7/1 -I -H > temp_q.cpt
@@ -43,7 +43,7 @@ EOF
 #	----------------------------------------------------------------------------------------------------------
 # 	3. Run the movie
 	gmt movie main.sh -Iin.sh -Sbpre.sh -Cfhd -Ttimes.txt -NMovie_Messi -H2 -D24 -Ml,png -Vi -Zs -Gred -Fmp4 \
-	-Lc0+jTR+o0.3/0.3+gwhite+h+r --FONT_TAG=14p,Helvetica,black --FORMAT_CLOCK_MAP=- --FORMAT_DATE_MAP=dd-mm-yyyy       \
+	-Lc0+jTR+o0.3/0.3+gwhite+h+r --FONT_TAG=14p,Helvetica,black --FORMAT_CLOCK_MAP=- --FORMAT_DATE_MAP=dd-mm-yyyy \
 	-Lc1+jTL+o0.3/0.3+gwhite+h+r
 
 # Place animation
