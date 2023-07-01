@@ -16,8 +16,8 @@ cat << 'EOF' > in.sh
     #REGION=$(gmt info Messi_Goals.txt -i1,2 -I10)
 	PROJ=W7.5
     PROJ2=M8c
-    Y=2.73c
-    Y2=-2.5c
+    Y=0c
+    Y2=0c
 
 EOF
 
@@ -63,7 +63,7 @@ EOF
 
 #	----------------------------------------------------------------------------------------------------------
 # 	3. Run the movie
-	gmt movie main.sh -Iin.sh -Sbpre.sh -C24cx10.46cx80 -TMessi_Times.txt -NMovie_Messi_v2 -H2 -D24 -Ml,png -Vi -Zs -Fnone -Gred \
+	gmt movie main.sh -Iin.sh -Sbpre.sh -C24cx10.46cx80 -Ttimes.txt -NMovie_Messi_v2 -H2 -D24 -Ml,png -Vi -Zs -Fnone -Gred \
 	-Lc0+jTR+o0.3/0.3+gwhite+h+r --FONT_TAG=14p,Helvetica,black --FORMAT_CLOCK_MAP=- --FORMAT_DATE_MAP=dd-mm-yyyy       \
 	-Lc1+jTL+o0.3/0.3+gwhite+h+r # -Pf+ac0 #+jRM+w5.9c+o2.7/0.8c+P3,white+p1,red+a1+f11p,2,white
 
