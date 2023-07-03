@@ -2,7 +2,7 @@
 #
 # Wessel, Esteban, & Delaviel-Anger, 2023
 
-#export http_proxy="http://proxy.fcen.uba.ar:8080"
+export http_proxy="http://proxy.fcen.uba.ar:8080"
 
 # File with variables used 
 cat << 'EOF' > in.sh
@@ -12,13 +12,13 @@ cat << 'EOF' > in.sh
     REGION2=-11/18/35/54
     #REGION2=ESC # España
     #REGION2=ESC,PTC,FR,GB,DE+R0/5/0/0
-    REGION2=ESC+R1
+    REGION2=ESC+R1/1/0.2/1
     #REGION=$(gmt info Messi_Goals.txt -i1,2 -I10)
 	PROJ=W7.5
-    PROJ2=M8c
+    PROJ2=M7.5c
     Y=0c
-    Y2=0c
-
+    Y2=5p
+    #gmt get MAP_FRAME_WIDTH
 EOF
 
 cat << EOF > pre.sh
@@ -42,6 +42,8 @@ gmt begin
 	gmt coast -Df -N1/thinnest
 
 ##	c. Graficar zoom Europa W
+    gmt get MAP_FRAME_WIDTH
+
     gmt grdimage  @earth_day_03m -R\${REGION2} -J\${PROJ2} -X9c -Y\${Y2} -Bf
     gmt coast -Df -N1/thinnest
 
@@ -58,15 +60,16 @@ gmt begin
 	gmt basemap -R\${REGION} -J\${PROJ}/\${MOVIE_WIDTH} -B+n -Y\${Y} -X0
 	gmt events temp_q.txt -SE- -Ctemp_q.cpt --TIME_UNIT=d -T\${MOVIE_COL0} -Es+r6+d18 -Ms2.5+c0.5 -Mi5+c0 -Mt+c0 -Wfaint
     gmt basemap -R\${REGION2} -J\${PROJ2} -B+n -X9c -Y\${Y2}
-	#gmt events temp_q2.txt -SE- -Ctemp_q.cpt --TIME_UNIT=d -T\${MOVIE_COL0} -Es+r6+d18 -Ms2.5+c0.5 -Mi5+c0 -Mt+c0 -Wfaint
+	gmt events temp_q2.txt -SE- -Ctemp_q.cpt --TIME_UNIT=d -T\${MOVIE_COL0} -Es+r6+d18 -Ms2.5+c0.5 -Mi5+c0 -Mt+c0 -Wfaint
 gmt end
 EOF
 
 #	----------------------------------------------------------------------------------------------------------
 # 	3. Run the movie
-	gmt movie main.sh -Iin.sh -Sbpre.sh -C24cx10.475cx80 -Ttimes.txt -NMovie_Messi_v2 -W -H2 -D24 -Ml,png -Vi -Zs -Fmp4 -Gred -K+po \
+	#gmt movie main.sh -Iin.sh -Sbpre.sh -C24cx10.46cx80 -Ttimes.txt -NMovie_Messi_v2 -W -H2 -D24 -Ml,png -Vi -Zs -Gred -K+po \
+    gmt movie main.sh -Iin.sh -Sbpre.sh -Cfhd -Ttimes.txt -NMovie_Messi_v2 -W -H2 -D24 -Ml,png -Vi -Zs -Gblack -K+po \
 	-Lc0+jTR+o0.3/0.3+gwhite+h+r --FONT_TAG=14p,Helvetica,black --FORMAT_CLOCK_MAP=- --FORMAT_DATE_MAP=dd-mm-yyyy       \
-	-Lc1+jTL+o0.3/0.3+gwhite+h+r # -Pf+ac0 #+jRM+w5.9c+o2.7/0.8c+P3,white+p1,red+a1+f11p,2,white
+	-Lc1+jTL+o0.3/0.3+gwhite+h+r #  -Fmp4 -Pf+ac0 #+jRM+w5.9c+o2.7/0.8c+P3,white+p1,red+a1+f11p,2,white
 
 # Place animation
 mkdir -p mp4
