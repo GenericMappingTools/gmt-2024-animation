@@ -40,16 +40,17 @@ gmt begin
 	gmt coast -Df -N1/thinnest
     
     gmt makecpt -Chot -T1/7/1 -I -H > temp_q.cpt
-    gmt colorbar -Ctemp_q.cpt -DjBL
+    gmt colorbar -Ctemp_q.cpt -DjMR+o1c/0 -F+gwhite+p+i+s
+
+	gmt basemap -R\${REGION2} -J\${PROJ2} -A | gmt plot -Wthick,white 
 
 
 ##	c. Graficar zoom Europa W
-    gmt basemap -R\${REGION2} -J\${PROJ2} -X\${X} -Y\${Y} -Bf --MAP_FRAME_TYPE=plain
+    gmt basemap -R\${REGION2} -J\${PROJ2} -X\${X} -Y\${Y} -Bf --MAP_FRAME_TYPE=plain --MAP_FRAME_PEN=white
     #gmt grdgradient @earth_relief_05m -Nt1.2 -A270 -Gtmp_intens2.nc
     #gmt grdimage  @earth_day -Itmp_intens.nc
     gmt grdimage  @earth_day
     gmt coast -Df -N1/thinnest
-
 
 gmt end
 EOF
@@ -69,7 +70,7 @@ EOF
 # 	3. Run the movie
 	gmt movie main.sh -Iin.sh -Sbpre.sh -C${W}cx${H}cx80 -Ttimes.txt -NMovie_Messi_v2 -H2 -D24 -Ml,png -Vi -Zs -Gblack  \
     -Lc0+jTR+o0.3/0.3+gwhite+h+r --FONT_TAG=14p,Helvetica,black --FORMAT_CLOCK_MAP=- --FORMAT_DATE_MAP=dd-mm-yyyy       \
-	-Lc1+jTL+o0.3/0.3+gwhite+h+r #-Fmp4 #-Pf+ac0 #+jRM+w5.9c+o2.7/0.8c+P3,white+p1,red+a1+f11p,2,white -K+po
+	-Lc1+jTL+o0.3/0.3+gwhite+h+r #-Fmp4
 
 # Place animation
 mkdir -p mp4
