@@ -2,7 +2,7 @@
 #
 # Wessel, Esteban, & Delaviel-Anger, 2023
 
-export http_proxy="http://proxy.fcen.uba.ar:8080"
+#export http_proxy="http://proxy.fcen.uba.ar:8080"
 
 # Calculate map/canvas height
     REGION=-130/145/-40/64
@@ -39,8 +39,9 @@ gmt begin
     gmt grdimage  @earth_day
 	gmt coast -Df -N1/thinnest
     
-    gmt makecpt -Chot -T1/7/1 -I -H > temp_q.cpt
-    gmt colorbar -Ctemp_q.cpt -DjMR+o1c/0 -F+gwhite+p+i+s
+    gmt makecpt -Chot -T1/5/1 -I -H -F+c > temp_q.cpt
+    gmt colorbar -Ctemp_q.cpt -DjBR+o1c+w40% -F+gwhite+p+i+s -L0.1
+    gmt colorbar -Ctemp_q.cpt -DjBL+o1c+w40% -F+gwhite+p+i+s
 
 	gmt basemap -R\${REGION2} -J\${PROJ2} -A | gmt plot -Wthick,white 
 
