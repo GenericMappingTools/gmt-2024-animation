@@ -2,7 +2,7 @@
 #
 # Wessel, Esteban, & Delaviel-Anger, 2023
 
-#export http_proxy="http://proxy.fcen.uba.ar:8080"
+export http_proxy="http://proxy.fcen.uba.ar:8080"
 
 # Calculate map/canvas height
     REGION=-130/145/-40/64
@@ -31,27 +31,35 @@ gmt begin
 #   3. Create main map
     gmt basemap -R${REGION} -J${PROJ}/\${MOVIE_WIDTH} -B+n -Y0 -X0
 
-##	a. Crear grilla para sombreado a partir del DEM
+#	a. Crear grilla para sombreado a partir del DEM
 	#gmt grdgradient @earth_relief_05m -Nt1.2 -A270 -Gtmp_intens.nc
 
-##	b. Graficar imagen satelital 
-	#gmt grdimage  @earth_day_05m -Itmp_intens.nc
+#	b. Graficar imagen satelital 
+    #gmt grdimage  @earth_day_05m -Itmp_intens.nc
     gmt grdimage  @earth_day
 	gmt coast -Df -N1/thinnest
     
-    gmt makecpt -Chot -T1/5/1 -I -H -F+c > temp_q.cpt
-    gmt colorbar -Ctemp_q.cpt -DjBR+o1c+w40% -F+gwhite+p+i+s -L0.1
-    gmt colorbar -Ctemp_q.cpt -DjBL+o1c+w40% -F+gwhite+p+i+s
+#   c. Create and draw CPT    
+    gmt makecpt \$(gmt info Messi_Goals.txt -T1+c3) -Chot -I -F+c1 -H > temp_q.cpt
 
+    gmt colorbar -Ctemp_q.cpt -DjBL+w60% -F+gwhite+p+i+s -L0.1 -S+y"Goals"
+    
 	gmt basemap -R\${REGION2} -J\${PROJ2} -A | gmt plot -Wthick,white 
 
-
-##	c. Graficar zoom Europa W
+#	d. Plot inset with zoom in western Europe
+    
     gmt basemap -R\${REGION2} -J\${PROJ2} -X\${X} -Y\${Y} -Bf --MAP_FRAME_TYPE=plain --MAP_FRAME_PEN=white
-    #gmt grdgradient @earth_relief_05m -Nt1.2 -A270 -Gtmp_intens2.nc
-    #gmt grdimage  @earth_day -Itmp_intens.nc
-    gmt grdimage  @earth_day
+    gmt grdgradient @earth_relief_01m -Nt1.2 -A270 -Gtmp_intens2.nc  -R\${REGION2}
+    gmt grdimage  @earth_day_01m -Itmp_intens2.nc
+    #gmt grdimage  @earth_day
     gmt coast -Df -N1/thinnest
+
+    #gmt inset begin -Dx\${X}/\${Y} -F+p+s -R\${REGION2} -J\${PROJ2}
+        #gmt grdgradient @earth_relief_01m -Nt1.2 -A270 -Gtmp_intens2.nc  -R\${REGION2}
+        #gmt grdimage  @earth_day -Itmp_intens2.nc
+        #gmt grdimage  @earth_day
+        #gmt coast -Df -N1/thinnest -Bf --MAP_FRAME_TYPE=plain --MAP_FRAME_PEN=white
+    #gmt inset end
 
 gmt end
 EOF
