@@ -42,16 +42,16 @@ gmt begin
 #   c. Create and draw CPT    
     gmt makecpt \$(gmt info Messi_Goals.txt -T1+c3) -Chot -I -F+c1 -H > temp_q.cpt
 
-    gmt colorbar -Ctemp_q.cpt -DjBL+w60% -F+gwhite+p+i+s -L0.1 -S+y"Goals"
+    gmt colorbar -Ctemp_q.cpt -DjBL+o0.7c/0.5c+w60% -F+gwhite+p+i+s -L0.1 -S+y"Goals"
     
 	gmt basemap -R\${REGION2} -J\${PROJ2} -A | gmt plot -Wthick,white 
 
 #	d. Plot inset with zoom in western Europe
     
     gmt basemap -R\${REGION2} -J\${PROJ2} -X\${X} -Y\${Y} -Bf --MAP_FRAME_TYPE=plain --MAP_FRAME_PEN=white
-    gmt grdgradient @earth_relief_01m -Nt1.2 -A270 -Gtmp_intens2.nc  -R\${REGION2}
-    gmt grdimage  @earth_day_01m -Itmp_intens2.nc
-    #gmt grdimage  @earth_day
+    #gmt grdgradient @earth_relief_01m -Nt1.2 -A270 -Gtmp_intens2.nc  -R\${REGION2}
+    #gmt grdimage  @earth_day_01m -Itmp_intens2.nc
+    gmt grdimage  @earth_day
     gmt coast -Df -N1/thinnest
 
     #gmt inset begin -Dx\${X}/\${Y} -F+p+s -R\${REGION2} -J\${PROJ2}
