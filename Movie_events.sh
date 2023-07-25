@@ -9,13 +9,14 @@
 # and fade and coda to one of them (red) and let the other
 # be plain default (green) and only visible from 0-1.
 
-echo 20 6 0 1 Red Label  > red.txt
-echo  0 6 0 1 Green Label > green.txt
+echo 20 6.5 0 1 Red Label  > red.txt
+echo  0 6.5 0 1 Green Label > green.txt
 cat <<- EOF > labels.txt
 -0.125 2 RISE
 0.125 2 PLATEAU
 0.375 2 DECAY
 1.125 2 FADE
+0.75 2 NORMAL
 1.375 2 CODA
 EOF
 # Create an approximate default scaling step function we can interpolate in events
@@ -36,6 +37,8 @@ cat <<- EOF > stepfunction.txt
 1	0
 1.5	0
 EOF
+# Create file to plot event duration
+echo "0 0.5 1 0.5 " > duration.txt
 cat <<- EOF > pre.sh
 gmt begin
 	# Build the more complicated size vs time curve based on knowledge of what events does internally
@@ -53,30 +56,33 @@ gmt begin
 	# Code (t = 1.25 to 1.5 symbol size stays at 0.25 during code)
 	gmt math -T1.3/1.5/0.1 0.25 = >> size_vs_time.txt
 	# Lay down the two curves and labels as background plot. Movie starts each frame with this plot
-	gmt plot -R-0.5/1.5/-0.1/2.1 -JX13.2c/2c -X4.4c -Y2.25c stepfunction.txt -W5p,green@50
+	gmt plot -R-0.5/1.5/-0.1/2.1 -JX13.2c/3c -X4.4c -Y2.25c stepfunction.txt -W5p,green@50
 	gmt plot size_vs_time.txt -W1p,red -BW -Bafg0.25+l"Size scale"
 	gmt text -F+f8p+jBC -Dj6p -N labels.txt
+	# Plot event width with an arrow
+	gmt plot duration.txt -Sv12p+s+bt+et -W1.5p -Gblack
+	echo 0.5 0.5 EVENT DURATION | gmt text -F+f8p+jMC -Gwhite -W0.25p
 gmt end
 EOF
 cat << 'EOF' > main.sh
 gmt begin
 	# Animate the red circle via the -E settings to ensure changes beyond the step function
 	gmt events red.txt -T${MOVIE_COL0} -R-20/40/1/9 -JX20c/10c -B -Es+r0.25+p0.25+d0.25+f0.25 \
-		-Et+o0.25 -Sc2c -Gred -W1p -Ms2+c0.25 -Mi1+c-0.5 -Mt100+c50 -F+f18p+jBC -Dj3c -L -X1c -Y1c
+		-Et+o0.25 -Sc2c -Gred -W1p -Ms2+c0.25 -Mi1+c-0.5 -Mt100+c50 -F+f18p+jBC -Dj2.3c -L -X1c -Y1c
 	# Plot the green circle at constant size and only visible during its duration
-	gmt events green.txt -T${MOVIE_COL0} -Sc2c -Ggreen -W1p -F+f18p+jBC -Dj3c -L -E
+	gmt events green.txt -T${MOVIE_COL0} -Sc2c -Ggreen -W1p -F+f18p+jBC -Dj2.3c -L -E
 	# Plot red circle moving along the red size curve as function of time
 	gmt sample1d size_vs_time.txt -T${MOVIE_COL0}, -Fl | gmt plot -Sc4p -Gred -W0.25p -R-0.5/1.5/-0.1/2.1 \
-	-JX13.2c/2c -N -X3.4c -Y1.25c
+	-JX13.2c/3c -N -X3.4c -Y1.25c
 	# Plot smaller green circle moving along the default green curve as function of time
 	gmt sample1d normal.txt -T${MOVIE_COL0}, -Fl | gmt plot -Sc2p -Ggreen -W0.25p -N
 gmt end
 EOF
 # Run the movie and add frame counter and horizontal time-progress bar
 gmt movie -C22cx12cx100 main.sh -Sbpre.sh -NMovie_events -T-0.5/1.5/0.01 -D24 -Fmp4 -Lc0 -Lf+jTR \
--Pf+jBC+o0/1.5c+ac -M150,png -Zs -V
+-Pf+jBC+o0/1.5c+ac -M75,png -Zs -V
 # Delete temporary files
-rm -f green.txt red.txt normal.txt labels.txt stepfunction.txt
+rm -f green.txt red.txt normal.txt labels.txt stepfunction.txt duration.txt
 mkdir -p mp4
 mv -f Movie_events.mp4 mp4
 mkdir -p png
