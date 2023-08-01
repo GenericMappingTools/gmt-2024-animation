@@ -32,34 +32,32 @@ gmt begin
     gmt basemap -R${REGION} -J${PROJ}/\${MOVIE_WIDTH} -B+n -Y0 -X0
 
 #	a. Crear grilla para sombreado a partir del DEM
-	#gmt grdgradient @earth_relief_05m -Nt1.2 -A270 -Gtmp_intens.nc
+	gmt grdgradient @earth_relief_05m -Nt1.2 -A270 -Gtmp_intens.nc
 
 #	b. Graficar imagen satelital 
-    #gmt grdimage  @earth_day_05m -Itmp_intens.nc
-    gmt grdimage  @earth_day
-	gmt coast -Df -N1/thinnest
+    gmt grdimage  @earth_day_05m -Itmp_intens.nc
+    gmt coast -Df -N1/thinnest
     
 #   c. Create and draw CPT    
     gmt makecpt \$(gmt info Messi_Goals.txt -T1+c3) -Chot -I -F+c1 -H > temp_q.cpt
-
-    gmt colorbar -Ctemp_q.cpt -DjBL+o0.7c/0.5c+w60% -F+gwhite+p+i+s -L0.1 -S+y"Goals"
+    gmt colorbar -Ctemp_q.cpt -DjBL+o0.7c/0.5c+w50% -F+gwhite+p+i+s -L0.1 -S+y"Goals"
     
+#   d. Draw zoom area in large map    
 	gmt basemap -R\${REGION2} -J\${PROJ2} -A | gmt plot -Wthick,white 
 
-#	d. Plot inset with zoom in western Europe
-    
-    gmt basemap -R\${REGION2} -J\${PROJ2} -X\${X} -Y\${Y} -Bf --MAP_FRAME_TYPE=plain --MAP_FRAME_PEN=white
+#	e. Plot inset with zoom in western Europe
+#   e1. 
+    #gmt basemap -R\${REGION2} -J\${PROJ2} -X\${X} -Y\${Y} -Bf --MAP_FRAME_TYPE=plain --MAP_FRAME_PEN=white
     #gmt grdgradient @earth_relief_01m -Nt1.2 -A270 -Gtmp_intens2.nc  -R\${REGION2}
     #gmt grdimage  @earth_day_01m -Itmp_intens2.nc
-    gmt grdimage  @earth_day
-    gmt coast -Df -N1/thinnest
+    #gmt grdimage  @earth_day
+    #gmt coast -Df -N1/thinnest
 
-    #gmt inset begin -Dx\${X}/\${Y} -F+p+s -R\${REGION2} -J\${PROJ2}
-        #gmt grdgradient @earth_relief_01m -Nt1.2 -A270 -Gtmp_intens2.nc  -R\${REGION2}
-        #gmt grdimage  @earth_day -Itmp_intens2.nc
-        #gmt grdimage  @earth_day
-        #gmt coast -Df -N1/thinnest -Bf --MAP_FRAME_TYPE=plain --MAP_FRAME_PEN=white
-    #gmt inset end
+    gmt inset begin -Dx\${X}/\${Y} -F+p+s -R\${REGION2} -J\${PROJ2}
+        gmt grdgradient @earth_relief_01m -Nt1.2 -A270 -Gtmp_intens2.nc  -R\${REGION2}
+        gmt grdimage  @earth_day -Itmp_intens2.nc
+        gmt coast -Df -N1/thinnest -Bf --MAP_FRAME_TYPE=plain --MAP_FRAME_PEN=white
+    gmt inset end
 
 gmt end
 EOF
@@ -77,7 +75,7 @@ EOF
 
 #	----------------------------------------------------------------------------------------------------------
 # 	3. Run the movie
-	gmt movie main.sh -Iin.sh -Sbpre.sh -C${W}cx${H}cx80 -Ttimes.txt -NMovie_Messi_v2 -H2 -D24 -Ml,png -Vi -Zs -Gblack  \
+	gmt movie main.sh -Iin.sh -Sbpre.sh -C${W}cx${H}cx80 -Ttimes.txt -NMovie_Messi_v2_40 -H2 -D24 -Ml,png -Vi -Zs -Gblack  \
     -Lc0+jTR+o0.3/0.3+gwhite+h+r --FONT_TAG=14p,Helvetica,black --FORMAT_CLOCK_MAP=- --FORMAT_DATE_MAP=dd-mm-yyyy       \
 	-Lc1+jTL+o0.3/0.3+gwhite+h+r #-Fmp4
 

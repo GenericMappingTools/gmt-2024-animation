@@ -2,8 +2,9 @@
 #
 # Wessel, Esteban, & Delaviel-Anger, 2023
 
-#export http_proxy="http://proxy.fcen.uba.ar:8080"
+export http_proxy="http://proxy.fcen.uba.ar:8080"
 
+# Calculate map/canvas height
 	REGION=-130/145/-40/64
     PROJ=W7.5
     W=24
