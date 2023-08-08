@@ -44,11 +44,10 @@ gmt begin
 	# Build the more complicated size vs time curve based on knowledge of what events does internally
 	echo "-0.5 0" > size_vs_time.txt
 	# Rise (t = -0.25 to 0 symbol size goes from 0 to 2x)
-	gmt math -T-0.25/0/0.01 T 0.25 ADD 0.25 DIV 2 POW 2 MUL = >> size_vs_time.txt
+    gmt math -T-0.25/0/0.01 1 T 0.25 ADD 0.25 DIV PI MUL COS SUB = >> size_vs_time.txt
 	# plateau (t = 0 to 0.25 symbol size stays at 2x)
-	#gmt math -T0/0.25/0.01 2 = >> size_vs_time.txt
 	# Decay (t = 0.25 to 0.5 symbol size decays from 2x to 1x)
-	gmt math -T0.25/0.5/0.01 1 T 0.25 SUB 0.25 DIV 2 POW SUB 1 ADD = >> size_vs_time.txt
+	gmt math -T0.25/0.5/0.01 1.5 T 0.25 SUB 0.25 DIV PI MUL COS 2 DIV ADD = >> size_vs_time.txt
 	# active (t = 0.5 to 1 symbol size stays at 1x)
 	gmt math -T0.6/1/0.1 1 = >> size_vs_time.txt
 	# Fade (t = 1 to 1.25 symbol size linearly drops to 0.25 during fading)
@@ -67,7 +66,7 @@ EOF
 cat << 'EOF' > main.sh
 gmt begin
 	# Animate the red circle via the -E settings to ensure changes beyond the step function
-	gmt events red.txt -T${MOVIE_COL0} -R-20/40/1/9 -JX20c/10c -B -Es+r0.25+p0.25+d0.25+f0.25 \
+	gmt events red.txt -T${MOVIE_COL0} -R-20/40/1/9 -JX20c/10c -B -Es+rc0.25+p0.25+dc0.25+f0.25 \
 		-Et+o0.25 -Sc2c -Gred -W1p -Ms2+c0.25 -Mi1+c-0.5 -Mt100+c50 -F+f18p+jBC -Dj2.3c -L -X1c -Y1c
 	# Plot the green circle at constant size and only visible during its duration
 	gmt events green.txt -T${MOVIE_COL0} -Sc2c -Ggreen -W1p -F+f18p+jBC -Dj2.3c -L -E
