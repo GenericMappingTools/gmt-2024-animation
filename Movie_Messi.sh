@@ -46,13 +46,6 @@ gmt begin
 	gmt basemap -R\${REGION2} -J\${PROJ2} -A | gmt plot -Wthick,white 
 
 #	e. Plot inset with zoom in western Europe
-#   e1. 
-    #gmt basemap -R\${REGION2} -J\${PROJ2} -X\${X} -Y\${Y} -Bf --MAP_FRAME_TYPE=plain --MAP_FRAME_PEN=white
-    #gmt grdgradient @earth_relief_01m -Nt1.2 -A270 -Gtmp_intens2.nc  -R\${REGION2}
-    #gmt grdimage  @earth_day_01m -Itmp_intens2.nc
-    #gmt grdimage  @earth_day
-    #gmt coast -Df -N1/thinnest
-
     gmt inset begin -Dx\${X}/\${Y} -F+p+s -R\${REGION2} -J\${PROJ2}
         gmt grdgradient @earth_relief_01m -Nt1.2 -A270 -Gtmp_intens2.nc  -R\${REGION2}
         gmt grdimage  @earth_day -Itmp_intens2.nc
