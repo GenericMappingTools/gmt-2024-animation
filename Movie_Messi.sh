@@ -2,26 +2,28 @@
 #
 # Wessel, Esteban, & Delaviel-Anger, 2023
 
+# Delete at the end
 #export http_proxy="http://proxy.fcen.uba.ar:8080"
 
-# Calculate map/canvas height
+# 1. Calculate map/canvas height
     REGION=-130/145/-40/64
     PROJ=W7.5
-    W=24
+    W=24c
     H=$(gmt mapproject -R$REGION -J$PROJ/$W -Wh)
 
-# File with variables used 
+# 2. File with variables used for the inset map
 cat << 'EOF' > in.sh
-#	Proyeccion del mapa y ancho del mapa
+#	Region, proyection, width map and offset in X and Y.
     REGION2=PTC,ESC,FR,GB,DE+R1/3/1/-3.5
     PROJ2=M5.5c
     Y=3.168p
     X=8.5c
 EOF
 
+# 3. Background plots
 cat << EOF > pre.sh
 gmt begin
-#	1. Reordenar datos y agrandar
+#	1. Reorder and scale data:
 	gmt convert Messi_Goals.txt -i1,2,3,3+s400,0 > temp_q.txt
     gmt convert Messi_Goals.txt -i1,2,3,3+s80,0 > temp_q2.txt
 
@@ -31,23 +33,23 @@ gmt begin
 #   3. Create main map
     gmt basemap -R${REGION} -J${PROJ}/\${MOVIE_WIDTH} -B+n -Y0 -X0
 
-#	a. Crear grilla para sombreado a partir del DEM
+#	a. Create intesity grid for shadow effect
 	gmt grdgradient @earth_relief_05m -Nt1.2 -A270 -Gtmp_intens.nc
 
-#	b. Graficar imagen satelital 
+#	b. Plot satellital image with shadow effect and coastlines
     gmt grdimage  @earth_day_05m -Itmp_intens.nc
     gmt coast -Df -N1/thinnest
-    
-#   c. Create and draw CPT    
+
+#   c. Create and draw CPT
     gmt makecpt \$(gmt info Messi_Goals.txt -T1+c3) -Chot -I -F+c1 -H > temp_q.cpt
     gmt colorbar -Ctemp_q.cpt -DjBL+o0.7c/0.5c+w50% -F+gwhite+p+i+s -L0.1 -S+y"Goals"
-    
-#   d. Draw zoom area in large map    
-	gmt basemap -R\${REGION2} -J\${PROJ2} -A | gmt plot -Wthick,white 
+
+#   d. Draw zoom area in th main map
+	gmt basemap -R\${REGION2} -J\${PROJ2} -A | gmt plot -Wthick,white
 
 #	e. Plot inset with zoom in western Europe
     gmt inset begin -Dx\${X}/\${Y} -F+p+s -R\${REGION2} -J\${PROJ2}
-        gmt grdgradient @earth_relief_01m -Nt1.2 -A270 -Gtmp_intens2.nc  -R\${REGION2}
+        gmt grdgradient @earth_relief_01m -Nt1.2 -A270 -Gtmp_intens2.nc -R\${REGION2}
         gmt grdimage  @earth_day -Itmp_intens2.nc
         gmt coast -Df -N1/thinnest -Bf --MAP_FRAME_TYPE=plain --MAP_FRAME_PEN=white
     gmt inset end
@@ -68,8 +70,8 @@ EOF
 
 #	----------------------------------------------------------------------------------------------------------
 # 	3. Run the movie
-	gmt movie main.sh -Iin.sh -Sbpre.sh -C${W}cx${H}cx80 -Ttimes.txt -NMovie_Messi -H2 -D24 -Ml,png -Vi -Zs -Gblack  \
-    -Lc0+jTR+o0.3/0.3+gwhite+h+r --FONT_TAG=14p,Helvetica,black --FORMAT_CLOCK_MAP=- --FORMAT_DATE_MAP=dd-mm-yyyy       \
+	gmt movie main.sh -Iin.sh -Sbpre.sh -C${W}cx${H}cx80 -Ttimes.txt -NMovie_Messi -H2 -D24 -Ml,png -Vi -Zs -Gblack \
+    -Lc0+jTR+o0.3/0.3+gwhite+h+r --FONT_TAG=14p,Helvetica,black --FORMAT_CLOCK_MAP=- --FORMAT_DATE_MAP=dd-mm-yyyy   \
 	-Lc1+jTL+o0.3/0.3+gwhite+h+r #-Fmp4
 
 # Place animation
