@@ -20,9 +20,11 @@ cat << 'EOF' > in.sh
     X=8.5c
 EOF
 
-# 3. Background plots
+# 3. Set up background script
 cat << EOF > pre.sh
 gmt begin
+
+# 3a. Create files for animation.
 #	1. Reorder and scale data:
 	gmt convert Messi_Goals.txt -i1,2,3,3+s400,0 > temp_q.txt
     gmt convert Messi_Goals.txt -i1,2,3,3+s80,0 > temp_q2.txt
@@ -30,10 +32,11 @@ gmt begin
 #   2. Create file with dates and accumulative sum for the labels
     gmt math Messi_Goals.txt -C3 SUM -o0,3 = | gmt sample1d $(gmt info Messi_Goals.txt -T3d) -Fe -fT > times.txt
 
-#   3. Create main map
+# 3b. Make statics background maps
+#   1. Plot main map
     gmt basemap -R${REGION} -J${PROJ}/\${MOVIE_WIDTH} -B+n -Y0 -X0
 
-#	a. Create intesity grid for shadow effect
+#	1a. Create intesity grid for shadow effect
 	gmt grdgradient @earth_relief_05m -Nt1.2 -A270 -Gtmp_intens.nc
 
 #	b. Plot satellital image with shadow effect and coastlines
@@ -44,10 +47,10 @@ gmt begin
     gmt makecpt \$(gmt info Messi_Goals.txt -T1+c3) -Chot -I -F+c1 -H > temp_q.cpt
     gmt colorbar -Ctemp_q.cpt -DjBL+o0.7c/0.5c+w50% -F+gwhite+p+i+s -L0.1 -S+y"Goals"
 
-#   d. Draw zoom area in th main map
+#   d. Draw zoom area in the main map
 	gmt basemap -R\${REGION2} -J\${PROJ2} -A | gmt plot -Wthick,white
 
-#	e. Plot inset with zoom in western Europe
+#	e. Plot inset map with zoom in western Europe
     gmt inset begin -Dx\${X}/\${Y} -F+p+s -R\${REGION2} -J\${PROJ2}
         gmt grdgradient @earth_relief_01m -Nt1.2 -A270 -Gtmp_intens2.nc -R\${REGION2}
         gmt grdimage  @earth_day -Itmp_intens2.nc
@@ -58,7 +61,7 @@ gmt end
 EOF
 
 #	----------------------------------------------------------------------------------------------------------
-# 	2. Set up main script
+# 	4. Set up main script
 cat << EOF > main.sh
 gmt begin
 	gmt basemap -R${REGION} -J${PROJ}/\${MOVIE_WIDTH} -B+n -Y0 -X0
@@ -69,7 +72,7 @@ gmt end
 EOF
 
 #	----------------------------------------------------------------------------------------------------------
-# 	3. Run the movie
+# 	5. Run the movie
 	gmt movie main.sh -Iin.sh -Sbpre.sh -C${W}cx${H}cx80 -Ttimes.txt -NMovie_Messi -H2 -D24 -Ml,png -Vi -Zs -Gblack \
     -Lc0+jTR+o0.3/0.3+gwhite+h+r --FONT_TAG=14p,Helvetica,black --FORMAT_CLOCK_MAP=- --FORMAT_DATE_MAP=dd-mm-yyyy   \
 	-Lc1+jTL+o0.3/0.3+gwhite+h+r #-Fmp4
