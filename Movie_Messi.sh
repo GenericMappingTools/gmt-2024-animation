@@ -72,7 +72,7 @@ gmt end
 EOF
 
 #	----------------------------------------------------------------------------------------------------------
-# 	3. Run the movie
+# 	5. Run the movie
 gmt movie main.sh -Iin.sh -Sbpre.sh -C${W}cx${H}cx80 -Ttimes.txt -NMovie_Messi -H2 -D24 -Ml,png -Vi -Zs -Gblack \
     -Lc0+jTR+o0.3/0.3+gwhite+h2p/-2p+r --FONT_TAG=14p,Courier-Bold,black --FORMAT_CLOCK_MAP=- --FORMAT_DATE_MAP=dd-mm-yyyy   \
 	-Lc1+jTL+o0.3/0.3+gwhite+h2p/-2p+r # -Fmp4
