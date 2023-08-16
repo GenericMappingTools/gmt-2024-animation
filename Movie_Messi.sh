@@ -6,16 +6,16 @@
 #export http_proxy="http://proxy.fcen.uba.ar:8080"
 
 # 1. Calculate map/canvas height
-    REGION=-130/145/-40/64
-    PROJ=W7.5
-    W=24c
-    H=$(gmt mapproject -R$REGION -J$PROJ/$W -Wh)
+    main_map_region=-130/145/-40/64
+    main_map_projection=W7.5       # Mollweide map center at longitude 7.5
+    canvas_width=24c
+    canvas_height=$(gmt mapproject -R${main_map_region} -J${main_map_projection}/${canvas_width} -Wh)
 
 # 2. File with variables used for the inset map
 cat << 'EOF' > in.sh
-#	Region, proyection, width map and offset in X and Y.
-    REGION2=PTC,ESC,FR,GB,DE+R1/3/1/-3.5
-    PROJ2=M5.5c
+#	Region, projection, width map and offset in X and Y
+    inset_map_region=PTC,ESC,FR,GB,DE+R1/3/1/-3.5
+    inset_map_projection=M5.5c                         
     Y=3.168p
     X=8.5c
 EOF
@@ -26,33 +26,35 @@ gmt begin
 
 # 3a. Create files for animation.
 #	1. Reorder and scale data:
-	gmt convert Messi_Goals.txt -i1,2,3,3+s400,0 > temp_q.txt
-    gmt convert Messi_Goals.txt -i1,2,3,3+s80,0  > temp_q2.txt
+	gmt convert Messi_Goals.txt -i1,2,3,3+s400,0 > data_scale_by_400.txt
+    gmt convert Messi_Goals.txt -i1,2,3,3+s80,0  > data_scale_by_80.txt
 
 #   2. Create file with dates and accumulative sum for the labels
     gmt math Messi_Goals.txt -C3 SUM -o0,3 = | gmt sample1d $(gmt info Messi_Goals.txt -T3d) -Fe -fT > times.txt
 
 # 3b. Make statics background maps
 #   1. Plot main map
-    gmt basemap -R${REGION} -J${PROJ}/\${MOVIE_WIDTH} -B+n -Y0 -X0
+    gmt basemap -R${main_map_region} -J${main_map_projection}/\${MOVIE_WIDTH} -B+n -Y0 -X0
 
 #	a. Create intesity grid for shadow effect
 	gmt grdgradient @earth_relief_05m_p -Nt1.2 -A270 -Gtmp_intens.nc
 
 #	b. Plot satellite image with shadow effect and coastlines
     gmt grdimage  @earth_day_05m -Itmp_intens.nc
-    gmt coast -Df -N1/thinnest
+    gmt coast -N1/thinnest #-Df
 
 #   c. Create and draw CPT
-    gmt makecpt \$(gmt info Messi_Goals.txt -T1+c3) -Chot -I -F+c1 -H > temp_q.cpt
-    gmt colorbar -Ctemp_q.cpt -DjBL+o0.7c/0.5c+w50% -F+gwhite+p+i+s2p/-2p -L0.1 -S+y"Goals"
+    gmt makecpt \$(gmt info Messi_Goals.txt -T1+c3) -Chot -I -F+c1 -H > Goals.cpt
 
-#   d. Draw zoom area in the main map
-	gmt basemap -R\${REGION2} -J\${PROJ2} -A | gmt plot -Wthick,white
+    # Plot colorbar near the bottom lefth of the canvas with a background panel.
+    gmt colorbar -CGoals.cpt -DjBL+o0.7c/0.5c+w50% -F+gwhite+p+i+s2p/-2p -L0.1 -S+y"Goals"
+
+#   d. Draw rectangular polygone showing the area of the inset map in the main map
+	gmt basemap -R\${inset_map_region} -J\${inset_map_projection} -A | gmt plot -Wthick,white
 
 #	e. Plot inset map with zoom in western Europe
-    gmt inset begin -Dx\${X}/\${Y} -F+p+s -R\${REGION2} -J\${PROJ2}
-        gmt grdgradient @earth_relief_01m_p -Nt1.2 -A270 -Gtmp_intens2.nc -R\${REGION2}
+    gmt inset begin -Dx\${X}/\${Y} -F+p+s -R\${inset_map_region} -J\${inset_map_projection}
+        gmt grdgradient @earth_relief_01m_p -Nt1.2 -A270 -Gtmp_intens2.nc -R\${inset_map_region}
         gmt grdimage  @earth_day -Itmp_intens2.nc
         gmt coast -Df -N1/thinnest -Bf --MAP_FRAME_TYPE=plain --MAP_FRAME_PEN=white
     gmt inset end
@@ -64,16 +66,16 @@ EOF
 # 	4. Set up main script
 cat << EOF > main.sh
 gmt begin
-	gmt basemap -R${REGION} -J${PROJ}/\${MOVIE_WIDTH} -B+n -Y0 -X0
-	gmt events temp_q.txt -SE- -Ctemp_q.cpt --TIME_UNIT=d -T\${MOVIE_COL0} -Es+r6+d18 -Ms2.5+c0.5 -Mi5+c0 -Mt+c0 -Wfaint
-    gmt basemap -R\${REGION2} -J\${PROJ2} -B+n -X\${X} -Y\${Y}
-	gmt events temp_q2.txt -SE- -Ctemp_q.cpt --TIME_UNIT=d -T\${MOVIE_COL0} -Es+r6+d18 -Ms2.5+c0.5 -Mi5+c0 -Mt+c0 -Wfaint
+	gmt basemap -R${main_map_region} -J${main_map_projection}/\${MOVIE_WIDTH} -B+n -Y0 -X0
+	gmt events data_scale_by_500.txt -SE- -CGoals.cpt --TIME_UNIT=d -T\${MOVIE_COL0} -Es+r6+d18 -Ms2.5+c0.5 -Mi5+c0 -Mt+c0 -Wfaint
+    gmt basemap -R\${inset_map_region} -J\${inset_map_projection} -B+n -X\${X} -Y\${Y}
+	gmt events data_scale_by_80.txt  -SE- -CGoals.cpt --TIME_UNIT=d -T\${MOVIE_COL0} -Es+r6+d18 -Ms2.5+c0.5 -Mi5+c0 -Mt+c0 -Wfaint
 gmt end
 EOF
 
 #	----------------------------------------------------------------------------------------------------------
 # 	5. Run the movie
-gmt movie main.sh -Iin.sh -Sbpre.sh -C${W}cx${H}cx80 -Ttimes.txt -NMovie_Messi -H2 -D24 -Ml,png -Vi -Zs -Gblack \
+gmt movie main.sh -Iin.sh -Sbpre.sh -C${canvas_width}cx${canvas_heigth}cx80 -Ttimes.txt -NMovie_Messi -H2 -D24 -Ml,png -Vi -Zs -Gblack \
     -Lc0+jTR+o0.3/0.3+gwhite+h2p/-2p+r --FONT_TAG=14p,Courier-Bold,black --FORMAT_CLOCK_MAP=- --FORMAT_DATE_MAP=dd-mm-yyyy   \
 	-Lc1+jTL+o0.3/0.3+gwhite+h2p/-2p+r # -Fmp4
 
