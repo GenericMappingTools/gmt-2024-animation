@@ -1,4 +1,4 @@
-#game_date	Longitud	Latitud	Goles
+# Game_date	Longitude	Latitude	Goals
 2004-01-18	2.118056	41.379722	1
 2004-02-08	2.251135	41.457121	1
 2004-04-01	2.209621	41.443390	3
