@@ -34,13 +34,11 @@ gmt begin
 
 # 3B. Make statics background maps
 #   1. Plot main map
-    gmt basemap -R${main_map_region} -J${main_map_projection}/\${MOVIE_WIDTH} -B+n -Y0 -X0
-
 #	a. Create intesity grid for shadow effect
 	gmt grdgradient @earth_relief_05m_p -Nt1.2 -A270 -Gmain_intensity.nc -R${main_map_region}
 
 #	b. Plot satellite image with shadow effect and coastlines
-    gmt grdimage  @earth_day_05m -Imain_intensity.nc
+    gmt grdimage  @earth_day_05m -Imain_intensity.nc -R${main_map_region} -J${main_map_projection}/\${MOVIE_WIDTH} -Y0 -X0
     gmt coast -N1/thinnest #-Df
 
 #   c. Create and draw CPT
