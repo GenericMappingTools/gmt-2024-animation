@@ -67,7 +67,7 @@ EOF
 cat << EOF > main.sh
 gmt begin
 	gmt basemap -R${main_map_region} -J${main_map_projection}/\${MOVIE_WIDTH} -B+n -Y0 -X0
-	gmt events data_scale_by_500.txt -SE- -CGoals.cpt --TIME_UNIT=d -T\${MOVIE_COL0} -Es+r6+d18 -Ms2.5+c0.5 -Mi5+c0 -Mt+c0 -Wfaint
+	gmt events data_scale_by_400.txt -SE- -CGoals.cpt --TIME_UNIT=d -T\${MOVIE_COL0} -Es+r6+d18 -Ms2.5+c0.5 -Mi5+c0 -Mt+c0 -Wfaint
     gmt basemap -R\${inset_map_region} -J\${inset_map_projection} -B+n -X\${X} -Y\${Y}
 	gmt events data_scale_by_80.txt  -SE- -CGoals.cpt --TIME_UNIT=d -T\${MOVIE_COL0} -Es+r6+d18 -Ms2.5+c0.5 -Mi5+c0 -Mt+c0 -Wfaint
 gmt end
