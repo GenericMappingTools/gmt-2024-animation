@@ -63,6 +63,7 @@ EOF
 #	----------------------------------------------------------------------------------------------------------
 # 	4. Set up main script
 cat << EOF > main.sh
+#   Set the region, projection and offset (in X and Y) with basemap and them plot the events. 
 gmt begin
 	gmt basemap -R${main_map_region} -J${main_map_projection}/\${MOVIE_WIDTH} -B+n -Y0 -X0
 	gmt events data_scale_by_400.txt -SE- -CGoals.cpt --TIME_UNIT=d -T\${MOVIE_COL0} -Es+r6+d18 -Ms2.5+c0.5 -Mi5+c0 -Mt+c0 -Wfaint
