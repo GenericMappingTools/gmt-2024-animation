@@ -3,7 +3,7 @@
 # Wessel, Esteban, & Delaviel-Anger, 2023
 
 # Delete at the end
-#export http_proxy="http://proxy.fcen.uba.ar:8080"
+export http_proxy="http://proxy.fcen.uba.ar:8080"
 
 # 1. Calculate map/canvas height
     main_map_region=-130/145/-40/64 # West/East/South/North boundaries
@@ -13,11 +13,10 @@
 
 # 2. File with variables used for the inset map
 cat << 'EOF' > in.sh
-#	Region, projection, width map and offset in X and Y
-    inset_map_region=PTC,ESC,FR,GB,DE+R1/3/1/-3.5
+#	Region, projection, width map and offset in X/Y direction 
+    inset_map_region=PTC,ESC,GB,DE+R1/3/1/-3.5
     inset_map_projection=M5.5c      # Mercator map of 5.5 cm width                         
- #   Y=3.168p                        # Shift plot in in Y-direction
-    Y=0.2c                         # Shift plot in in Y-direction
+    Y=0.2c                          # Shift plot in in Y-direction
     X=8.5c                          # Shift plot in in X-direction
 EOF
 
@@ -30,14 +29,15 @@ gmt begin
 	gmt convert Messi_Goals.txt -i1,2,3,3+s400,0 > data_scale_by_400.txt
     gmt convert Messi_Goals.txt -i1,2,3,3+s80,0  > data_scale_by_80.txt
 
-#   2. Create file with dates every 3 days versus accumulative sum of goals
+#   2. Create file with dates every 3 days versus cumulative sum of goals
     gmt math Messi_Goals.txt -C3 SUM -o0,3 = | gmt sample1d $(gmt info Messi_Goals.txt -T3d) -Fe -fT > dates_vs_goals.txt
+    
+#   Temporary command to make a shorter animation. Delete at the end
     #gmt math Messi_Goals.txt -C3 SUM -o0,3 = | gmt sample1d $(gmt info Messi_Goals.txt -T60d) -Fe -fT > dates_vs_goals.txt
 
-
-# 3B. Make statics background maps
+# 3B. Make static background maps
 #   1. Plot main map
-#	a. Create intesity grid for shadow effect
+#	a. Create intensity grid for shadow effect
 	gmt grdgradient @earth_relief_05m_p -Nt1.2 -A270 -Gmain_intensity.nc -R${main_map_region}
 
 #	b. Plot satellite image with shadow effect and coastlines
@@ -46,7 +46,6 @@ gmt begin
 
 #   c. Create and draw CPT
     gmt makecpt \$(gmt info Messi_Goals.txt -T1+c3) -Chot -I -F+c1 -H > Goals.cpt
-
     # Plot colorbar near the bottom left of the canvas with a background panel.
     gmt colorbar -CGoals.cpt -DjBL+o0.7c/0.5c+w50% -F+gwhite+p+i+s2p/-2p -L0.1 -S+y"Goals"
 
@@ -79,8 +78,8 @@ EOF
 #	----------------------------------------------------------------------------------------------------------
 # 	5. Run the movie
 gmt movie main.sh -Iin.sh -Sbpre.sh -C${canvas_width}cx${canvas_height}cx80 -Tdates_vs_goals.txt -NMovie_Messi -H2 -Ml,png -Vi -Zs -Gblack \
-    -Lc0+jTR+o0.3/0.3+gwhite+h2p/-2p+r --FONT_TAG=14p,Courier-Bold,black  --FORMAT_CLOCK_MAP=- --FORMAT_DATE_MAP=dd-mm-yyyy   \
-	-Lc1+jTL+o0.3/0.3+gwhite+h2p/-2p+r -Fmp4 # ,Courier-Bold,black
+    -Lc0+jTR+o0.3/0.3+gwhite+h2p/-2p+r --FONT_TAG=14p  --FORMAT_CLOCK_MAP=- --FORMAT_DATE_MAP=dd-mm-yyyy   \
+	-Lc1+jTL+o0.3/0.3+gwhite+h2p/-2p+r -Fmp4
 
 # Place animation
 mkdir -p mp4
