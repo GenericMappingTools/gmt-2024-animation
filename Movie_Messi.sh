@@ -32,9 +32,6 @@ gmt begin
 #   2. Create file with dates every 3 days versus cumulative sum of goals
     gmt math Messi_Goals.txt -C3 SUM -o0,3 = | gmt sample1d $(gmt info Messi_Goals.txt -T3d) -Fe -fT > dates_vs_goals.txt
     
-#   Temporary command to make a shorter animation. Delete at the end
-    #gmt math Messi_Goals.txt -C3 SUM -o0,3 = | gmt sample1d $(gmt info Messi_Goals.txt -T60d) -Fe -fT > dates_vs_goals.txt
-
 # 3B. Make static background maps
 #   1. Plot main map
 #	a. Create intensity grid for shadow effect
@@ -81,10 +78,9 @@ gmt movie main.sh -Iin.sh -Sbpre.sh -C${canvas_width}cx${canvas_height}cx80 -Tda
     -Lc0+jTR+o0.3/0.3+gwhite+h2p/-2p+r --FONT_TAG=14p  --FORMAT_CLOCK_MAP=- --FORMAT_DATE_MAP=dd-mm-yyyy   \
 	-Lc1+jTL+o0.3/0.3+gwhite+h2p/-2p+r -Fmp4
 
-# Place animation
+# Place animation and clean up
 mkdir -p mp4
 mv -f Movie_Messi.mp4 mp4
 mkdir -p png
 mv -f Movie_Messi.png png
-
 rm gmt.history
