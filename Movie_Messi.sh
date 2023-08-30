@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 #
 # Wessel, Esteban, & Delaviel-Anger, 2023
+#
+# Create an animation showcasing Lionel Messi's goals over time, 
+# around the world and with detail in western Europe.
 
 # Delete at the end
 export http_proxy="http://proxy.fcen.uba.ar:8080"
