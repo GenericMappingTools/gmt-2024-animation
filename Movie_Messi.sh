@@ -77,7 +77,7 @@ EOF
 
 #	----------------------------------------------------------------------------------------------------------
 # 	5. Run the movie
-gmt movie main.sh -Iin.sh -Sbpre.sh -C${canvas_width}cx${canvas_height}cx80 -Tdates_vs_goals.txt -NMovie_Messi -H2 -Ml,png -Vi -Zs -Gblack \
+gmt movie main.sh -Iin.sh -Sbpre.sh -C${canvas_width}cx${canvas_height}cx80 -Tdates_vs_goals.txt -NMovie_Messi -H2 -Ml,png -Vi -Zs -Gblack -K+fo+p \
     -Lc0+jTR+o0.3/0.3+gwhite+h2p/-2p+r --FONT_TAG=14p  --FORMAT_CLOCK_MAP=- --FORMAT_DATE_MAP=dd-mm-yyyy   \
 	-Lc1+jTL+o0.3/0.3+gwhite+h2p/-2p+r -Fmp4
 
