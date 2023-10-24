@@ -1,4 +1,7 @@
 .DS_Store
+main.sh
+pre.sh
+post.sh
 pdf/*.pdf
 png/*.png
 mp4/*.mp4

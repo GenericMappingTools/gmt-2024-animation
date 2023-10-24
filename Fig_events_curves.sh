@@ -12,8 +12,9 @@ else
 	dir="${1}/"
 fi
 
-gmt begin ${dir}Fig_events_curves $1
+gmt begin png/Fig_events_curves png
 	gmt set GMT_THEME cookbook
+	gmt set FONT_LABEL 12p
 	gmt subplot begin 5x1 -Fs6i/1.5i -A
 	# SIZE
 	cat <<- EOF > B.txt
