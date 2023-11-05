@@ -4,3 +4,5 @@ gmt begin
 gmt end show
 EOF
 gmt movie main.sh -C20cx20cx30 -T359 -Fmp4 -Mf,png -NMovie_Moon -Z
+mv -f Movie_Moon.mp4 mp4
+mv -f Movie_Moon.png png
