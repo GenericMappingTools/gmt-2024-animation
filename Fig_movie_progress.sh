@@ -2,7 +2,7 @@
 #
 # Makes a plot of the six movie progress indicators available
 #
-# Wessel, Esteban, & Delaviel-Anger, 2023
+# Wessel, Esteban, & Delaviel-Anger, 2024
 #
 # Make dummy map script for static "movie"
 cat << EOF > map.sh

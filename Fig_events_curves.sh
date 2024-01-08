@@ -3,7 +3,7 @@
 # Make a figure illustrating size, color intensity, transparency, dz and label
 # transparency curve for an event across time in events
 #
-# Wessel, Esteban, & Delaviel-Anger, 2023
+# Wessel, Esteban, & Delaviel-Anger, 2024
 
 # Determine if we need to specify an output directory or not
 if [ "X${1}" = "X" ]; then
@@ -17,7 +17,7 @@ gmt begin png/Fig_events_curves png
 	gmt set FONT_LABEL 12p
 	gmt subplot begin 5x1 -Fs6i/1.5i -A
 	# SIZE
-	cat <<- EOF > B.txt
+	cat <<- EOF > Custom_annoLine.txt
 	-0.5	afg	t@-r@-
 	0	afg	t@-b@-
 	0.6	afg	t@-p@-
@@ -26,18 +26,18 @@ gmt begin png/Fig_events_curves png
 	3.5	afg	t@-f@-
 	EOF
 	# Rise (t = -0.5 to 0 symbol size goes from 0 to 5x)
-	gmt math -T-0.5/0/0.02 T 0.5 ADD 2 MUL 2 POW 5 MUL = t.txt
+	gmt math -T-0.5/0/0.02 T 0.5 ADD 2 MUL 2 POW 5 MUL = Line.txt
 	# plateau (t = 0 to 0.5 symbol size stays at 5x)
-	gmt math -T0/0.6/0.1 5 = >> t.txt
+	gmt math -T0/0.6/0.1 5 = >> Line.txt
 	# Decay (t = 0.5 to 1.5 symbol size decays from 5x to 1x)
-	gmt math -T0.6/1.5/0.02 0.9 T 0.6 SUB SUB 0.9 DIV 2 POW 4 MUL 1 ADD = >> t.txt
+	gmt math -T0.6/1.5/0.02 0.9 T 0.6 SUB SUB 0.9 DIV 2 POW 4 MUL 1 ADD = >> Line.txt
 	# active (t = 1.5 to 3 symbol size stays at 1x)
-	gmt math -T1.5/3/0.1 1 = >> t.txt
+	gmt math -T1.5/3/0.1 1 = >> Line.txt
 	# Fade (t = 3 to 3.5 symbol size linearly drops to 0.3 during fading)
-	gmt math -T3/3.5/0.1 T 3 SUB 1.4 MUL NEG 1 ADD = >> t.txt
+	gmt math -T3/3.5/0.1 T 3 SUB 1.4 MUL NEG 1 ADD = >> Line.txt
 	# Code (t = 3.5 5 symbol size stays at 0.3 during code)
-	gmt math -T3.5/5/0.1 0.3 = >> t.txt
-	gmt basemap -R-1/5/-1/6.5 -BWStr -BxcB.txt -Byag10+l"Symbol magnification" -c
+	gmt math -T3.5/5/0.1 0.3 = >> Line.txt
+	gmt basemap -R-1/5/-1/6.5 -BWStr -BxcCustom_annoLine.txt -Byag10+l"Symbol magnification" -c
 	gmt plot -W3p,green <<- EOF -lDefault
 	-1	0
 	0	0
@@ -50,7 +50,7 @@ gmt begin png/Fig_events_curves png
 	-1	1
 	6	1
 	EOF
-	gmt plot -W2p t.txt -lAnnounce
+	gmt plot -W2p Line.txt -lAnnounce
 	gmt plot -Sv0.15i+bt+et+s -W1.5p,red <<- EOF
 	-0.5	5.5	1.5	5.5
 	EOF
@@ -73,18 +73,18 @@ gmt begin png/Fig_events_curves png
 	EOF
 	# INTENSITY
 	# Rise (t = -0.5 to 0 intensity goes from 0 to 4)
-	gmt math -T-0.5/0/0.02 T 0.5 ADD 2 MUL 2 POW 4 MUL = t.txt
+	gmt math -T-0.5/0/0.02 T 0.5 ADD 2 MUL 2 POW 4 MUL = Line.txt
 	# plateau (t = 0 to 0.6 intensity stays at 4)
-	gmt math -T0/0.6/0.1 4 = >> t.txt
+	gmt math -T0/0.6/0.1 4 = >> Line.txt
 	# Decay (t = 0.6 to 1.5 intensity decays from 4 to 0)
-	gmt math -T0.6/1.5/0.02 0.9 T 0.6 SUB SUB 0.9 DIV 2 POW 4 MUL = >> t.txt
+	gmt math -T0.6/1.5/0.02 0.9 T 0.6 SUB SUB 0.9 DIV 2 POW 4 MUL = >> Line.txt
 	# active (t = 1.5 to 3 intensity stays at 0)
-	gmt math -T1.5/3/0.1 0 = >> t.txt
+	gmt math -T1.5/3/0.1 0 = >> Line.txt
 	# Fade (t = 3 to 3.5 intensity linearly drops to -0.75 during fading)
-	gmt math -T3/3.5/0.1 T 3 SUB 1.5 MUL NEG = >> t.txt
+	gmt math -T3/3.5/0.1 T 3 SUB 1.5 MUL NEG = >> Line.txt
 	# Code (t = 3.5 5 intensity stays at -0.75 during coda)
-	gmt math -T3.5/5/0.1 -0.75 = >> t.txt
-	gmt basemap -R-1/5/-1/6.5 -BWStr -BxcB.txt -Bya+l"Color intensity" -c
+	gmt math -T3.5/5/0.1 -0.75 = >> Line.txt
+	gmt basemap -R-1/5/-1/6.5 -BWStr -BxcCustom_annoLine.txt -Bya+l"Color intensity" -c
 	gmt plot -W3p,green <<- EOF
 	-1	0
 	5	0
@@ -93,7 +93,7 @@ gmt begin png/Fig_events_curves png
 	-1	0
 	6	0
 	EOF
-	gmt plot -W2p t.txt
+	gmt plot -W2p Line.txt
 	gmt plot -Sv0.15i+bt+et+s -W1.5p,red <<- EOF
 	-0.5	5.5	1.5	5.5
 	EOF
@@ -116,18 +116,18 @@ gmt begin png/Fig_events_curves png
 	EOF
 	# COLOR ADJUSTMENT
 	# Rise (t = -0.5 to 0 symbol dz goes from 0 to 1)
-	gmt math -T-0.5/0/0.02 T 0.5 ADD 2 MUL 2 POW = t.txt
+	gmt math -T-0.5/0/0.02 T 0.5 ADD 2 MUL 2 POW = Line.txt
 	# plateau (t = 0 to 0.5 symbol dz stays at 1)
-	gmt math -T0/0.6/0.1 1 = >> t.txt
+	gmt math -T0/0.6/0.1 1 = >> Line.txt
 	# Decay (t = 0.5 to 1.5 symbol dz decays from 1 to 0)
-	gmt math -T0.6/1.5/0.02 0.9 T 0.6 SUB SUB 0.9 DIV 2 POW = >> t.txt
+	gmt math -T0.6/1.5/0.02 0.9 T 0.6 SUB SUB 0.9 DIV 2 POW = >> Line.txt
 	# active (t = 1.5 to 3 symbol dz stays at 0)
-	gmt math -T1.5/3/0.1 0 = >> t.txt
+	gmt math -T1.5/3/0.1 0 = >> Line.txt
 	# Fade (t = 3 to 3.5 symbol dz linearly drops to -0.2 during fading)
-	gmt math -T3/3.5/0.1 T 3 SUB 0.4 MUL NEG = >> t.txt
+	gmt math -T3/3.5/0.1 T 3 SUB 0.4 MUL NEG = >> Line.txt
 	# Coda (t = 3.5 5 symbol dz stays at -0.2 during code)
-	gmt math -T3.5/5/0.1 -0.2 = >> t.txt
-	gmt basemap -R-1/5/-0.30/1.30 -BWStr -BxcB.txt -Bya+l"Symbol @~D@~z" -c
+	gmt math -T3.5/5/0.1 -0.2 = >> Line.txt
+	gmt basemap -R-1/5/-0.30/1.30 -BWStr -BxcCustom_annoLine.txt -Bya+l"Symbol @~D@~z" -c
 	gmt plot -W3p,green <<- EOF
 	-1	0
 	5	0
@@ -136,7 +136,7 @@ gmt begin png/Fig_events_curves png
 	-1	0
 	6	0
 	EOF
-	gmt plot -W2p t.txt
+	gmt plot -W2p Line.txt
 	gmt plot -Sv0.15i+bt+et+s -W1.5p,red <<- EOF
 	-0.5	1.10	1.5	1.10
 	EOF
@@ -159,14 +159,14 @@ gmt begin png/Fig_events_curves png
 	EOF
 	# TRANSPARENY
 	# Rise (t = -0.5 to 0 transparency goes from 100 to 0)
-	gmt math -T-0.5/0/0.02 1 T 0.5 ADD 2 MUL SUB 2 POW 100 MUL = t.txt
+	gmt math -T-0.5/0/0.02 1 T 0.5 ADD 2 MUL SUB 2 POW 100 MUL = Line.txt
 	# plateau, decay, normal (t = 0 to 3 transparency stays at 0)
-	gmt math -T0/3/0.1 0 = >> t.txt
+	gmt math -T0/3/0.1 0 = >> Line.txt
 	# Fade (t = 3 to 3.5 transparency linearly increases to 75 during fading)
-	gmt math -T3/3.5/0.1 T 3 SUB 2 MUL 75 MUL = >> t.txt
+	gmt math -T3/3.5/0.1 T 3 SUB 2 MUL 75 MUL = >> Line.txt
 	# Code (t = 3.5 5 transparency stays at 75 during coda)
-	gmt math -T3.5/5/0.1 75 = >> t.txt
-	gmt basemap -R-1/5/-20/130 -BWStr -BxcB.txt -Bya+l"Symbol transparency" -c
+	gmt math -T3.5/5/0.1 75 = >> Line.txt
+	gmt basemap -R-1/5/-20/130 -BWStr -BxcCustom_annoLine.txt -Bya+l"Symbol transparency" -c
 	gmt plot -W3p,green <<- EOF
 	-1	100
 	0	100
@@ -179,7 +179,7 @@ gmt begin png/Fig_events_curves png
 	-1	0
 	6	0
 	EOF
-	gmt plot -W2p t.txt
+	gmt plot -W2p Line.txt
 	gmt plot -Sv0.15i+bt+et+s -W1.5p,red <<- EOF
 	-0.5	110	1.5	110
 	EOF
@@ -202,14 +202,14 @@ gmt begin png/Fig_events_curves png
 	EOF
 	# LABELS
 	# Rise (t = -0.5 to 0 transparency goes from 100 to 0)
-	gmt math -T-0.5/0/0.02 1 T 0.5 ADD 2 MUL SUB 2 POW 100 MUL = t.txt
+	gmt math -T-0.5/0/0.02 1 T 0.5 ADD 2 MUL SUB 2 POW 100 MUL = Line.txt
 	# normal (t = 0 to 3 transparency stays at 0)
-	gmt math -T0/3/0.1 0 = >> t.txt
+	gmt math -T0/3/0.1 0 = >> Line.txt
 	# Fade (t = 3 to 3.5 transparency linearly increases to 100 during fading)
-	gmt math -T3/3.5/0.1 T 3 SUB 2 MUL 100 MUL = >> t.txt
+	gmt math -T3/3.5/0.1 T 3 SUB 2 MUL 100 MUL = >> Line.txt
 	# Code (t = 3.5 5 transparency stays at 100 during coda)
-	gmt math -T3.5/5/0.1 100 = >> t.txt
-	gmt basemap -R-1/5/-20/130 -BWStr -BxcB.txt -Bya+l"Label transparency" -c
+	gmt math -T3.5/5/0.1 100 = >> Line.txt
+	gmt basemap -R-1/5/-20/130 -BWStr -BxcCustom_annoLine.txt -Bya+l"Label transparency" -c
 	gmt plot -W3p,green <<- EOF
 	-1	100
 	0	100
@@ -222,7 +222,7 @@ gmt begin png/Fig_events_curves png
 	-1	0
 	6	0
 	EOF
-	gmt plot -W2p t.txt
+	gmt plot -W2p Line.txt
 	gmt plot -Sv0.15i+bt+et+s -W1.5p,blue <<- EOF
 	0	110	3	110
 	EOF
@@ -238,5 +238,5 @@ gmt begin png/Fig_events_curves png
 	1.5 120 FULL VISIBILITY OF LABEL
 	EOF
 	gmt subplot end 
-	rm -f B.txt t.txt
+	rm -f Custom_annoLine.txt Line.txt
 gmt end show

@@ -2,7 +2,7 @@
 #
 # Makes a plot of the general movie dimensions and label placements
 #
-# Wessel, Esteban, & Delaviel-Anger, 2023
+# Wessel, Esteban, & Delaviel-Anger, 2024
 #
 
 # Determine if we need to specify an output directory or not
@@ -41,7 +41,7 @@ gmt begin ${dir}Fig_canvas $1
 	2.8	3	0	LM	-X@%2%off@%%
 	6	2.8		0	CB	-Y@%2%off@%%
 	EOF
-	cat <<- EOF > pos.txt
+	cat <<- EOF > Position.txt
 	1.15	0.75	BL
 	13.0	0.75	BC
 	22.85	0.75	BR
@@ -54,6 +54,6 @@ gmt begin ${dir}Fig_canvas $1
 	EOF
 	while read x y txt; do
 		echo 0 0 ${txt} | gmt text -D${x}/${y} -F+f12p,Courier-Bold+jCM -C0.5c/0.2c -W0.2p,dashed -Gwhite
-	done < pos.txt
+	done < Position.txt
 gmt end show
-rm -f pos.txt
+rm -f Position.txt
