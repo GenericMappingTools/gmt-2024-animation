@@ -13,17 +13,29 @@ help::
 #!make <target>, where <target> can be:
 #!
 #!all           : Just build or update PNG figures and movies for the paper
+#!figs          : Just build or update PNG figures
+#!movies        : Just build or update MP4 movies
 #!clean-figs    : Delete all created PNG products
 #!clean-movies  : Delete all created MP4 products
 #!spotless      : Delete all created graphic products
 #!
 #---------------------------------------------------------------------------
 # List of scripts creating illustrations and movies (all called Figure)
-FIGs=	WED-A_Fig_1.sh WED-A_Fig_2.sh WED-A_Fig_3.sh WED-A_Fig_4.sh WED-A_Fig_5.sh WED-A_Fig_6.sh \
-		Movie_IndianaJones_flight.sh Movie_IndianaJones_flight_complex.sh
+FIGS=	WED-A_Fig_1.shWED-A_Fig_3.sh WED-A_Fig_5.sh
+MOVIES=	WED-A_Fig_2.sh WED-A_Fig_4.sh WED-A_Fig_6.sh
+#		Movie_IndianaJones_flight.sh Movie_IndianaJones_flight_complex.sh
 
-all:
-	bash ${FIGS}
+figs:
+	for script in $(FIGS) ; do\
+		bash $$script; \
+	done
+
+movies:
+	for script in $(MOVIES) ; do\
+		bash $$script; \
+	done
+
+all:	figs movies
 
 clean-figs:
 	rm -f *.png
