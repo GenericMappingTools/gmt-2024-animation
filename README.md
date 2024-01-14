@@ -1,12 +1,12 @@
-# gmt-2023-animation
+# gmt-2024-animation
 
-The Generic Mapping Tools and Animations for the Masses
-
-	P. Wessel, F. Esteban, and G. Delaviel-Anger
+Wessel, Esteban, & Delaviel-Anger, 2024,
+	The Generic Mapping Tools and Animations for the Masses,
+	Geochem. Geophys. Geosyst.
 	
-Illustration and movie scripts for 2023 publication on GMT animations
+Illustration and movie scripts for 2024 publication on GMT animations
 
 The paper will be Open Access but the GMT scripts used to make
 the illustrations as well as the movie examples will be stored
-in this public (once reviewed) repository.  That way, uses can
+in this public (once reviewed) repository.  That way, users can
 reproduce the animations.
