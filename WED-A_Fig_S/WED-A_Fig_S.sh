@@ -1,21 +1,26 @@
-#!/usr/bin/bash	
+#!/usr/bin/bash
+#
+# Figure S (a movie) in this paper: WED-A_Fig_S.sh
+# https://github.com/GenericMappingTools/gmt-2024-animation
+#
+# Wessel, Esteban, & Delaviel-Anger, 2024,
+# The Generic Mapping Tools and Animations for the Masses,
+# Geochem. Geophys. Geosyst.
+#
+# Purpose: Movie of seismicity near La Soufrière volcano (La Guadeloupe, Lesser Antilles)
+#--------------------------------------------------------------------------------
 
-#	#	#	#	#	#	#
-#	A GMT SCRIPT :
-#	- modules : 
-#		movie, events, grdview, plot3d, coast, basemap, math, info
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# #																								# #
+# #											MOVIE												# #
+# # 										time												# #
+# #																								# #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #
-#	- acknowledgment :
-#		Institut de Physique du Globe de Paris [IPGP] / Research Collection
-#		for more info, visit https://dataverse.ipgp.fr/dataset.xhtml?persistentId=doi:10.18715/IPGP.2022.l3ylhaal
-#	
-#	- data : 	* .csv 				:
-#					event timestamp, location and identifier
-#				* @earth_relief_	:
-#					remote data from IGPP Global Earth Relief
-#
-#	- objective : provide an 3D animation of subduction's zone seismicity
-#
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
 
 # Hypocenters data
 DATA_file="DATA/2014-2019_catalog.csv"
