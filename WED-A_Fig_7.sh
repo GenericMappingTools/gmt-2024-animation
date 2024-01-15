@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 #
-# Movie_IndianaJones_flight.sh
+# Figure 7 (a movie) in this paper: WED-A_Fig_7.sh
+# https://github.com/GenericMappingTools/gmt-2024-animation
 #
-# Wessel, Esteban, & Delaviel-Anger, 2023
+# Wessel, Esteban & Delaviel-Anger, 2024,
+# The Generic Mapping Tools and Animations for the Masses,
+# Geochem. Geophys. Geosyst.
 #
-# Create a simple Indiana Jones flight animation where
-# ...
+# Purpose: Simple movie with Indiana Jones flight.
+#--------------------------------------------------------------------------------
+FIG=WED-A_Fig_7
 
 # File with variables used 
 cat << 'EOF' > in.sh
@@ -32,9 +36,4 @@ gmt begin
 gmt end
 EOF
 #	Create animation
-gmt movie main.sh -Iin.sh -Sbpre.sh -NMovie_IndianaJones_flight -Tdistance_vs_frame.txt -Cfhd -Fmp4 -Zs -Vi
-# Place animation
-mkdir -p mp4
-mv -f Movie_IndianaJones_flight.mp4 mp4
-mkdir -p png
-mv -f Movie_IndianaJones_flight.png png
+gmt movie main.sh -Iin.sh -Sbpre.sh -N${FIG} -Tdistance_vs_frame.txt -Cfhd -Fmp4 -Zs -Vi

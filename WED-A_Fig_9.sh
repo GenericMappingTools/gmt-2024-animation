@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
 #
-# Wessel, Esteban, & Delaviel-Anger, 2023
+# Figure 9 (a movie) in this paper: WED-A_Fig_9.sh
+# https://github.com/GenericMappingTools/gmt-2024-animation
 #
-# Create an animation showcasing Lionel Messi's goals over time, 
+# Wessel, Esteban & Delaviel-Anger, 2024,
+# The Generic Mapping Tools and Animations for the Masses,
+# Geochem. Geophys. Geosyst.
+#
+# Purpose: Create an animation showcasing Lionel Messi's goals over time, 
 # around the world and with detail in western Europe.
-
-# Delete at the end
-export http_proxy="http://proxy.fcen.uba.ar:8080"
+#--------------------------------------------------------------------------------
+FIG=WED-A_Fig_9
 
 # 1. Calculate map/canvas height
     main_map_region=-130/145/-40/64 # West/East/South/North boundaries
@@ -77,13 +81,6 @@ EOF
 
 #	----------------------------------------------------------------------------------------------------------
 # 	5. Run the movie
-gmt movie main.sh -Iin.sh -Sbpre.sh -C${canvas_width}cx${canvas_height}cx80 -Tdates_vs_goals.txt -NMovie_Messi -H2 -Ml,png -Vi -Zs -Gblack -K+fo+p \
+gmt movie main.sh -Iin.sh -Sbpre.sh -C${canvas_width}cx${canvas_height}cx80 -Tdates_vs_goals.txt -N${FIG} -H2 -Ml,png -Vi -Zs -Gblack -K+fo+p \
     -Lc0+jTR+o0.3/0.3+gwhite+h2p/-2p+r --FONT_TAG=14p  --FORMAT_CLOCK_MAP=- --FORMAT_DATE_MAP=dd-mm-yyyy   \
 	-Lc1+jTL+o0.3/0.3+gwhite+h2p/-2p+r -Fmp4
-
-# Place animation and clean up
-mkdir -p mp4
-mv -f Movie_Messi.mp4 mp4
-mkdir -p png
-mv -f Movie_Messi.png png
-rm gmt.history
