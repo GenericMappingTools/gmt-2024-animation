@@ -1,6 +1,6 @@
 # Animations
 
-## A year of precipitation : 
+## A decade of precipitation around the world : 
 Cluster **GRACE** *@yale.edu*
 
 Dataset from [Climate Data Store](https://cds.climate.copernicus.eu/cdsapp#!/dataset/satellite-precipitation?tab=overview) project: Daily precipitation, gridded data from 2010 to 2022 derived from satellite measurements. [XX Gb]
