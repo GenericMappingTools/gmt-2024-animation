@@ -11,9 +11,8 @@
 #--------------------------------------------------------------------------------
 FIG=WED-A_Fig_rho
 #
-# HD or UHD movie of the 3-D density structure of the Emperors
-# The awkward -C settings was selected to give HD or UHD widths and
-# even integer heights.
+# High-resolution movie of the 3-D density structure of the Emperors
+# HD if -C1920x700x116+c and UHD if -C3840x1400x232+c.
 
 cat << EOF > pre.sh
 # Prepare data and CPT for movie
@@ -25,7 +24,6 @@ gmt begin
 	#cp -f data/*.nc .
 gmt end
 EOF
-# 116 or 232 dpc
 cat << 'EOF' > main.sh
 gmt begin
 	# Lay down average density grid in the horizontal plane
@@ -41,6 +39,5 @@ gmt begin
 	gmt colorbar -Crho3D.cpt -DJCB+w5c+o-5.75c/-0.5c -Bxaf -By+l"kg/m@+3@+" --FONT_ANNOT_PRIMARY=7p --MAP_FRAME_PEN=0.5p
 gmt end
 EOF
-gmt movie -Tpos3D.txt main.sh -Sbpre.sh -C16.5517241379cx6.03448275862cx116 -D12 -N${FIG} -Ls"Emperor Seamounts 3-D Density Model"+jTC -Pc+ac0 -Fmp4 -M50,png -Zs -H4
-gmt movie -Tpos3D.txt main.sh -Sbpre.sh -C1920x700x116+c -D12 -N${FIG} -Ls"Emperor Seamounts 3-D Density Model"+jTC -Pc+ac0 -M50,png -Zs -H4
+gmt movie -Tpos3D.txt main.sh -Sbpre.sh -C1920x700x116+c -D12 -N${FIG} -Ls"The Emperor Seamounts 3-D Density Model"+jTC -Pc+ac0 -M50,png -Fmp4 -H2 -Zs
 rm -f slice.txt pos3D.txt rho3D.cpt
