@@ -20,7 +20,7 @@ cat << EOF > pre.sh
 gmt begin
 	# Select the range of along-strike y-profiles in 2 km increments
 	gmt math -T-150/150/2 -o1 -I T = pos3D.txt
-	gmt makecpt -Cturbo -T2200/3000 -I --COLOR_BACKGROUND=black -H > rho3D.cpt
+	gmt makecpt -Croma -T2150/3050 -I --COLOR_BACKGROUND=black -H > rho3D.cpt
 	#unzip data/Emperor_oblique_prisms.txt.zip
 	#cp -f data/*.nc .
 gmt end
@@ -41,7 +41,6 @@ gmt begin
 	gmt colorbar -Crho3D.cpt -DJCB+w5c+o-5.75c/-0.5c -Bxaf -By+l"kg/m@+3@+" --FONT_ANNOT_PRIMARY=7p --MAP_FRAME_PEN=0.5p
 gmt end
 EOF
-exit
-#gmt movie -Tpos3D.txt main.sh -Sfpre.sh -C16.5517241379cx6.03448275862cx116 -D12 -N${FIG} -Ls"Emperor Seamounts 3-D Density Model"+jTC -Pc+ac0 -Fmp4 -M50,png -Zs
-gmt movie -Tpos3D.txt main.sh -Sbpre.sh -C16.5517241379cx6.03448275862cx116 -D12 -N${FIG} -Ls"Emperor Seamounts 3-D Density Model"+jTC -Pc+ac0 -M50,png -Zs
+gmt movie -Tpos3D.txt main.sh -Sbpre.sh -C16.5517241379cx6.03448275862cx116 -D12 -N${FIG} -Ls"Emperor Seamounts 3-D Density Model"+jTC -Pc+ac0 -Fmp4 -M50,png -Zs -H4
+gmt movie -Tpos3D.txt main.sh -Sbpre.sh -C1920x700x116+c -D12 -N${FIG} -Ls"Emperor Seamounts 3-D Density Model"+jTC -Pc+ac0 -M50,png -Zs -H4
 rm -f slice.txt pos3D.txt rho3D.cpt
