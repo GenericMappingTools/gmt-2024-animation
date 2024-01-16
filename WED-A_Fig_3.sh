@@ -3,7 +3,7 @@
 # Figure 3 in this paper: WED-A_Fig_3.sh
 # https://github.com/GenericMappingTools/gmt-2024-animation
 #
-# Wessel, Esteban, & Delaviel-Anger, 2024,
+# Wessel, Esteban & Delaviel-Anger, 2024,
 #	The Generic Mapping Tools and Animations for the Masses,
 #	Geochem. Geophys. Geosyst.
 #
