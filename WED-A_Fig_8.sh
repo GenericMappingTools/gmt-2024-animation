@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 #
-# Fig_movie_IndianaJones_Flight_Complex.sh
+# Figure 8 (a movie) in this paper: WED-A_Fig_8.sh
+# https://github.com/GenericMappingTools/gmt-2024-animation
 #
-# Wessel, Esteban, & Delaviel-Anger, 2023
+# Wessel, Esteban & Delaviel-Anger, 2024,
+# The Generic Mapping Tools and Animations for the Masses,
+# Geochem. Geophys. Geosyst.
 #
-# Create a more complex Indiana Jones flight animation where
-# we make some further changes to the initial animation:
-#   1. Add a title sequences to explain what the movie illustrates.
-#   2. Plot a city circle and label when plane is within 250 km of city
-#   3. Add the Raiders of the Lost Arc soundtrack
+# Purpose: Complex movie with Indiana Jones flight
+#--------------------------------------------------------------------------------
+FIG=WED-A_Fig_8
 
 # 1. File with variables used 
 cat << 'EOF' > in.sh
@@ -65,9 +66,4 @@ gmt begin
 gmt end
 EOF
 #	Create animation
-gmt movie main.sh -AIndianaJones_RaidersMarch.mp3+e -Iin.sh -Sbpre.sh -NMovie_IndianaJones_flight_complex -Tdistance_vs_frame.txt -Mm,png -Etitle.sh+d6s+fo1s -Cfhd -Fmp4 -Vi -D60 -K+p -Zs
-# Place animation
-mkdir -p mp4
-mv -f Movie_IndianaJones_flight_complex.mp4 mp4
-mkdir -p png
-mv -f Movie_IndianaJones_flight_complex.png png
+gmt movie main.sh -AIndianaJones_RaidersMarch.mp3+e -Iin.sh -Sbpre.sh -N${FIG} -Tdistance_vs_frame.txt -Mm,png -Etitle.sh+d6s+fo1s -Cfhd -Fmp4 -Vi -D60 -K+p -Zs
