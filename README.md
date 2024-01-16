@@ -1,6 +1,6 @@
 # gmt-2024-animation
 
-Wessel, Esteban, & Delaviel-Anger, 2024,
+Wessel, Esteban & Delaviel-Anger, 2024,
 	The Generic Mapping Tools and Animations for the Masses,
 	Geochem. Geophys. Geosyst.
 	
