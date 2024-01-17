@@ -61,7 +61,7 @@ posy_profile=$(gmt math -Q ${posy_region} $(gmt mapproject ${DOMAIN_region} -JM$
 # 3D view
 azimuth=135
 elevation=20
-PERSPECTIVE="${azimuth}/${elevation}"
+PERSPECTIVE="${azimuth}/${elevation}+w${SOUFRIERE}"
 
 
 max_depth_data=$(gmt math -C3 -o3 ${DATA_file} -1 MUL LOWER -Sf =)
@@ -101,63 +101,63 @@ gmt begin test png
 		topo_island.nc -Crelief.cpt -Qc -I+d \
 		-Bafg \
 		-Xa${posx_volc} -Ya$(gmt math -Q ${posy_volc} 12 ${elevation} COSD MUL ADD =) \
-		-p
+		-p -t50
 
 
 # # # 
 # # # 
 # # # 
-	# Minimap : coast
-	gmt coast ${DOMAIN_region} -JM${width_region}c -W -Slightblue -Glightbrown \
-		-TdjBL+f1+l \
-		-Ba0.5f0.5g0.5 \
-		-Xa${posx_region} -Ya${posy_region} \
-		--FORMAT_GEO_MAP="ddd.xxx" --FONT_ANNOT_PRIMARY=4p
+# 	# Minimap : coast
+# 	gmt coast ${DOMAIN_region} -JM${width_region}c -W -Slightblue -Glightbrown \
+# 		-TdjBL+f1+l \
+# 		-Ba0.5f0.5g0.5 \
+# 		-Xa${posx_region} -Ya${posy_region} \
+# 		--FORMAT_GEO_MAP="ddd.xxx" --FONT_ANNOT_PRIMARY=4p
 
-	gmt basemap -Bwesn -p90 \
-		-LjBR+w$(gmt math -Q 1 DEG2KM RINT -Vq =)k+o-0.15c/$(gmt math -Q -${width_region} 0.3 ADD =)c+u+c+f \
-		-Xa${posx_region} -Ya${posy_region} \
-		--FONT_ANNOT_PRIMARY=4p --MAP_SCALE_HEIGHT=3p 
+# 	gmt basemap -Bwesn -p90 \
+# 		-LjBR+w$(gmt math -Q 1 DEG2KM RINT -Vq =)k+o-0.15c/$(gmt math -Q -${width_region} 0.3 ADD =)c+u+c+f \
+# 		-Xa${posx_region} -Ya${posy_region} \
+# 		--FONT_ANNOT_PRIMARY=4p --MAP_SCALE_HEIGHT=3p 
 
-	# Minimap : hypocenters (within radius)
-	gmt select ${DATA_file} -i2,1 -fg -C${SOUFRIERE}+d50k > subset.txt
-	gmt plot ${DATA_file} -i2,1 -Sc0.1c -Glightgray  -Xa${posx_region} -Ya${posy_region} -t80
-	gmt plot subset.txt -Sc0.1c -Gblack -Xa${posx_region} -Ya${posy_region} -t50
+# 	# Minimap : hypocenters (within radius)
+# 	gmt select ${DATA_file} -i2,1 -fg -C${SOUFRIERE}+d50k > subset.txt
+# 	gmt plot ${DATA_file} -i2,1 -Sc0.1c -Glightgray  -Xa${posx_region} -Ya${posy_region} -t80
+# 	gmt plot subset.txt -Sc0.1c -Gblack -Xa${posx_region} -Ya${posy_region} -t50
 
-	# Minimap : swath
-	gmt plot table.txt -Wfaint,black -Xa${posx_region} -Ya${posy_region}
+# 	# Minimap : swath
+# 	gmt plot table.txt -Wfaint,black -Xa${posx_region} -Ya${posy_region}
 
-	# # Minimap : dome
-	# echo $(echo ${SOUFRIERE} | awk -F[/] '{printf "%f %f", $1,$2}') | gmt plot -Sx0.25c -Wred -Xa${posx_region} -Ya${posy_region} # Marker of La Soufriere Volcano
+# 	# # Minimap : dome
+# 	# echo $(echo ${SOUFRIERE} | awk -F[/] '{printf "%f %f", $1,$2}') | gmt plot -Sx0.25c -Wred -Xa${posx_region} -Ya${posy_region} # Marker of La Soufriere Volcano
 	
-	# Minimap : rotating arrow
-	gmt plot -Rg -JG180/90/3c -SV0.4c+ea+h0+a60+gred -Wfatter,red \
-	-Xa$(gmt math -Q ${posx_region} 0.66 SUB =) -Ya$(gmt math -Q ${posy_region} 3.75 ADD =) <<- EOF
-	${arrow_lon} 5 0 0.75c
-	EOF
-	# gmt basemap -Bafg -Xa$(gmt math -Q ${posx_region} 0.66 SUB =) -Ya$(gmt math -Q ${posy_region} 3.75 ADD =) # Frame for "polar" projection
+# 	# Minimap : rotating arrow
+# 	gmt plot -Rg -JG180/90/3c -SV0.4c+ea+h0+a60+gred -Wfatter,red \
+# 	-Xa$(gmt math -Q ${posx_region} 0.66 SUB =) -Ya$(gmt math -Q ${posy_region} 3.75 ADD =) <<- EOF
+# 	${arrow_lon} 5 0 0.75c
+# 	EOF
+# 	# gmt basemap -Bafg -Xa$(gmt math -Q ${posx_region} 0.66 SUB =) -Ya$(gmt math -Q ${posy_region} 3.75 ADD =) # Frame for "polar" projection
 
 
-# # # 
-# # # 
-# # # 
-	# Profile : hypocenters
-	gmt plot subset.txt  -R-40/100/-10000/3000 -JX${width_profile}/${width_region} \
-		-Xa${posx_profile} -Ya${posy_profile}
+# # # # 
+# # # # 
+# # # # 
+# 	# Profile : hypocenters
+# 	gmt plot subset.txt  -R-40/100/-10000/3000 -JX${width_profile}/${width_region} \
+# 		-Xa${posx_profile} -Ya${posy_profile}
 
-	# Profile : sea_area
-	gmt plot sea_area.txt -Glightblue -Sb1q+b0 -Xa${posx_profile} -Ya${posy_profile}
-	gmt plot -W -Xa${posx_profile} -Ya${posy_profile} <<- EOF
-	-40 0
-	100 0
-	EOF
+# 	# Profile : sea_area
+# 	gmt plot sea_area.txt -Glightblue -Sb1q+b0 -Xa${posx_profile} -Ya${posy_profile}
+# 	gmt plot -W -Xa${posx_profile} -Ya${posy_profile} <<- EOF
+# 	-40 0
+# 	100 0
+# 	EOF
 
-	# Profile : topo thickness
-	gmt plot -Wthick stack.txt -i0,1,5,6 -L+b -Glightgray -Xa${posx_profile} -Ya${posy_profile}
-	echo "WSW" | gmt text -F+cTL+fHelvetica-Bold -DJ0.1 -Xa${posx_profile} -Ya${posy_profile}
-	echo "ENE" | gmt text -F+cTR+fHelvetica-Bold -DJ0.1 -Xa${posx_profile} -Ya${posy_profile}
+# 	# Profile : topo thickness
+# 	gmt plot -Wthick stack.txt -i0,1,5,6 -L+b -Glightgray -Xa${posx_profile} -Ya${posy_profile}
+# 	echo "WSW" | gmt text -F+cTL+fHelvetica-Bold -DJ0.1 -Xa${posx_profile} -Ya${posy_profile}
+# 	echo "ENE" | gmt text -F+cTR+fHelvetica-Bold -DJ0.1 -Xa${posx_profile} -Ya${posy_profile}
 
-	gmt basemap  -Bxafg1000+l"Distance from dome (km)" -Byaf+l"Depth (m)" -BWSne -Xa${posx_profile} -Ya${posy_profile}
+# 	gmt basemap  -Bxafg1000+l"Distance from dome (km)" -Byaf+l"Depth (m)" -BWSne -Xa${posx_profile} -Ya${posy_profile}
 
 gmt end show
 
