@@ -10,40 +10,26 @@
 # Purpose: Movie of seismicity near La Soufrière volcano (La Guadeloupe, Lesser Antilles)
 #--------------------------------------------------------------------------------
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# #																								# #
-# #											MOVIE												# #
-# # 										time												# #
-# #																								# #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-
-
-
 # Hypocenters data
 DATA_file="DATA/2014-2019_catalog.csv"
-
 
 # # Topography data
 res_topo="01s"
 gmt grdmath -RGP @earth_synbath_${res_topo}_g 0 GT 0 NAN @earth_synbath_${res_topo}_g MUL = topo_island.nc
 
-
 # Area of Interest
-SOUFRIERE="-61.663406/16.043829"
+SOUFRIERE_LON=-61.663406
+SOUFRIERE_LAT=16.043829
+SOUFRIERE=${SOUFRIERE_LON}/${SOUFRIERE_LAT}
 
 max_dist_volc=12
-west_lim=$(gmt math -Q $(echo ${SOUFRIERE} | awk -F[/] '{print $1}') ${max_dist_volc}  KM2DEG SUB -Vq =)
-east_lim=$(gmt math -Q $(echo ${SOUFRIERE} | awk -F[/] '{print $1}') ${max_dist_volc}  KM2DEG ADD -Vq =)
-south_lim=$(gmt math -Q $(echo ${SOUFRIERE} | awk -F[/] '{print $2}') ${max_dist_volc}  KM2DEG SUB -Vq  =)
-north_lim=$(gmt math -Q $(echo ${SOUFRIERE} | awk -F[/] '{print $2}') ${max_dist_volc}  KM2DEG ADD -Vq  =)
+west_lim=$(gmt math -Q ${SOUFRIERE_LON} ${max_dist_volc} ${SOUFRIERE_LAT} COSD MUL KM2DEG SUB =)
+east_lim=$(gmt math -Q ${SOUFRIERE_LON} ${max_dist_volc} ${SOUFRIERE_LAT} COSD MUL KM2DEG ADD =)
+south_lim=$(gmt math -Q ${SOUFRIERE_LAT} ${max_dist_volc} KM2DEG SUB  =)
+north_lim=$(gmt math -Q ${SOUFRIERE_LAT} ${max_dist_volc} KM2DEG ADD  =)
 
 DOMAIN_region=$(gmt mapproject -RGP,MQ+r1 -WR)
 DOMAIN_volc="-R${west_lim}/${east_lim}/${south_lim}/${north_lim}"
-
-
 
 # Figure's dimension
 width_volc=$(gmt math -Q 9 2 SQRT MUL =) # diagonal from 9cm edge
@@ -63,7 +49,6 @@ azimuth=135
 elevation=20
 PERSPECTIVE="${azimuth}/${elevation}+w${SOUFRIERE}"
 
-
 max_depth_data=$(gmt math -C3 -o3 ${DATA_file} -1 MUL LOWER -Sf =)
 max_depth_3d=$(gmt math -Q $max_depth_data 1000 MUL =)
 # max_depth_coupe=-137000 #gmt histogram $DATA_file -i3 -Glightblue -W -T1 -Baf -png test
@@ -77,7 +62,6 @@ EOF
 gmt grdtrack ${DOMAIN_region} track.txt -G@earth_synbath_${res_topo}_g -C200k/0.1/0.25+v -Sm+sstack.txt -Vq > table.txt
 gmt math stack.txt 0 LE 0 NAN stack.txt MUL = sea_area.txt
 
-
 # # # # # # # # # 
 gmt begin test png
 	gmt makecpt -Coleron -T0/${max_alt} -H > relief.cpt
@@ -90,7 +74,6 @@ gmt begin test png
 		-Xa${posx_volc} -Ya${posy_volc} \
 		-p${PERSPECTIVE}
 
-
 	# 3D view : surface
 	gmt coast ${DOMAIN_volc} -JM${width_volc} \
 	-Wthick,black -Df -Slightblue -t75 \
@@ -102,7 +85,6 @@ gmt begin test png
 		-Bafg \
 		-Xa${posx_volc} -Ya$(gmt math -Q ${posy_volc} 12 ${elevation} COSD MUL ADD =) \
 		-p -t50
-
 
 # # # 
 # # # 
@@ -128,7 +110,7 @@ gmt begin test png
 # 	gmt plot table.txt -Wfaint,black -Xa${posx_region} -Ya${posy_region}
 
 # 	# # Minimap : dome
-# 	# echo $(echo ${SOUFRIERE} | awk -F[/] '{printf "%f %f", $1,$2}') | gmt plot -Sx0.25c -Wred -Xa${posx_region} -Ya${posy_region} # Marker of La Soufriere Volcano
+# 	# echo ${SOUFRIERE_LON} ${SOUFRIERE_LAT} | gmt plot -Sx0.25c -Wred -Xa${posx_region} -Ya${posy_region} # Marker of La Soufriere Volcano
 	
 # 	# Minimap : rotating arrow
 # 	gmt plot -Rg -JG180/90/3c -SV0.4c+ea+h0+a60+gred -Wfatter,red \
@@ -136,7 +118,6 @@ gmt begin test png
 # 	${arrow_lon} 5 0 0.75c
 # 	EOF
 # 	# gmt basemap -Bafg -Xa$(gmt math -Q ${posx_region} 0.66 SUB =) -Ya$(gmt math -Q ${posy_region} 3.75 ADD =) # Frame for "polar" projection
-
 
 # # # # 
 # # # # 
@@ -160,5 +141,3 @@ gmt begin test png
 # 	gmt basemap  -Bxafg1000+l"Distance from dome (km)" -Byaf+l"Depth (m)" -BWSne -Xa${posx_profile} -Ya${posy_profile}
 
 gmt end show
-
-
