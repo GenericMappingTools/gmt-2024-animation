@@ -1,3 +1,5 @@
+export http_proxy="http://proxy.fcen.uba.ar:8080"
+
 #!/usr/bin/env bash
 #
 # Figure P (a movie) in this paper: WED-A_Fig_P.sh
@@ -40,31 +42,6 @@
 FIG="WED-A_Fig_P" 
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# #								Where is my mind 												# #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# This block purpose is to ensure PATH consistency
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-PROFILE="cluster"
-
-if [ ${PROFILE} = "local" ]; then
-	root_dir="/Users/guillaume/Documents/GMT/gmt-2024-animation"
-elif [ ${PROFILE} = "cluster" ]; then
-	root_dir="/home/gd428/EMPTY_project/gmt-2024-animation"
-else
-	echo "You are not Groot"
-	exit
-fi
-
-work_dir="${root_dir}/TMP"
-if [ ! -d "${work_dir}" ]; then
-  echo "No, the journey doesn't end here (JRRT)"
-  exit
-fi
-
-cd ${work_dir}
-
-
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # 									include.sh												  #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # In this part, we declare all fixed variables for the general framework of the movie.
@@ -91,27 +68,26 @@ cat <<- 'EOF' > include.sh
 	date_stop_interest="2021-12-31"
 
 	# Generate the list of dates (corresponding to files)
-	gmt math -T${date_start_interest}T/${date_stop_interest}T/1 --TIME_UNIT=d -o0 T = ${work_dir}/timetable.txt
+	gmt math -T${date_start_interest}T/${date_stop_interest}T/1 --TIME_UNIT=d -o0 T = timetable.txt
 
 	# Generate the list of azimuth (used for Earth rotation)
-	gmt math -T0/360/$(gmt math -Q 360 $(wc -l ${work_dir}/timetable.txt | awk '{print $1}') DIV =) T -o0 = ${work_dir}/azimuth.txt
+	gmt math -T0/360/$(gmt math -Q 360 $(wc -l timetable.txt | awk '{print $1}') DIV =) T -o0 = azimuth.txt
+#	gmt math -T0/360/$(gmt math -Q 360 $(wc -l < timetable.txt ) DIV =) T -o0 = azimuth.txt
+#	gmt math -T0/360/$(wc -l < timetable.txt )+n T -o0 = azimuth.txt
 	
 	# Generate the index table for reading for time-series
 	row_start=$(gmt math -Q ${date_start_interest}T ${date_start}T SUB --TIME_UNIT=d =)
 	row_stop=$(gmt math -Q ${date_stop_interest}T ${date_start_interest}T SUB ${row_start} ADD 1 ADD --TIME_UNIT=d =)
-	gmt math -T${row_start}/${row_stop}/1 T -o0 = ${work_dir}/index_graphs.txt
+	gmt math -T${row_start}/${row_stop}/1 T -o0 = index_graphs.txt
 	
 	# Insure that the two files got the same length and concatenate them
-	echo "$(gmt math -Q ${date_stop_interest}T 1 ADD --TIME_UNIT=d -fT -o0 =)" >> ${work_dir}/timetable.txt
-	paste -d" " ${work_dir}/timetable.txt ${work_dir}/azimuth.txt ${work_dir}/index_graphs.txt > ${work_dir}/movie_frames.txt
-
+	echo "$(gmt math -Q ${date_stop_interest}T 1 ADD --TIME_UNIT=d -fT -o0 =)" >> timetable.txt
+	paste -d" " timetable.txt azimuth.txt index_graphs.txt > movie_frames.txt
 
 	# # Make Slow-Mo
-	# awk 'BEGIN { X=1; Y=10; N=7 } { if (NR >= X && NR <= Y) { for (i=1; i<=N; i++) { print } } else { print } }' ${work_dir}/movie_frames.txt > ${work_dir}/movie_frames_sl.txt
-	# awk 'BEGIN { X=1654; Y=1664; N=7 } { if (NR >= X && NR <= Y) { for (i=1; i<=N; i++) { print } } else { print } }' ${work_dir}/movie_frames_sl.txt > ${work_dir}/movie_frames_sm.txt
+	# awk 'BEGIN { X=1; Y=10; N=7 } { if (NR >= X && NR <= Y) { for (i=1; i<=N; i++) { print } } else { print } }' movie_frames.txt > movie_frames_sl.txt
+	# awk 'BEGIN { X=1654; Y=1664; N=7 } { if (NR >= X && NR <= Y) { for (i=1; i<=N; i++) { print } } else { print } }' movie_frames_sl.txt > movie_frames_sm.txt
 	
-
-
 	# Countries of Interest
 	coi_1='france'
 	coi_1_iso='FR'
@@ -131,8 +107,8 @@ cat <<- 'EOF' > include.sh
 	PLT_graph_width=$(gmt math -Q ${PLT_graph_height} 16 MUL 9 DIV FLOOR =)								# Graph width
 	PLT_inset_size=$(gmt math -Q ${PLT_graph_height} 3 DIV =)											# Inset size
 
-	rm -f ./gmt.conf																					# Make sure we're clear with GMT parameters
-	rm -f ${work_dir}/gmt.conf																			# (should be the same: sanity check)
+	#rm -f ./gmt.conf																					# Make sure we're clear with GMT parameters
+	#rm -f ${work_dir}/gmt.conf																			# (should be the same: sanity check)
 	gmt set MAP_GRID_PEN_SECONDARY faint,lightgray 														# Embellishment for time-series graph
 	gmt set FORMAT_DATE_OUT="dd o yyyy"
 	gmt set FORMAT_CLOCK_OUT="-"
@@ -146,8 +122,8 @@ cat <<- 'EOF' > include.sh
 	# (cumulated daily-mean precipitation within region normalized by region area)
 	# + 10% and 30% addition for graph y-range and unit annotation above 
 
-	coi1_range_max=$(gmt info ${root_dir}/SCRIPTS/DATA2/roi_results/france_filtered.txt -C -o3)
-	coi2_range_max=$(gmt info ${root_dir}/SCRIPTS/DATA2/roi_results/argentina_filtered.txt -C -o3)
+	coi1_range_max=$(gmt info ../data/roi_results/france_filtered.txt -C -o3)
+	coi2_range_max=$(gmt info ../data/roi_results/argentina_filtered.txt -C -o3)
 
 	subplt_region_max=$(gmt math -Q ${coi1_range_max} ${coi2_range_max} MAX =)
 		subplt_region_max_10=$(gmt math -Q ${subplt_region_max} 1.1 MUL =)
@@ -209,8 +185,8 @@ cat <<- 'EOF' > pre.sh
 		# # # # # # # # # # # # # # #	
 		
 		# Colour palettes
-		gmt makecpt -Crain -T0/50 -H -D		> ${work_dir}/precip.cpt	# foreground (data)
-		gmt makecpt -Cgray -T0/5000 -H -I	> ${work_dir}/relief.cpt	# background (topo)
+		gmt makecpt -Crain -T0/50 -H -D		> precip.cpt	# foreground (data)
+		gmt makecpt -Cgray -T0/5000 -H -I	> relief.cpt	# background (topo)
 		
 		colrbar_margin=0.5
 
@@ -302,14 +278,14 @@ EOF
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 cat <<- 'EOF' > main.sh
 
+	gmt set GMT_DATA_SERVER oceania
 	colrbar_margin=$(echo "${PLT_globe_size}/15;"|bc)
-	bg_color=$(tail -3 ${work_dir}/precip.cpt | head -1 | awk '{print $2}')
-
+	bg_color=$(tail -3 ../precip.cpt | head -1 | awk '{print $2}')
 
 	gmt begin
 
 		filename=$(gmt math -Q ${MOVIE_COL0} -fT --FORMAT_DATE_OUT=yyyymmdd --FORMAT_CLOCK_OUT=- =)
-		data="${root_dir}/SCRIPTS/DATA2/grids/${filename}.grd"			# File name to be processed
+		data="data/grids/${filename}.grd"			# File name to be processed
 		
 		# # # # # # # # # # # # # # #
 		# # 		Globe			#
@@ -323,8 +299,11 @@ cat <<- 'EOF' > main.sh
 		gmt grdimage -Rg -JG${MOVIE_COL1}/15/${PLT_globe_size}c -Bafg $data -Cprecip.cpt  \
 			-X0.4c -Y0.15c
 
-		gmt grdimage @earth_relief_03m -Crelief.cpt -I+d -t50
-		gmt coast -Dl -A5000 -Wthinner -Gantiquewhite -S${bg_color} -t65
+		gmt set GMT_DATA_UPDATE_INTERVAL 1d
+		gmt set GMT_DATA_SERVER oceania
+		gmt grdimage @earth_relief_30m -Crelief.cpt -I+d -t50
+		#gmt coast -Dl -A5000 -Wthinner -Gantiquewhite -S${bg_color} -t65
+		gmt coast -Dl -A5000 -Wthinner -Gantiquewhite -S238/237/243 -t65
 		gmt coast -Dl -A5000 -E${coi_1_iso}+g${coi_1_clr} -t45
 		gmt coast -Dl -A5000 -E${coi_2_iso}+g${coi_2_clr} -t45
 
@@ -347,11 +326,11 @@ cat <<- 'EOF' > main.sh
 			gmt subplot set 2
 
 				# Continuous line and moving dot
-				gmt plot ${root_dir}/SCRIPTS/DATA2/roi_results/${coi_1}_filtered.txt -Wthick,${coi_1_clr} -t20 -q0:${MOVIE_COL2}
-				gmt plot ${root_dir}/SCRIPTS/DATA2/roi_results/${coi_1}_filtered.txt -Sc0.2c -G${coi_1_clr} -Wthick,black -qi${MOVIE_COL2}
+				gmt plot ../data/roi_results/${coi_1}_filtered.txt -Wthick,${coi_1_clr} -t20 -q0:${MOVIE_COL2}
+				gmt plot ../data/roi_results/${coi_1}_filtered.txt -Sc0.2c -G${coi_1_clr} -Wthick,black -qi${MOVIE_COL2}
 
-				gmt plot ${root_dir}/SCRIPTS/DATA2/roi_results/${coi_2}_filtered.txt -Wthick,${coi_2_clr} -t20 -q0:${MOVIE_COL2}
-				gmt plot ${root_dir}/SCRIPTS/DATA2/roi_results/${coi_2}_filtered.txt -Sc0.2c -G${coi_2_clr} -Wthick,black -qi${MOVIE_COL2}
+				gmt plot ../data/roi_results/${coi_2}_filtered.txt -Wthick,${coi_2_clr} -t20 -q0:${MOVIE_COL2}
+				gmt plot ../data/roi_results/${coi_2}_filtered.txt -Sc0.2c -G${coi_2_clr} -Wthick,black -qi${MOVIE_COL2}
 
 		gmt subplot end
 
@@ -362,9 +341,6 @@ EOF
 # #											GMT MOVIE											  #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-# Inject working directory path at the beginning of "include.sh"
-echo -e "work_dir=\"${work_dir}\"\nroot_dir=\"${root_dir}\"\n$(cat include.sh)" > include.sh
-
 # Finally, the command to rule them all.
 #	-I for the parameters shared accross the animation
 #	-Sb for the static set-up
@@ -372,13 +348,11 @@ echo -e "work_dir=\"${work_dir}\"\nroot_dir=\"${root_dir}\"\n$(cat include.sh)" 
 #	-N & -M for filename and poster image respectively
 #	-P for the progress circle and -L for the timestamp labelling
 #	-C for the canvas size, -D for the frame rate and -F for the file format
-gmt movie main.sh \
-	-I${work_dir}/include.sh \
-	-Sb${work_dir}/pre.sh \
-	-T${work_dir}/movie_frames.txt \
-	-N${FIG} -Mf \
+gmt movie main.sh -Iinclude.sh -Sbpre.sh -Tmovie_frames.txt -N${FIG} -Mf,png \
 	-Pb+jTR+w0.75c -Lc --FORMAT_DATE_MAP="dd o yyyy" --FORMAT_CLOCK_MAP=- \
-	-C2160p -D21 -Fmp4
+	-C2160p -D21 -Zs -V #-Fmp4 
+	#-C2160p \
+	
 
 # # Clean after yourself
 # mkdir ${work_dir}/RESULTS/${FIG}
