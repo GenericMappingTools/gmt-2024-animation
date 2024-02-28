@@ -1,4 +1,4 @@
-export http_proxy="http://proxy.fcen.uba.ar:8080"
+#export http_proxy="http://proxy.fcen.uba.ar:8080"
 
 #!/usr/bin/env bash
 #
@@ -279,7 +279,8 @@ EOF
 cat <<- 'EOF' > main.sh
 
 	gmt set GMT_DATA_SERVER oceania
-	colrbar_margin=$(echo "${PLT_globe_size}/15;"|bc)
+	#colrbar_margin=$(echo "${PLT_globe_size}/15;"|bc)
+	colrbar_margin=$(gmt math -Q ${PLT_globe_size} 15 DIV =)
 	bg_color=$(tail -3 ../precip.cpt | head -1 | awk '{print $2}')
 
 	gmt begin
@@ -296,12 +297,17 @@ cat <<- 'EOF' > main.sh
 		# #		* coi				#		(projection history not retained elsewhere)
 		# # # # # # # # # # # # # # #
 		
+		# Try ploting grid first
+		#gmt grdimage -Rg -JG${MOVIE_COL1}/15/${PLT_globe_size}c -Bafg @earth_relief_30m -Crelief.cpt -I+d  \
+			-X0.4c -Y0.15c
+		#gmt grdimage $data -Cprecip.cpt -t50 -V
+
 		gmt grdimage -Rg -JG${MOVIE_COL1}/15/${PLT_globe_size}c -Bafg $data -Cprecip.cpt  \
 			-X0.4c -Y0.15c
-
+		
 		gmt set GMT_DATA_UPDATE_INTERVAL 1d
 		gmt set GMT_DATA_SERVER oceania
-		gmt grdimage @earth_relief_30m -Crelief.cpt -I+d -t50
+		gmt grdimage @earth_relief_15m -Crelief.cpt -I+d  #-t50
 		#gmt coast -Dl -A5000 -Wthinner -Gantiquewhite -S${bg_color} -t65
 		gmt coast -Dl -A5000 -Wthinner -Gantiquewhite -S238/237/243 -t65
 		gmt coast -Dl -A5000 -E${coi_1_iso}+g${coi_1_clr} -t45
@@ -348,7 +354,7 @@ EOF
 #	-N & -M for filename and poster image respectively
 #	-P for the progress circle and -L for the timestamp labelling
 #	-C for the canvas size, -D for the frame rate and -F for the file format
-gmt movie main.sh -Iinclude.sh -Sbpre.sh -Tmovie_frames.txt -N${FIG} -Mf,png \
+gmt movie main.sh -Iinclude.sh -Sbpre.sh -Tmovie_frames.txt -N${FIG} -Ml,png \
 	-Pb+jTR+w0.75c -Lc --FORMAT_DATE_MAP="dd o yyyy" --FORMAT_CLOCK_MAP=- \
 	-C2160p -D21 -Zs -V #-Fmp4 
 	#-C2160p \
