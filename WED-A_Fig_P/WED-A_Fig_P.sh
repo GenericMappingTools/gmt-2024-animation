@@ -279,14 +279,16 @@ EOF
 cat <<- 'EOF' > main.sh
 
 	gmt set GMT_DATA_SERVER oceania
-	#colrbar_margin=$(echo "${PLT_globe_size}/15;"|bc)
 	colrbar_margin=$(gmt math -Q ${PLT_globe_size} 15 DIV =)
+	echo ${colrbar_margin}
+	colrbar_margin=$(echo "${PLT_globe_size}/15;"|bc)
+	echo ${colrbar_margin}
 	bg_color=$(tail -3 ../precip.cpt | head -1 | awk '{print $2}')
 
 	gmt begin
 
 		filename=$(gmt math -Q ${MOVIE_COL0} -fT --FORMAT_DATE_OUT=yyyymmdd --FORMAT_CLOCK_OUT=- =)
-		data="data/grids/${filename}.grd"			# File name to be processed
+		data="data/grids/${filename}.grd+n0"			# File name to be processed
 		
 		# # # # # # # # # # # # # # #
 		# # 		Globe			#
@@ -298,18 +300,21 @@ cat <<- 'EOF' > main.sh
 		# # # # # # # # # # # # # # #
 		
 		# Try ploting grid first
-		#gmt grdimage -Rg -JG${MOVIE_COL1}/15/${PLT_globe_size}c -Bafg @earth_relief_30m -Crelief.cpt -I+d  \
-			-X0.4c -Y0.15c
-		#gmt grdimage $data -Cprecip.cpt -t50 -V
+		#gmt grdgradient @earth_relief_15m -Gearth_gradient.nc -A-45 -Nt1+a0
+		#gmt grdimage -Rg -JG${MOVIE_COL1}/15/${PLT_globe_size}c @earth_relief -Crelief.cpt -Iearth_gradient.nc -X0.4c -Y0.15c
+		
+		gmt grdimage -Rg -JG${MOVIE_COL1}/15/${PLT_globe_size}c @earth_relief -Crelief.cpt -I+d -X0.4c -Y0.15c
+		gmt grdimage $data -Cprecip.cpt -Bafg -Q
 
-		gmt grdimage -Rg -JG${MOVIE_COL1}/15/${PLT_globe_size}c -Bafg $data -Cprecip.cpt  \
-			-X0.4c -Y0.15c
+		#gmt grdimage -Rg -JG${MOVIE_COL1}/15/${PLT_globe_size}c -Bafg $data -Cprecip.cpt -X0.4c -Y0.15c
 		
 		gmt set GMT_DATA_UPDATE_INTERVAL 1d
 		gmt set GMT_DATA_SERVER oceania
-		gmt grdimage @earth_relief_15m -Crelief.cpt -I+d  #-t50
+		#gmt grdimage @earth_relief -Crelief.cpt -I+d -t50 -Vi
+		#gmt colorbar -Crelief.cpt
 		#gmt coast -Dl -A5000 -Wthinner -Gantiquewhite -S${bg_color} -t65
 		gmt coast -Dl -A5000 -Wthinner -Gantiquewhite -S238/237/243 -t65
+		#gmt coast -Dl -A5000 -Wthinner
 		gmt coast -Dl -A5000 -E${coi_1_iso}+g${coi_1_clr} -t45
 		gmt coast -Dl -A5000 -E${coi_2_iso}+g${coi_2_clr} -t45
 
