@@ -32,8 +32,9 @@ cat << 'EOF' > main.sh
 gmt begin
 	gmt set FONT_TAG 20p,Helvetica,black
 	# Truncate prisms below the current line, then plot the remaining prisms
-	#gmt select Emperor_oblique_prisms.txt -Z${MOVIE_COL0}/600+c1 > slice.txt -o0:2,3+o2650,4 -bo3h,2f
 	gmt select Emperor_oblique_prisms.txt -Z${MOVIE_COL0}/$((${MOVIE_COL0} + 2))+c1 > slice.txt -o0:2,3+o2650,4 -bo3h,2f
+	# Use the following line if you want to plot all the columns (be careful, it needs a lot of memory).
+	#gmt select Emperor_oblique_prisms.txt -Z${MOVIE_COL0}/600+c1 > slice.txt -o0:2,3+o2650,4 -bo3h,2f
 	gmt plot3d slice.txt -R100/2220/-280/200/0/6000 -Jx0.007c -Jz0.0006c -p165/30 -So1q+b -Crho3D.cpt -X1c -Y0.2c -bi3h,2f
 	# Draw the kink line
 	printf "100 ${MOVIE_COL0} 0\n2220 ${MOVIE_COL0} 0\n" | gmt plot3d -W0.25p -p
