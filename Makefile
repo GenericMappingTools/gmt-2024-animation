@@ -22,8 +22,7 @@ help::
 #---------------------------------------------------------------------------
 # List of scripts creating illustrations and movies (all called Figure)
 FIGS=	WED-A_Fig_1.sh WED-A_Fig_3.sh WED-A_Fig_5.sh
-MOVIES=	WED-A_Fig_2.sh WED-A_Fig_4.sh WED-A_Fig_6.sh WED-A_Fig_7.sh WED-A_Fig_8.sh WED-A_Fig_9.sh
-#		Movie_IndianaJones_flight.sh Movie_IndianaJones_flight_complex.sh
+MOVIES=	WED-A_Fig_2.sh WED-A_Fig_4.sh WED-A_Fig_6.sh WED-A_Fig_7.sh WED-A_Fig_8.sh WED-A_Fig_9.sh WED-A_Fig_10.sh WED-A_Fig_11.sh
 
 figs:
 	for script in $(FIGS) ; do\

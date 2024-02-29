@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Figure X in this paper: WED-A_Fig_rho.sh
+# Figure 10 in this paper: WED-A_Fig_rho.sh
 # https://github.com/GenericMappingTools/gmt-2024-animation
 #
 # Wessel, Esteban & Delaviel-Anger, 2024,
@@ -9,7 +9,7 @@
 #
 # Purpose: Show movie of Emperor 3-D density model sliced N-S.
 #--------------------------------------------------------------------------------
-FIG=WED-A_Fig_rho
+FIG=WED-A_Fig_10
 #
 # High-resolution movie of the 3-D density structure of the Emperors
 # HD if -C1920x700x116+c and UHD if -C3840x1400x232+c.
