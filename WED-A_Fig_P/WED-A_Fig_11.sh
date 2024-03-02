@@ -1,8 +1,6 @@
-export http_proxy="http://proxy.fcen.uba.ar:8080"
-
 #!/usr/bin/env bash
 #
-# Figure P (a movie) in this paper: WED-A_Fig_P.sh
+# Figure P (a movie) in this paper: WED-A_Fig_11.sh
 # https://github.com/GenericMappingTools/gmt-2024-animation
 #
 # Wessel, Esteban, & Delaviel-Anger, 2024,
@@ -11,7 +9,7 @@ export http_proxy="http://proxy.fcen.uba.ar:8080"
 #
 # Purpose: Movie of a decade of precipitation around the world
 #--------------------------------------------------------------------------------
-FIG="WED-A_Fig_P" 
+FIG="WED-A_Fig_11" 
 
 # The following lines of code aggregate several components :
 #
@@ -50,7 +48,7 @@ cat <<- 'EOF' > include.sh
 
 	date_start_interest="2012-01-01"
 	date_stop_interest="2022-01-01"
-
+	
 	# 1. Generate the list of dates
 	gmt math -T${date_start_interest}T/${date_stop_interest}T/1d -o0 T = timetable.txt
 
