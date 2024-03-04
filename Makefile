@@ -5,6 +5,7 @@
 #	The Generic Mapping Tools and Animations for the Masses,
 #	Geochem. Geophys. Geosyst.
 #
+# Note: This commands may NOT work on windows.
 
 help::
 		@grep '^#!' Makefile | cut -c3-
