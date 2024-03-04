@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+inicio=$(date +%s)
 #
 # Figure 8 (a movie) in this paper: WED-A_Fig_8.sh
 # https://github.com/GenericMappingTools/gmt-2024-animation
@@ -67,13 +68,27 @@ gmt begin
 gmt end
 EOF
 #	Create animation
-#gmt movie main.sh -Tdistance_vs_frame.txt -Iin.sh -Sbpre.sh -Etitle.sh+d6s+fo1s -N${FIG} -Mm,png \
-#	-AIndianaJones_RaidersMarch.mp3+e -Cfhd -Fpng -Vi -D60 -K+p # -Zs
 gmt movie main.sh -Tdistance_vs_frame.txt -Iin.sh -Sbpre.sh -Etitle.sh+d6s+fo1s -N${FIG} -Mm,png \
-	-AIndianaJones_RaidersMarch.mp3+e -Cfhd -Fmp4 -Vi -D60 -K+p # -Zs
+	-AIndianaJones_RaidersMarch.mp3+e -Cfhd -Fpng -Vi -D60 -K+p # -Zs
+# Sin -A*+e* para GMT 6.5
+gmt movie main.sh -Tdistance_vs_frame.txt -Iin.sh -Sbpre.sh -Etitle.sh+d6s+fo1s -N${FIG} -Mm,png \
+	-AIndianaJones_RaidersMarch.mp3 -Cfhd -Fmp4 -Vi -D60 -K+p #-Zs
 
-# WIP. Errores con 
+# WIP. Comando ffmpeg
+# orginal con audio estirado
 #ffmpeg -loglevel warning -f image2 -framerate 60 -y -i "/home/federico/Github/Esteban82/gmt-2024-animation/WED-A_Fig_8/WED-A_Fig_8_%04d.png" -i IndianaJones_RaidersMarch.mp3 -af atempo=1.00086 -vcodec libx264  -pix_fmt yuv420p WED-A_Fig_8.mp4
-#ffmpeg -thread_queue_size 4096 -loglevel warning -f image2 -framerate 60 -y -i "/home/federico/Github/Esteban82/gmt-2024-animation/WED-A_Fig_8/WED-A_Fig_8_%04d.png" -i IndianaJones_RaidersMarch.mp3 -af atempo=1.00086 -vcodec libx264  -pix_fmt yuv420p WED-A_Fig_8.mp4
+# original con thread_queue size modificado
+#ffmpeg -loglevel warning -f image2 -framerate 60 -y -i "WED-A_Fig_8/WED-A_Fig_8_%04d.png" -i IndianaJones_RaidersMarch.mp3 -af atempo=1.00086 -vcodec libx264  -pix_fmt yuv420p WED-A_Fig_8_original.mp4
+#ffmpeg -loglevel warning -f image2 -framerate 60 -y -i "/home/thor/Github/Esteban82/gmt-2024-animation/WED-A_Fig_8/WED-A_Fig_8_%04d.png" -i IndianaJones_RaidersMarch.mp3 -vcodec libx264  -pix_fmt yuv420p WED-A_Fig_8.mp4
 
-# ffmpeg error con -A+e?
+#ffmpeg -thread_queue_size 4096 -loglevel warning -f image2 -framerate 60 -y -i "WED-A_Fig_8/WED-A_Fig_8_%04d.png" -i IndianaJones_RaidersMarch.mp3 -af atempo=1.00086 -vcodec libx264  -pix_fmt yuv420p WED-A_Fig_8_threa_AudioEstirado.mp4
+# thread_queue size modificado y audio sin estirar
+#ffmpeg -thread_queue_size 4096 -loglevel warning -f image2 -framerate 60 -y -i "WED-A_Fig_8/WED-A_Fig_8_%04d.png" -i IndianaJones_RaidersMarch.mp3 -vcodec libx264  -pix_fmt yuv420p WED-A_Fig_8_thread_audioOriginal.mp4
+# thread_queue size modificado y audio sin estirar
+#ffmpeg -thread_queue_size 4096 -loglevel warning -f image2 -framerate 60 -y -i "WED-A_Fig_8/WED-A_Fig_8_%04d.png" -i IndianaJones_RaidersMarch.mp3 -vcodec libx264  -pix_fmt yuv420p WED-A_Fig_8_t_mute.mp4
+
+fin=$(date +%s)
+tiempo_total=$((fin - inicio))
+echo "El script tardó $tiempo_total segundos en ejecutarse."
+
+# Con la opcion +e no la toma

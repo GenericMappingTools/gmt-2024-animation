@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+inicio=$(date +%s)
 #
 # Figure 10 in this paper: WED-A_Fig_rho.sh
 # https://github.com/GenericMappingTools/gmt-2024-animation
@@ -43,5 +44,8 @@ gmt begin
 	gmt plot3d topography_profile.txt -W0.25p -p -gD0.3c -Vq
 gmt end
 EOF
-gmt movie -Tpos3D.txt main.sh -Sbpre.sh -C1920x700x116+c -D12 -N${FIG} -Ls"The Emperor Seamounts 3-D Density Model"+jTC -Pc+ac0 -M50,png -H2 -Fmp4 -V -Zs 
+gmt movie -Tpos3D.txt main.sh -Sbpre.sh -C1920x700x116+c -D12 -N${FIG} -Ls"The Emperor Seamounts 3-D Density Model"+jTC -Pc+ac0 -M50,png -H2 -Fmp4 -Vi -Zs 
 rm -f slice.txt pos3D.txt rho3D.cpt topography_profile.txt
+fin=$(date +%s)
+tiempo_total=$((fin - inicio))
+echo "El script tardó $tiempo_total segundos en ejecutarse."

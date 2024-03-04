@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+inicio=$(date +%s)
 #
 # Figure 9 (a movie) in this paper: WED-A_Fig_9.sh
 # https://github.com/GenericMappingTools/gmt-2024-animation
@@ -30,7 +31,9 @@ EOF
 # 3. Set up background script
 cat << EOF > pre.sh
 gmt begin
-
+  export http_proxy="http://proxy.fcen.uba.ar:8080"
+    gmt set GMT_DATA_UPDATE_INTERVAL 7d 
+    gmt set GMT_DATA_SERVER oceania
 # 3A. Create files for animation
 #	1. Reorder and scale data:
 	gmt convert Messi_Goals.txt -i1,2,3,3+s400,0 > data_scale_by_400.txt
@@ -81,6 +84,10 @@ EOF
 
 #	----------------------------------------------------------------------------------------------------------
 # 	5. Run the movie
-gmt movie main.sh -Iin.sh -Sbpre.sh -C${canvas_width}cx${canvas_height}cx80 -Tdates_vs_goals.txt -N${FIG} -H2 -Ml,png -Vi -Zs -Gblack -K+fo+p \
+gmt movie main.sh -Iin.sh -Sbpre.sh -C${canvas_width}cx${canvas_height}cx80 -Tdates_vs_goals.txt -N${FIG} -H2 -Ml,png -Vi -Zs -Gblack -K+fo+p -D12 \
     -Lc0+jTR+o0.3/0.3+gwhite+h2p/-2p+r --FONT_TAG=14p  --FORMAT_CLOCK_MAP=- --FORMAT_DATE_MAP=dd-mm-yyyy   \
 	-Lc1+jTL+o0.3/0.3+gwhite+h2p/-2p+r -Fmp4
+
+fin=$(date +%s)
+tiempo_total=$((fin - inicio))
+echo "El script tardó $tiempo_total segundos en ejecutarse."

@@ -8,6 +8,7 @@
 # Geochem. Geophys. Geosyst.
 #
 # Purpose: Simple movie with Indiana Jones flight.
+# The movie took 152 seconds to render on an 8-core Intel® Core™ i7-7700 CPU @ 3.60GHz.
 #--------------------------------------------------------------------------------
 FIG=WED-A_Fig_7
 

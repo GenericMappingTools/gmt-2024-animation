@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+inicio=$(date +%s)
 #
 # Figure 11 (a movie) in this paper: WED-A_Fig_11.sh
 # https://github.com/GenericMappingTools/gmt-2024-animation
@@ -295,4 +296,8 @@ EOF
 #	-C for the canvas size, -D for the frame rate and -F for the file format
 gmt movie main.sh -Iinclude.sh -Sbpre.sh -Tmovie_frames.txt -N${FIG} -Ml,png \
 	-Pb+jTR+w0.75c -Lc+o4c/0c --FORMAT_DATE_MAP="dd o yyyy" --FORMAT_CLOCK_MAP=- \
-	-D21 -Zs -V -C1080p #-Fmp4
+	-D21 -Zs -V -C1080p -Fmp4
+
+	fin=$(date +%s)
+tiempo_total=$((fin - inicio))
+echo "El script tardó $tiempo_total segundos en ejecutarse."
