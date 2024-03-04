@@ -62,8 +62,18 @@ gmt begin
 	# Draw the flight path from start to now
    	gmt events distance_vs_frame.txt -W3p,red -T${MOVIE_COL2} -Es -Ar
 	# Plot labels that appear/disappear when plan reaches the cities
-    gmt events labels.txt -T${MOVIE_COL2} -L500 -Mt100+c100 -F+f18p+jTC -Dj1c -E+r100+f100+o-250 -Gred -Sc0.3c
+    gmt events labels.txt -T${MOVIE_COL2} -L500 -Mt100+c100 -F+f18p+jTC -Dj1c -E+r100+f100+o-250 \
+		-Gred -Sc0.3c -Vq
 gmt end
 EOF
 #	Create animation
-gmt movie main.sh -AIndianaJones_RaidersMarch.mp3+e -Iin.sh -Sbpre.sh -N${FIG} -Tdistance_vs_frame.txt -Mm,png -Etitle.sh+d6s+fo1s -Cfhd -Fmp4 -Vi -D60 -K+p -Zs
+#gmt movie main.sh -Tdistance_vs_frame.txt -Iin.sh -Sbpre.sh -Etitle.sh+d6s+fo1s -N${FIG} -Mm,png \
+#	-AIndianaJones_RaidersMarch.mp3+e -Cfhd -Fpng -Vi -D60 -K+p # -Zs
+gmt movie main.sh -Tdistance_vs_frame.txt -Iin.sh -Sbpre.sh -Etitle.sh+d6s+fo1s -N${FIG} -Mm,png \
+	-AIndianaJones_RaidersMarch.mp3+e -Cfhd -Fmp4 -Vi -D60 -K+p # -Zs
+
+# WIP. Errores con 
+#ffmpeg -loglevel warning -f image2 -framerate 60 -y -i "/home/federico/Github/Esteban82/gmt-2024-animation/WED-A_Fig_8/WED-A_Fig_8_%04d.png" -i IndianaJones_RaidersMarch.mp3 -af atempo=1.00086 -vcodec libx264  -pix_fmt yuv420p WED-A_Fig_8.mp4
+#ffmpeg -thread_queue_size 4096 -loglevel warning -f image2 -framerate 60 -y -i "/home/federico/Github/Esteban82/gmt-2024-animation/WED-A_Fig_8/WED-A_Fig_8_%04d.png" -i IndianaJones_RaidersMarch.mp3 -af atempo=1.00086 -vcodec libx264  -pix_fmt yuv420p WED-A_Fig_8.mp4
+
+# ffmpeg error con -A+e?

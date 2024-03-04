@@ -40,7 +40,7 @@ gmt begin
 	printf "100 ${MOVIE_COL0} 0\n2220 ${MOVIE_COL0} 0\n" | gmt plot3d -W0.25p -p
 	# Plot outline of topography along the profile
 	gmt grdtrack -GEmperor_oblique_load_mask.nc -E100/${MOVIE_COL0}/2220/${MOVIE_COL0} -s > topography_profile.txt
-	gmt plot3d topography_profile.txt -W0.25p -p -gD0.3c
+	gmt plot3d topography_profile.txt -W0.25p -p -gD0.3c -Vq
 gmt end
 EOF
 gmt movie -Tpos3D.txt main.sh -Sbpre.sh -C1920x700x116+c -D12 -N${FIG} -Ls"The Emperor Seamounts 3-D Density Model"+jTC -Pc+ac0 -M50,png -H2 -Fmp4 -V -Zs 

@@ -78,14 +78,15 @@ gmt begin
 	# Plot the green circle at constant size and only visible during its duration
 	gmt events green.txt -T${MOVIE_COL0} -Sc2c -Ggreen -W1p -F+f18p+jBC -Dj2.3c -L -E
 	# Plot red circle moving along the red size curve as function of time
-	gmt sample1d size_vs_time.txt -T${MOVIE_COL0}, -Fl | gmt plot -Sc4p -Gred -W0.25p -R-0.5/1.5/-0.1/2.1 \
-	-JX13.2c/3c -N -X3.4c -Y1.25c
+	gmt sample1d size_vs_time.txt -T${MOVIE_COL0}, -Fl > red_circle.txt
+	gmt plot red_circle.txt -Sc4p -Gred -W0.25p -R-0.5/1.5/-0.1/2.1 -JX13.2c/3c -N -X3.4c -Y1.25c
 	# Plot smaller green circle moving along the default green curve as function of time
-	gmt sample1d normal.txt -T${MOVIE_COL0}, -Fl | gmt plot -Sc2p -Ggreen -W0.25p -N
+	gmt sample1d normal.txt -T${MOVIE_COL0}, -Fl > green_circle.txt
+	gmt plot green_circle.txt -Sc2p -Ggreen -W0.25p -N
 gmt end
 EOF
 # Run the movie and add frame counter and horizontal time-progress bar
 gmt movie -C22cx12cx100 main.sh -Sbpre.sh -N${FIG} -T-0.5/1.5/0.01 -D24 -Fmp4 -Lc0 -Lf+jTR \
--Pf+jBC+o0/1.5c+ac -M75,png -Zs
+-Pf+jBC+o0/1.5c+ac -M75,png -Zs -Vi
 # Delete temporary files
 rm -f main.sh green.txt red.txt normal.txt labels.txt stepfunction.txt duration.txt

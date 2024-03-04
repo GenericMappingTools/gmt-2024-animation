@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Figure P (a movie) in this paper: WED-A_Fig_11.sh
+# Figure 11 (a movie) in this paper: WED-A_Fig_11.sh
 # https://github.com/GenericMappingTools/gmt-2024-animation
 #
 # Wessel, Esteban, & Delaviel-Anger, 2024,
@@ -295,5 +295,4 @@ EOF
 #	-C for the canvas size, -D for the frame rate and -F for the file format
 gmt movie main.sh -Iinclude.sh -Sbpre.sh -Tmovie_frames.txt -N${FIG} -Ml,png \
 	-Pb+jTR+w0.75c -Lc+o4c/0c --FORMAT_DATE_MAP="dd o yyyy" --FORMAT_CLOCK_MAP=- \
-	-D21 -Zs -V -C1080p -Fmp4 
-	#-C2160p
+	-D21 -Zs -V -C1080p #-Fmp4

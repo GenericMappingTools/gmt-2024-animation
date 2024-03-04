@@ -16,4 +16,4 @@ gmt begin
   gmt grdimage @moon_relief_06m_p.grd -Rg -JG-${MOVIE_FRAME}/30/20c -Bg -X0 -Y0
 gmt end show
 EOF
-gmt movie main.sh -C20cx20cx30 -T359 -Fmp4 -Mf,png -N${FIG} -Zs
+gmt movie main.sh -C20cx20cx30 -T359 -Fmp4 -Mf,png -N${FIG} -Zs -Vi
