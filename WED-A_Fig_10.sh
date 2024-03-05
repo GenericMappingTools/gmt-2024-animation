@@ -9,6 +9,7 @@ inicio=$(date +%s)
 #	Geochem. Geophys. Geosyst.
 #
 # Purpose: Show movie of Emperor 3-D density model sliced N-S.
+# The movie took xxx seconds to render on an 8-core Intel® Core™ i7-7700 CPU @ 3.60GHz.
 #--------------------------------------------------------------------------------
 FIG=WED-A_Fig_10
 #
@@ -46,6 +47,7 @@ gmt end
 EOF
 gmt movie -Tpos3D.txt main.sh -Sbpre.sh -C1920x700x116+c -D12 -N${FIG} -Ls"The Emperor Seamounts 3-D Density Model"+jTC -Pc+ac0 -M50,png -H2 -Fmp4 -Vi -Zs 
 rm -f slice.txt pos3D.txt rho3D.cpt topography_profile.txt
+
 fin=$(date +%s)
 tiempo_total=$((fin - inicio))
 echo "El script tardó $tiempo_total segundos en ejecutarse."

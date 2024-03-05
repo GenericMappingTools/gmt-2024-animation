@@ -10,6 +10,7 @@ inicio=$(date +%s)
 #
 # Purpose: Create an animation showcasing Lionel Messi's goals over time, 
 # around the world and with detail in western Europe.
+# The movie took xxx seconds to render on an 8-core Intel® Core™ i7-7700 CPU @ 3.60GHz.
 #--------------------------------------------------------------------------------
 FIG=WED-A_Fig_9
 

@@ -9,6 +9,7 @@ inicio=$(date +%s)
 # Geochem. Geophys. Geosyst.
 #
 # Purpose: Complex movie with Indiana Jones flight
+# The movie took 441 seconds to render on an 8-core Intel® Core™ i7-7700 CPU @ 3.60GHz.
 #--------------------------------------------------------------------------------
 FIG=WED-A_Fig_8
 
@@ -69,26 +70,8 @@ gmt end
 EOF
 #	Create animation
 gmt movie main.sh -Tdistance_vs_frame.txt -Iin.sh -Sbpre.sh -Etitle.sh+d6s+fo1s -N${FIG} -Mm,png \
-	-AIndianaJones_RaidersMarch.mp3+e -Cfhd -Fpng -Vi -D60 -K+p # -Zs
-# Sin -A*+e* para GMT 6.5
-gmt movie main.sh -Tdistance_vs_frame.txt -Iin.sh -Sbpre.sh -Etitle.sh+d6s+fo1s -N${FIG} -Mm,png \
-	-AIndianaJones_RaidersMarch.mp3 -Cfhd -Fmp4 -Vi -D60 -K+p #-Zs
-
-# WIP. Comando ffmpeg
-# orginal con audio estirado
-#ffmpeg -loglevel warning -f image2 -framerate 60 -y -i "/home/federico/Github/Esteban82/gmt-2024-animation/WED-A_Fig_8/WED-A_Fig_8_%04d.png" -i IndianaJones_RaidersMarch.mp3 -af atempo=1.00086 -vcodec libx264  -pix_fmt yuv420p WED-A_Fig_8.mp4
-# original con thread_queue size modificado
-#ffmpeg -loglevel warning -f image2 -framerate 60 -y -i "WED-A_Fig_8/WED-A_Fig_8_%04d.png" -i IndianaJones_RaidersMarch.mp3 -af atempo=1.00086 -vcodec libx264  -pix_fmt yuv420p WED-A_Fig_8_original.mp4
-#ffmpeg -loglevel warning -f image2 -framerate 60 -y -i "/home/thor/Github/Esteban82/gmt-2024-animation/WED-A_Fig_8/WED-A_Fig_8_%04d.png" -i IndianaJones_RaidersMarch.mp3 -vcodec libx264  -pix_fmt yuv420p WED-A_Fig_8.mp4
-
-#ffmpeg -thread_queue_size 4096 -loglevel warning -f image2 -framerate 60 -y -i "WED-A_Fig_8/WED-A_Fig_8_%04d.png" -i IndianaJones_RaidersMarch.mp3 -af atempo=1.00086 -vcodec libx264  -pix_fmt yuv420p WED-A_Fig_8_threa_AudioEstirado.mp4
-# thread_queue size modificado y audio sin estirar
-#ffmpeg -thread_queue_size 4096 -loglevel warning -f image2 -framerate 60 -y -i "WED-A_Fig_8/WED-A_Fig_8_%04d.png" -i IndianaJones_RaidersMarch.mp3 -vcodec libx264  -pix_fmt yuv420p WED-A_Fig_8_thread_audioOriginal.mp4
-# thread_queue size modificado y audio sin estirar
-#ffmpeg -thread_queue_size 4096 -loglevel warning -f image2 -framerate 60 -y -i "WED-A_Fig_8/WED-A_Fig_8_%04d.png" -i IndianaJones_RaidersMarch.mp3 -vcodec libx264  -pix_fmt yuv420p WED-A_Fig_8_t_mute.mp4
+	-AIndianaJones_RaidersMarch.mp3+e -Cfhd -Fmp4 -Vi -D60 -K+p -Zs
 
 fin=$(date +%s)
 tiempo_total=$((fin - inicio))
 echo "El script tardó $tiempo_total segundos en ejecutarse."
-
-# Con la opcion +e no la toma

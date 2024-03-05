@@ -9,6 +9,7 @@ inicio=$(date +%s)
 # Geochem. Geophys. Geosyst.
 #
 # Purpose: Movie of a decade of precipitation around the world
+# The movie took xxx seconds to render on an 8-core Intel® Core™ i7-7700 CPU @ 3.60GHz.
 #--------------------------------------------------------------------------------
 FIG="WED-A_Fig_11" 
 
@@ -298,6 +299,6 @@ gmt movie main.sh -Iinclude.sh -Sbpre.sh -Tmovie_frames.txt -N${FIG} -Ml,png \
 	-Pb+jTR+w0.75c -Lc+o4c/0c --FORMAT_DATE_MAP="dd o yyyy" --FORMAT_CLOCK_MAP=- \
 	-D21 -Zs -V -C1080p -Fmp4
 
-	fin=$(date +%s)
+fin=$(date +%s)
 tiempo_total=$((fin - inicio))
 echo "El script tardó $tiempo_total segundos en ejecutarse."
