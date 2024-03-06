@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+inicio=$(date +%s)
 #
 # Video 3 in this paper: WED-A_Vid_3.sh
 # https://github.com/GenericMappingTools/gmt-2024-animation
@@ -26,7 +27,7 @@ EOF
 
 cat << 'EOF' > pre.sh
 gmt begin
-    gmt sample1d cities.txt -T10k+a > distance_vs_frame.txt
+	gmt sample1d cities.txt -T10k+a > distance_vs_frame.txt
 gmt end
 EOF
 
@@ -37,5 +38,9 @@ gmt begin
 	gmt events distance_vs_frame.txt -W3p,red -T${MOVIE_COL2} -Es -Ar
 gmt end
 EOF
+
 #	Create animation
 gmt movie main.sh -Iin.sh -Sbpre.sh -N${FIG} -Tdistance_vs_frame.txt -Cfhd -Fmp4 -Zs -Vi
+fin=$(date +%s)
+tiempo_total=$((fin - inicio))
+echo "El script tardó $tiempo_total segundos en ejecutarse."

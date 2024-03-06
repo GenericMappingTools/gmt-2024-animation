@@ -4,7 +4,7 @@ inicio=$(date +%s)
 # Video 7 in this paper: WED-A_Vid_7.sh
 # https://github.com/GenericMappingTools/gmt-2024-animation
 #
-# Wessel, Esteban, & Delaviel-Anger, 2024,
+# Wessel, Esteban & Delaviel-Anger, 2024,
 # The Generic Mapping Tools and Animations for the Masses,
 # Geochem. Geophys. Geosyst.
 #
@@ -43,7 +43,6 @@ FIG="WED-A_Vid_7"
 #		(8) Declare the axis parameters for the time-series
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 cat <<- 'EOF' > include.sh
-
 	# Data period
 	date_start="2010-01-01"
 	date_stop="2022-06-30"
@@ -159,6 +158,10 @@ cat <<- 'EOF' > pre.sh
 		
 		# Colour palettes
 		gmt makecpt -Crain -T0/50 -H -D		> precip.cpt	# foreground (data)
+
+		# Create intesity grid from relief grid
+		gmt set GMT_DATA_UPDATE_INTERVAL 1d GMT_DATA_SERVER oceania
+		gmt grdgradient @earth_relief_06m -Gearth_gradient.nc -A-45 -Nt1+a0
 				
 		# Initialize Globe position
 		gmt basemap -Rg -JG0/15/${PLT_globe_size}c -B -X0.4c -Y0.15c
@@ -242,7 +245,6 @@ EOF
 cat <<- 'EOF' > main.sh
 	bg_color=$(tail -3 ../precip.cpt | head -1 | awk '{print $2}')
 	gmt begin
-		gmt set GMT_DATA_UPDATE_INTERVAL 1d GMT_DATA_SERVER oceania
 
 		filename=$(gmt math -Q ${MOVIE_COL0} -fT --FORMAT_DATE_OUT=yyyymmdd --FORMAT_CLOCK_OUT=- =)
 		data="data/grids/${filename}.grd"			# File name to be processed
@@ -256,7 +258,6 @@ cat <<- 'EOF' > main.sh
 		# #		* coi				#		(projection history not retained elsewhere)
 		# # # # # # # # # # # # # # #
 		
-		gmt grdgradient @earth_relief_06m -Gearth_gradient.nc -A-45 -Nt1+a0
 		gmt grdsample $data -I06m -Gtmp_grid.nc
 		gmt grdimage tmp_grid.nc -Cprecip.cpt -Bafg -Iearth_gradient.nc -X0.4c -Y0.15c -Rg -JG${MOVIE_COL1}/15/${PLT_globe_size}c
 		gmt coast -Dl -A5000 -Wthinner -Gantiquewhite -S${bg_color} -t65

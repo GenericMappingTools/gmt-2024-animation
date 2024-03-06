@@ -24,6 +24,7 @@ help::
 # List of scripts creating illustrations and movies
 FIGS=	WED-A_Fig_1.sh WED-A_Fig_2.sh WED-A_Fig_3.sh WED-A_Fig_4.sh
 MOVIES=	WED-A_Vid_1.sh WED-A_Vid_2.sh WED-A_Vid_3.sh WED-A_Vid_4.sh WED-A_Vid_5.sh WED-A_Vid_6.sh WED-A_Vid_7.sh
+#MOVIES=	WED-A_Vid_2.sh WED-A_Vid_4.sh WED-A_Vid_5.sh WED-A_Vid_6.sh WED-A_Vid_7.sh
 
 figs:
 	for script in $(FIGS) ; do\
@@ -32,7 +33,7 @@ figs:
 
 movies:
 	for script in $(MOVIES) ; do\
-		bash $$script; \
+		time bash $$script 2> $$script.log ; \
 	done
 
 all:	figs movies
@@ -44,3 +45,4 @@ clean-movies:
 	rm -f *.mp4
 
 spotless: clean-figs clean-movies
+
