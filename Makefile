@@ -5,7 +5,7 @@
 #	The Generic Mapping Tools and Animations for the Masses,
 #	Geochem. Geophys. Geosyst.
 #
-# Note: This commands may NOT work on windows.
+# Note: These commands may NOT work on windows.
 
 help::
 		@grep '^#!' Makefile | cut -c3-
@@ -21,9 +21,9 @@ help::
 #!spotless      : Delete all created graphic products
 #!
 #---------------------------------------------------------------------------
-# List of scripts creating illustrations and movies (all called Figure)
-FIGS=	WED-A_Fig_1.sh WED-A_Fig_3.sh WED-A_Fig_5.sh
-MOVIES=	WED-A_Fig_2.sh WED-A_Fig_4.sh WED-A_Fig_6.sh WED-A_Fig_7.sh WED-A_Fig_8.sh WED-A_Fig_9.sh WED-A_Fig_10.sh WED-A_Fig_11.sh
+# List of scripts creating illustrations and movies
+FIGS=	WED-A_Fig_1.sh WED-A_Fig_2.sh WED-A_Fig_3.sh WED-A_Fig_4.sh
+MOVIES=	WED-A_Vid_1.sh WED-A_Vid_2.sh WED-A_Vid_3.sh WED-A_Vid_4.sh WED-A_Vid_5.sh WED-A_Vid_6.sh WED-A_Vid_7.sh
 
 figs:
 	for script in $(FIGS) ; do\
