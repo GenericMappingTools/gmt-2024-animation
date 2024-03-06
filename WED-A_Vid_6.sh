@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 inicio=$(date +%s)
 #
-# Figure 10 in this paper: WED-A_Fig_rho.sh
+# Video 6 in this paper: WED-A_Vid_6.sh
 # https://github.com/GenericMappingTools/gmt-2024-animation
 #
 # Wessel, Esteban & Delaviel-Anger, 2024,
@@ -11,7 +11,7 @@ inicio=$(date +%s)
 # Purpose: Show movie of Emperor 3-D density model sliced N-S.
 # The movie took xxx seconds to render on an 8-core Intel® Core™ i7-7700 CPU @ 3.60GHz.
 #--------------------------------------------------------------------------------
-FIG=WED-A_Fig_10
+FIG=WED-A_Vid_6
 #
 # High-resolution movie of the 3-D density structure of the Emperors
 # HD if -C1920x700x116+c and UHD if -C3840x1400x232+c.

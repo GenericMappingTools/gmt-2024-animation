@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 inicio=$(date +%s)
 #
-# Figure 11 (a movie) in this paper: WED-A_Fig_11.sh
+# Video 7 in this paper: WED-A_Vid_7.sh
 # https://github.com/GenericMappingTools/gmt-2024-animation
 #
 # Wessel, Esteban, & Delaviel-Anger, 2024,
@@ -11,7 +11,7 @@ inicio=$(date +%s)
 # Purpose: Movie of a decade of precipitation around the world
 # The movie took xxx seconds to render on an 8-core Intel® Core™ i7-7700 CPU @ 3.60GHz.
 #--------------------------------------------------------------------------------
-FIG="WED-A_Fig_11" 
+FIG="WED-A_Vid_7" 
 
 # The following lines of code aggregate several components :
 #

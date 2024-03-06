@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 inicio=$(date +%s)
 #
-# Figure 8 (a movie) in this paper: WED-A_Fig_8.sh
+# Video 4 in this paper: WED-A_Vid_4.sh
 # https://github.com/GenericMappingTools/gmt-2024-animation
 #
 # Wessel, Esteban & Delaviel-Anger, 2024,
@@ -11,7 +11,7 @@ inicio=$(date +%s)
 # Purpose: Complex movie with Indiana Jones flight
 # The movie took 441 seconds to render on an 8-core Intel® Core™ i7-7700 CPU @ 3.60GHz.
 #--------------------------------------------------------------------------------
-FIG=WED-A_Fig_8
+FIG=WED-A_Vid_4
 
 # 1. File with variables used 
 cat << 'EOF' > in.sh

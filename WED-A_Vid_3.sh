@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Figure 7 (a movie) in this paper: WED-A_Fig_7.sh
+# Video 3 in this paper: WED-A_Vid_3.sh
 # https://github.com/GenericMappingTools/gmt-2024-animation
 #
 # Wessel, Esteban & Delaviel-Anger, 2024,
@@ -10,7 +10,7 @@
 # Purpose: Simple movie with Indiana Jones flight.
 # The movie took 152 seconds to render on an 8-core Intel® Core™ i7-7700 CPU @ 3.60GHz.
 #--------------------------------------------------------------------------------
-FIG=WED-A_Fig_7
+FIG=WED-A_Vid_3
 
 # File with variables used 
 cat << 'EOF' > in.sh

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Figure 6 (a movie) in this paper: WED-A_Fig_6.sh
+# Video 2 in this paper: WED-A_Vid_2.sh
 # https://github.com/GenericMappingTools/gmt-2024-animation
 #
 # Wessel, Esteban & Delaviel-Anger, 2024,
@@ -10,7 +10,7 @@
 # Purpose: Simple movie of spinning Moon.
 # The movie took 236 seconds to render on an 8-core Intel® Core™ i7-7700 CPU @ 3.60GHz.
 #--------------------------------------------------------------------------------
-FIG=WED-A_Fig_6
+FIG=WED-A_Vid_2
 
 cat <<- 'EOF' > main.sh
 gmt begin

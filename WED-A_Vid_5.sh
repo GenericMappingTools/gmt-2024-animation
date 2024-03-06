@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 inicio=$(date +%s)
 #
-# Figure 9 (a movie) in this paper: WED-A_Fig_9.sh
+# Video 5 in this paper: WED-A_Vid_5.sh
 # https://github.com/GenericMappingTools/gmt-2024-animation
 #
 # Wessel, Esteban & Delaviel-Anger, 2024,
@@ -12,7 +12,7 @@ inicio=$(date +%s)
 # around the world and with detail in western Europe.
 # The movie took xxx seconds to render on an 8-core Intel® Core™ i7-7700 CPU @ 3.60GHz.
 #--------------------------------------------------------------------------------
-FIG=WED-A_Fig_9
+FIG=WED-A_Vid_5
 
 # 1. Calculate map/canvas height
     main_map_region=-130/145/-40/64 # West/East/South/North boundaries
