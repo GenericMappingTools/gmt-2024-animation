@@ -10,7 +10,7 @@ inicio=$(date +%s)
 #
 # Purpose: Create an animation showcasing Lionel Messi's goals over time, 
 # around the world and with detail in western Europe.
-# The movie took xxx seconds to render on an 8-core Intel® Core™ i7-7700 CPU @ 3.60GHz.
+# The movie took 44 minutes to render on an 8-core Intel® Core™ i7-7700 CPU @ 3.60GHz.
 #--------------------------------------------------------------------------------
 FIG=WED-A_Vid_5
 
@@ -32,9 +32,6 @@ EOF
 # 3. Set up background script
 cat << EOF > pre.sh
 gmt begin
-	export http_proxy="http://proxy.fcen.uba.ar:8080"
-	gmt set GMT_DATA_UPDATE_INTERVAL 7d 
-	gmt set GMT_DATA_SERVER oceania
 # 3A. Create files for animation
 #	1. Reorder and scale data:
 	gmt convert Messi_Goals.txt -i1,2,3,3+s400,0 > data_scale_by_400.txt
@@ -44,7 +41,7 @@ gmt begin
 	gmt math Messi_Goals.txt -C3 SUM -o0,3 = | gmt sample1d $(gmt info Messi_Goals.txt -T3d) -Fe -fT > dates_vs_goals.txt
 
 # 3B. Make static background maps
-# 1. Plot main map
+#	1. Plot main map
 #	a. Create intensity grid for shadow effect
 	gmt grdgradient @earth_relief_05m_p -Nt1.2 -A270 -Gmain_intensity.nc -R${main_map_region}
 

@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-inicio=$(date +%s)
 #
 # Video 1 in this paper: WED-A_Vid_1.sh
 # https://github.com/GenericMappingTools/gmt-2024-animation
@@ -9,7 +8,7 @@ inicio=$(date +%s)
 #	Geochem. Geophys. Geosyst.
 #
 # Purpose: Show short movie of the life of two simple events.
-# The movie took 236 seconds to render on an 8-core Intel® Core™ i7-7700 CPU @ 3.60GHz.
+# The movie took 61 seconds to render on an 8-core Intel® Core™ i7-3700 CPU @ 3.40GHz.
 #--------------------------------------------------------------------------------
 FIG=WED-A_Vid_1
 #
@@ -100,6 +99,3 @@ gmt movie -C22cx12cx100 main.sh -Sbpre.sh -N${FIG} -T-0.5/1.5/0.01 -D24 -Fmp4 -L
 
 # Delete temporary files
 rm -f main.sh green.txt red.txt normal.txt labels.txt stepfunction.txt duration.txt
-fin=$(date +%s)
-tiempo_total=$((fin - inicio))
-echo "El script tardó $tiempo_total segundos en ejecutarse."

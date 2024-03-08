@@ -9,23 +9,20 @@ inicio=$(date +%s)
 # Geochem. Geophys. Geosyst.
 #
 # Purpose: Simple movie with Indiana Jones flight.
-# The movie took 152 seconds to render on an 8-core Intel® Core™ i7-7700 CPU @ 3.60GHz.
+# The movie took 3.35 minutes to render on an 8-core Intel® Core™ i7-7700 CPU @ 3.60GHz.
 #--------------------------------------------------------------------------------
 FIG=WED-A_Vid_3
 
-# File with variables used 
-cat << 'EOF' > in.sh
-	# Dr. Jones stopover cities
-	cat <<- 'FILE' > cities.txt
-	-74.007	40.712	New York
-	-52.712	47.562	St. John's (Newfoundland)
-	-25.696	37.742	São Miguel (Azores)
-	-9.135	38.776	Lisbon
-	 12.342	45.503	Venice
-	FILE
-EOF
-
 cat << 'EOF' > pre.sh
+# Dr. Jones stopover cities
+cat <<- 'FILE' > cities.txt
+-74.007	40.712	New York
+-52.712	47.562	St. John's (Newfoundland)
+-25.696	37.742	São Miguel (Azores)
+-9.135	38.776	Lisbon
+ 12.342	45.503	Venice
+FILE
+
 gmt begin
 	gmt sample1d cities.txt -T10k+a > distance_vs_frame.txt
 gmt end
@@ -40,7 +37,7 @@ gmt end
 EOF
 
 #	Create animation
-gmt movie main.sh -Iin.sh -Sbpre.sh -N${FIG} -Tdistance_vs_frame.txt -Cfhd -Fmp4 -Zs -Vi
+gmt movie main.sh -Sbpre.sh -N${FIG} -Tdistance_vs_frame.txt -Cfhd -Fmp4 -Zs -Mf,png -Vi
 fin=$(date +%s)
 tiempo_total=$((fin - inicio))
 echo "El script tardó $tiempo_total segundos en ejecutarse."
