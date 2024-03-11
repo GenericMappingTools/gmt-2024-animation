@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-inicio=$(date +%s)
 #
 # Video 4 in this paper: WED-A_Vid_4.sh
 # https://github.com/GenericMappingTools/gmt-2024-animation
@@ -16,18 +15,16 @@ FIG=WED-A_Vid_4
 # 1. File with variables used 
 cat << 'EOF' > in.sh
 	animation_duration=27 # in seconds
-	#animation_duration=14 # in seconds for error thread_queue_size
 EOF
 
 # 2. Make a title slide explaining things
 cat << 'EOF' > title.sh
-
 gmt begin
 	echo "12 11.5 Dr. Jones' flight to Venice on his Last Crusade" | gmt text -R0/24/0/13.5 -Jx1c -F+f26p,Helvetica-Bold+jCB -X0 -Y0
 	gmt text -M -F+f14p <<- END
 	> 12 6.5 16p 20c j
 	We will simulate the flight path from New York to Venice trough three stopovers.
-	First, we do some calculations to set a fixed duration of the movie. 
+	First, we do some calculations to set a fixed duration of the movie.
 	Then, we interpolate between the cities along a rhumb line.
 	We also make a separate file for the labels.
 	Finally, we make a Mercator map centered on the changing longitude and latitude.
@@ -40,6 +37,7 @@ gmt begin
 gmt end
 EOF
 
+# 3. Set up background script to create data files needed in the loop
 cat << 'EOF' > pre.sh
 	# Dr. Jones stopover cities
 	cat <<- 'FILE' > cities.txt
@@ -63,10 +61,12 @@ gmt begin
 gmt end
 EOF
 
+# 4. Set up main script
 cat << 'EOF' > main.sh
 gmt begin
 	# Lay down land/ocean background map for the frame
-	gmt coast -JM${MOVIE_COL0}/${MOVIE_COL1}/${MOVIE_WIDTH} -Y0 -X0 -R480/270+uk -G200 -Sdodgerblue2 -N1/0.2,- 
+	gmt coast -JM${MOVIE_COL0}/${MOVIE_COL1}/${MOVIE_WIDTH} -R480/270+uk -G200 -Sdodgerblue2 \
+	-N1/0.2,- -Y0 -X0
 
 	# Draw the flight path from start to now
 	gmt events distance_vs_frame.txt -W3p,red -T${MOVIE_COL2} -Es -Ar
@@ -76,7 +76,7 @@ gmt begin
 gmt end
 EOF
 
-#	Create animation
+# 5. Run the movie
 # For GMT 6.5 dev
 #gmt movie main.sh -Tdistance_vs_frame.txt -Iin.sh -Sbpre.sh -Etitle.sh+d6s+fo1s -N${FIG} \
 #	-Adata/IndianaJones_RaidersMarch.mp3+e -Cfhd -Fmp4+i"-thread_queue_size 4096" -Vi -D60 -K+p #-Zs
@@ -86,9 +86,4 @@ gmt movie main.sh -Tdistance_vs_frame.txt -Iin.sh -Sbpre.sh -Etitle.sh+d6s+fo1s 
 
 # WIP
 #gmt movie main.sh -Tdistance_vs_frame.txt -Iin.sh -Sbpre.sh -Etitle.sh+d6s+fo1s -N${FIG} \
-#g -Cfhd -Vi -D60 -K+p -Fmp4 -Ml,png
-
-
-fin=$(date +%s)
-tiempo_total=$((fin - inicio))
-echo "El script tardó $tiempo_total segundos en ejecutarse."
+#-Cfhd -Vi -D60 -K+p -Fmp4 -Ml,png

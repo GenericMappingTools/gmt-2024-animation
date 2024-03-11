@@ -25,7 +25,7 @@ help::
 FIGS=	WED-A_Fig_1.sh WED-A_Fig_2.sh WED-A_Fig_3.sh WED-A_Fig_4.sh
 #MOVIES=	WED-A_Vid_3.sh WED-A_Vid_4.sh WED-A_Vid_5.sh WED-A_Vid_6.sh WED-A_Vid_7.sh
 MOVIES=	WED-A_Vid_4.sh WED-A_Vid_5.sh WED-A_Vid_6.sh #WED-A_Vid_7.sh
-MOVIES=	WED-A_Vid_4.sh #WED-A_Vid_7.sh
+#MOVIES=	WED-A_Vid_7.sh #WED-A_Vid_7.sh
 
 
 figs:
@@ -36,6 +36,7 @@ figs:
 movies:
 	for script in $(MOVIES) ; do\
 		time bash $$script 2> $$script.log ; \
+		gmt --version >> $$script.log ; \
 	done
 
 all:	figs movies

@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-inicio=$(date +%s)
 #
 # Video 6 in this paper: WED-A_Vid_6.sh
 # https://github.com/GenericMappingTools/gmt-2024-animation
@@ -16,8 +15,8 @@ FIG=WED-A_Vid_6
 # High-resolution movie of the 3-D density structure of the Emperors
 # HD if -C1920x700x116+c and UHD if -C3840x1400x232+c.
 
+# 1. Set up background script to prepare data and CPT for movie
 cat << EOF > pre.sh
-# Prepare data and CPT for movie
 gmt begin
 	# Select the range of along-strike y-profiles in 2 km increments
 	gmt math -T-150/150/2 -o1 -I T = pos3D.txt
@@ -30,6 +29,8 @@ gmt begin
 	gmt colorbar -Crho3D.cpt -DJCB+w5c+o-5.75c/-0.5c -Bxaf -By+l"kg/m@+3@+" --FONT_ANNOT_PRIMARY=7p --MAP_FRAME_PEN=0.5p
 gmt end
 EOF
+
+# 2. Set up main script
 cat << 'EOF' > main.sh
 gmt begin
 	# Select the prisms along the current line
@@ -51,15 +52,8 @@ gmt begin
 gmt end
 EOF
 
-# Run the movie
+# 3. Run the movie
 # Use with GMT 6 (dev version)
 #gmt movie -Tpos3D.txt main.sh -Sbpre.sh -C1920x700x116+c -D12 -N${FIG} -Ls"The Emperor Seamounts 3-D Density Model"+jTC -Pc+ac0 -M50,png -H2 -Fmp4 -Vi -Zs
 # With GMT 6.5
-#gmt movie -Tpos3D.txt main.sh -Sbpre.sh -C19.20x7x100 -D12 -N${FIG} -Ls"The Emperor Seamounts 3-D Density Model"+jTC -Pc+ac0 -M50,png -H2 -Fmp4 -Vi -Zs 
-
-# WIP
-gmt movie -Tpos3D.txt main.sh -Sbpre.sh -C16.55cx6.03cx116 -D12 -N${FIG} -Ls"The Emperor Seamounts 3-D Density Model"+jTC -Pc+ac0 -M50,png -Fmp4 -H2 -Vi -Zs 
-
-fin=$(date +%s)
-tiempo_total=$((fin - inicio))
-echo "El script tardó $tiempo_total segundos en ejecutarse."
+gmt movie -Tpos3D.txt main.sh -Sbpre.sh -C16.55cx6.03cx116 -D12 -N${FIG} -Ls"The Emperor Seamounts 3-D Density Model"+jTC -Pc+ac0 -M50,png -H2 -Fmp4 -Vi -Zs

@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-inicio=$(date +%s)
 #
 # Video 7 in this paper: WED-A_Vid_7.sh
 # https://github.com/GenericMappingTools/gmt-2024-animation
@@ -22,8 +21,6 @@ FIG="WED-A_Vid_7"
 #	* PRE.SH :
 #		Generated file that initiates the figure. The "static background" for each plot is here.
 #		Also, a subroutine (gmt_subplt_inset) is embedded to avoid excessive repetitions.
-#		(You might note that there's not "post.sh"... simply because I haven't any relevant 
-#		"static foreground" to add.)
 #
 #	* MAIN.SH :
 #		Generated file that updates the figure. The "dynamic" part for each plot is here.
@@ -49,6 +46,7 @@ cat <<- 'EOF' > include.sh
 
 	date_start_interest="2012-01-01"
 	date_stop_interest="2022-01-01"
+	date_stop_interest="2012-02-01"	# WIP
 	
 	# 1. Generate the list of dates
 	gmt math -T${date_start_interest}T/${date_stop_interest}T/1d -o0 T = timetable.txt
@@ -99,8 +97,8 @@ cat <<- 'EOF' > include.sh
 	# (cumulated daily-mean precipitation within region normalized by region area)
 	# + 10% and 30% addition for graph y-range and unit annotation above 
 
-	coi1_range_max=$(gmt info ../data/roi_results/france_filtered.txt -C -o3)
-	coi2_range_max=$(gmt info ../data/roi_results/argentina_filtered.txt -C -o3)
+	coi1_range_max=$(gmt info ../data/roi_results/${coi_1}_filtered.txt -C -o3)
+	coi2_range_max=$(gmt info ../data/roi_results/${coi_2}_filtered.txt -C -o3)
 
 	subplt_region_max=$(gmt math -Q ${coi1_range_max} ${coi2_range_max} MAX =)
 		subplt_region_max_10=$(gmt math -Q ${subplt_region_max} 1.1 MUL =)
@@ -243,40 +241,36 @@ EOF
 # #		* Make the time-series progress with time
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 cat <<- 'EOF' > main.sh
+	# Get background color
 	bg_color=$(tail -3 ../precip.cpt | head -1 | awk '{print $2}')
 	gmt begin
 
+		# File name to be processed
 		filename=$(gmt math -Q ${MOVIE_COL0} -fT --FORMAT_DATE_OUT=yyyymmdd --FORMAT_CLOCK_OUT=- =)
-		data="data/grids/${filename}.grd"			# File name to be processed
+		data="data/grids/${filename}.grd"
 		
-		# # # # # # # # # # # # # # #
-		# # 		Globe			#
-		# # # # # # # # # # # # # # #
-		# # 	* data				#
-		# # 	* topography		# NB : topo + coastline should be in post-flight script. 
-		# #		* coastlines		#		However, the rotation imposes to plot them here
-		# #		* coi				#		(projection history not retained elsewhere)
-		# # # # # # # # # # # # # # #
-		
+		# Resample input grid to match the intesity grid
 		gmt grdsample $data -I06m -Gtmp_grid.nc
-		gmt grdimage tmp_grid.nc -Cprecip.cpt -Bafg -Iearth_gradient.nc -X0.4c -Y0.15c -Rg -JG${MOVIE_COL1}/15/${PLT_globe_size}c
-		gmt coast -Dl -A5000 -Wthinner -Gantiquewhite -S${bg_color} -t65
-		gmt coast -Dl -A5000 -E${coi_1_iso}+g${coi_1_clr} -t45
-		gmt coast -Dl -A5000 -E${coi_2_iso}+g${coi_2_clr} -t45
 
-		# # # # # # # # # # # # # # #
-		# # 	Graph subplots		#
-		# # # # # # # # # # # # # # #
-		# #		* time-series		#
-		# # # # # # # # # # # # # # #	
-		
+		# Plot input grid with shadow effect
+		gmt grdimage tmp_grid.nc -Cprecip.cpt -Bafg -Iearth_gradient.nc -X0.4c -Y0.15c -Rg \
+		-JG${MOVIE_COL1}/15/${PLT_globe_size}c
+
+		# Plot coastlines and paint dry/wet areas with transparency
+		gmt coast -Dl -A5000 -Wthinner -Gantiquewhite -S${bg_color} -t65
+
+		# Plot both countries with transparency
+		gmt coast -E${coi_1_iso}+g${coi_1_clr} -E${coi_2_iso}+g${coi_2_clr} -t45
+
+		# Graph time-series
 		gmt subplot begin 3x1 -Fs${PLT_graph_width}c/${PLT_graph_height}c -M0.75c	\
 			-X$(gmt math -Q ${PLT_globe_size} ${colrbar_margin} ADD 4 ADD =)c \
-			-Y1.5c -R${date_start}T/${date_stop}T/0/${subplt_region_max_10} -JX${PLT_graph_width}cT/${PLT_graph_height}c \
+			-Y1.5c -R${date_start}T/${date_stop}T/0/${subplt_region_max_10} \
+			-JX${PLT_graph_width}cT/${PLT_graph_height}c \
 			-B+n
 
+			# Continuous line and moving dot
 			gmt subplot set 2
-				# Continuous line and moving dot
 				gmt plot ../data/roi_results/${coi_1}_filtered.txt -Wthick,${coi_1_clr} -t20 -q0:${MOVIE_COL2}
 				gmt plot ../data/roi_results/${coi_1}_filtered.txt -Sc0.2c -G${coi_1_clr} -Wthick,black -qi${MOVIE_COL2}
 				gmt plot ../data/roi_results/${coi_2}_filtered.txt -Wthick,${coi_2_clr} -t20 -q0:${MOVIE_COL2}
@@ -296,10 +290,11 @@ EOF
 #	-N & -M for filename and poster image respectively
 #	-P for the progress circle and -L for the timestamp labelling
 #	-C for the canvas size, -D for the frame rate and -F for the file format
+#gmt movie main.sh -Iinclude.sh -Sbpre.sh -Tmovie_frames.txt -N${FIG} -Ml,png \
+#	-Pb+jTR+w0.75c -Lc+o4c/0c --FORMAT_DATE_MAP="dd o yyyy" --FORMAT_CLOCK_MAP=- \
+#	-D21 -Zs -V -C1080p # -Fmp4
+
+# WIP
 gmt movie main.sh -Iinclude.sh -Sbpre.sh -Tmovie_frames.txt -N${FIG} -Ml,png \
 	-Pb+jTR+w0.75c -Lc+o4c/0c --FORMAT_DATE_MAP="dd o yyyy" --FORMAT_CLOCK_MAP=- \
-	-D21 -Zs -V -C1080p -Fmp4
-
-fin=$(date +%s)
-tiempo_total=$((fin - inicio))
-echo "El script tardó $tiempo_total segundos en ejecutarse."
+	-D21 -V -C1080p -Fmp4 -Zs
