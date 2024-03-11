@@ -8,9 +8,13 @@
 # Geochem. Geophys. Geosyst.
 #
 # Purpose: Movie of a decade of precipitation around the world
-# The movie took xxx seconds to render on an 8-core Intel® Core™ i7-7700 CPU @ 3.60GHz.
+# The movie took 2 hours to render on an 8-core Intel® Core™ i7-7700 CPU @ 3.60GHz.
 #--------------------------------------------------------------------------------
 FIG="WED-A_Vid_7" 
+
+# 0. Get the data from zenodo and unzip in the main directory
+cp data/${FIG}.zip .
+unzip -qq ${FIG}.zip
 
 # The following lines of code aggregate several components :
 #
@@ -46,7 +50,6 @@ cat <<- 'EOF' > include.sh
 
 	date_start_interest="2012-01-01"
 	date_stop_interest="2022-01-01"
-	date_stop_interest="2012-02-01"	# WIP
 	
 	# 1. Generate the list of dates
 	gmt math -T${date_start_interest}T/${date_stop_interest}T/1d -o0 T = timetable.txt
@@ -97,8 +100,8 @@ cat <<- 'EOF' > include.sh
 	# (cumulated daily-mean precipitation within region normalized by region area)
 	# + 10% and 30% addition for graph y-range and unit annotation above 
 
-	coi1_range_max=$(gmt info ../data/roi_results/${coi_1}_filtered.txt -C -o3)
-	coi2_range_max=$(gmt info ../data/roi_results/${coi_2}_filtered.txt -C -o3)
+	coi1_range_max=$(gmt info ../roi_results/${coi_1}_filtered.txt -C -o3)
+	coi2_range_max=$(gmt info ../roi_results/${coi_2}_filtered.txt -C -o3)
 
 	subplt_region_max=$(gmt math -Q ${coi1_range_max} ${coi2_range_max} MAX =)
 		subplt_region_max_10=$(gmt math -Q ${subplt_region_max} 1.1 MUL =)
@@ -247,13 +250,13 @@ cat <<- 'EOF' > main.sh
 
 		# File name to be processed
 		filename=$(gmt math -Q ${MOVIE_COL0} -fT --FORMAT_DATE_OUT=yyyymmdd --FORMAT_CLOCK_OUT=- =)
-		data="data/grids/${filename}.grd"
+		data="grids/${filename}.grd"
 		
 		# Resample input grid to match the intesity grid
-		gmt grdsample $data -I06m -Gtmp_grid.nc
+		gmt grdsample $data -I06m -Gintensity_grid.nc
 
 		# Plot input grid with shadow effect
-		gmt grdimage tmp_grid.nc -Cprecip.cpt -Bafg -Iearth_gradient.nc -X0.4c -Y0.15c -Rg \
+		gmt grdimage intensity_grid.nc -Cprecip.cpt -Bafg -Iearth_gradient.nc -X0.4c -Y0.15c -Rg \
 		-JG${MOVIE_COL1}/15/${PLT_globe_size}c
 
 		# Plot coastlines and paint dry/wet areas with transparency
@@ -271,10 +274,10 @@ cat <<- 'EOF' > main.sh
 
 			# Continuous line and moving dot
 			gmt subplot set 2
-				gmt plot ../data/roi_results/${coi_1}_filtered.txt -Wthick,${coi_1_clr} -t20 -q0:${MOVIE_COL2}
-				gmt plot ../data/roi_results/${coi_1}_filtered.txt -Sc0.2c -G${coi_1_clr} -Wthick,black -qi${MOVIE_COL2}
-				gmt plot ../data/roi_results/${coi_2}_filtered.txt -Wthick,${coi_2_clr} -t20 -q0:${MOVIE_COL2}
-				gmt plot ../data/roi_results/${coi_2}_filtered.txt -Sc0.2c -G${coi_2_clr} -Wthick,black -qi${MOVIE_COL2}
+				gmt plot ../roi_results/${coi_1}_filtered.txt -Wthick,${coi_1_clr} -t20 -q0:${MOVIE_COL2}
+				gmt plot ../roi_results/${coi_1}_filtered.txt -Sc0.2c -G${coi_1_clr} -Wthick,black -qi${MOVIE_COL2}
+				gmt plot ../roi_results/${coi_2}_filtered.txt -Wthick,${coi_2_clr} -t20 -q0:${MOVIE_COL2}
+				gmt plot ../roi_results/${coi_2}_filtered.txt -Sc0.2c -G${coi_2_clr} -Wthick,black -qi${MOVIE_COL2}
 		gmt subplot end
 	gmt end
 EOF
@@ -290,11 +293,10 @@ EOF
 #	-N & -M for filename and poster image respectively
 #	-P for the progress circle and -L for the timestamp labelling
 #	-C for the canvas size, -D for the frame rate and -F for the file format
-#gmt movie main.sh -Iinclude.sh -Sbpre.sh -Tmovie_frames.txt -N${FIG} -Ml,png \
-#	-Pb+jTR+w0.75c -Lc+o4c/0c --FORMAT_DATE_MAP="dd o yyyy" --FORMAT_CLOCK_MAP=- \
-#	-D21 -Zs -V -C1080p # -Fmp4
-
-# WIP
 gmt movie main.sh -Iinclude.sh -Sbpre.sh -Tmovie_frames.txt -N${FIG} -Ml,png \
 	-Pb+jTR+w0.75c -Lc+o4c/0c --FORMAT_DATE_MAP="dd o yyyy" --FORMAT_CLOCK_MAP=- \
-	-D21 -V -C1080p -Fmp4 -Zs
+	-Pb+jTR+w0.75c -Lc+o4c/0c --FORMAT_DATE_MAP="dd o yyyy" --FORMAT_CLOCK_MAP=- \
+	-D21 -Zs -V -C1080p -Fmp4
+
+# Delete temporary files
+rm -rf ${FIG}.zip grids/ roi_results/

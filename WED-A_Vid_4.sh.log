@@ -1,5 +1,0 @@
-movie [ERROR]: Cannot find file in.sh
-Command exited with non-zero status 72
-0.07user 0.05system 0:00.05elapsed 253%CPU (0avgtext+0avgdata 42936maxresident)k
-0inputs+32outputs (4major+3934minor)pagefaults 0swaps
-6.5.0

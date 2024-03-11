@@ -8,7 +8,7 @@
 #	Geochem. Geophys. Geosyst.
 #
 # Purpose: Show short movie of the life of two simple events.
-# The movie took 61 seconds to render on an 8-core Intel® Core™ i7-3700 CPU @ 3.40GHz.
+# The movie took 53 seconds to render on an 8-core Intel® Core™ i7-3700 CPU @ 3.60GHz.
 #--------------------------------------------------------------------------------
 FIG=WED-A_Vid_1
 #

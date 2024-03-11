@@ -8,9 +8,14 @@
 # Geochem. Geophys. Geosyst.
 #
 # Purpose: Complex movie with Indiana Jones flight
-# The movie took almost 6 minutes to render on an 8-core Intel® Core™ i7-7700 CPU @ 3.60GHz.
+# The movie took 7.3 minutes to render on an 8-core Intel® Core™ i7-7700 CPU @ 3.60GHz.
 #--------------------------------------------------------------------------------
 FIG=WED-A_Vid_4
+
+# 0. Get the data from zenodo and unzip in the main directory
+#wget "https://zenodo.org/record/10805941" -O {FIG}.zip
+cp data/${FIG}.zip .
+unzip ${FIG}.zip
 
 # 1. File with variables used 
 cat << 'EOF' > in.sh
@@ -82,8 +87,7 @@ EOF
 #	-Adata/IndianaJones_RaidersMarch.mp3+e -Cfhd -Fmp4+i"-thread_queue_size 4096" -Vi -D60 -K+p #-Zs
 # For GMT 6.5
 gmt movie main.sh -Tdistance_vs_frame.txt -Iin.sh -Sbpre.sh -Etitle.sh+d6s+fo1s -N${FIG} \
-	-Adata/IndianaJones_RaidersMarch.mp3 -Cfhd -Fmp4 -Vi -D60 -K+p -Zs
+	-AIndianaJones_RaidersMarch.mp3 -Cfhd -Fmp4 -Vi -D60 -K+p -Zs
 
-# WIP
-#gmt movie main.sh -Tdistance_vs_frame.txt -Iin.sh -Sbpre.sh -Etitle.sh+d6s+fo1s -N${FIG} \
-#-Cfhd -Vi -D60 -K+p -Fmp4 -Ml,png
+# 6. Delete temporary files
+rm -f ${FIG}.zip IndianaJones_RaidersMarch.mp3 IndianaJones_Logo.png

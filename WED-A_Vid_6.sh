@@ -8,12 +8,17 @@
 #	Geochem. Geophys. Geosyst.
 #
 # Purpose: Show movie of Emperor 3-D density model sliced N-S.
-# The movie took 5.6 minutes to render on an 8-core Intel® Core™ i7-7700 CPU @ 3.60GHz.
+# The movie took 3:22 minutes to render on an 8-core Intel® Core™ i7-7700 CPU @ 3.60GHz.
 #--------------------------------------------------------------------------------
 FIG=WED-A_Vid_6
 #
 # High-resolution movie of the 3-D density structure of the Emperors
 # HD if -C1920x700x116+c and UHD if -C3840x1400x232+c.
+
+# 0. Get the data from zenodo and unzip in the main directory
+#
+cp data/${FIG}.zip .
+unzip ${FIG}.zip
 
 # 1. Set up background script to prepare data and CPT for movie
 cat << EOF > pre.sh
@@ -21,8 +26,7 @@ gmt begin
 	# Select the range of along-strike y-profiles in 2 km increments
 	gmt math -T-150/150/2 -o1 -I T = pos3D.txt
 	gmt makecpt -Croma -T2150/3050 -I --COLOR_BACKGROUND=black -H > rho3D.cpt
-	#unzip data/Emperor_oblique_prisms.txt.zip
-	#cp -f data/*.nc .
+
 	# Lay down average density grid in the horizontal plane
 	gmt set FONT_TAG 20p,Helvetica,black
 	gmt grdimage Emperor_oblique_ave_dens.nc -R100/2220/-280/200 -Jx0.007c -Jz0.0006c -Baf -Bzaf -BWStrZ -p165/30 -Q -Crho3D.cpt -X1c -Y0.2c
@@ -57,3 +61,6 @@ EOF
 #gmt movie -Tpos3D.txt main.sh -Sbpre.sh -C1920x700x116+c -D12 -N${FIG} -Ls"The Emperor Seamounts 3-D Density Model"+jTC -Pc+ac0 -M50,png -H2 -Fmp4 -Vi -Zs
 # With GMT 6.5
 gmt movie -Tpos3D.txt main.sh -Sbpre.sh -C16.55cx6.03cx116 -D12 -N${FIG} -Ls"The Emperor Seamounts 3-D Density Model"+jTC -Pc+ac0 -M50,png -H2 -Fmp4 -Vi -Zs
+
+# 4. Delete temporary files
+rm -f ${FIG}.zip Emperor_oblique_prisms.txt Emperor_oblique_ave_dens.nc Emperor_oblique_load_mask.nc

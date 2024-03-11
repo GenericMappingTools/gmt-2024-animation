@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 #
+export http_proxy="http://proxy.fcen.uba.ar:8080"
 # Video 5 in this paper: WED-A_Vid_5.sh
 # https://github.com/GenericMappingTools/gmt-2024-animation
 #
@@ -9,9 +10,12 @@
 #
 # Purpose: Create an animation showcasing Lionel Messi's goals over time, 
 # around the world and with detail in western Europe.
-# The movie took 44 minutes to render on an 8-core Intel® Core™ i7-7700 CPU @ 3.60GHz.
+# The movie took almost 26 minutes to render on an 8-core Intel® Core™ i7-7700 CPU @ 3.60GHz.
 #--------------------------------------------------------------------------------
 FIG=WED-A_Vid_5
+
+# 0. Get data to the main directory
+cp data/Messi_Goals.txt .
 
 # 1. Calculate map/canvas height
 	main_map_region=-130/145/-40/64		# West/East/South/North boundaries
@@ -31,6 +35,8 @@ EOF
 # 3. Set up background script
 cat << EOF > pre.sh
 gmt begin
+	gmt set GMT_DATA_SERVER oceania GMT_DATA_UPDATE_INTERVAL 1d
+
 # 3A. Create files for animation
 #	1. Reorder and scale data
 	gmt convert Messi_Goals.txt -i1,2,3,3+s400,0 > data_scale_by_400.txt
@@ -81,4 +87,7 @@ EOF
 # 5. Run the movie
 gmt movie main.sh -Iin.sh -Sbpre.sh -C${canvas_width}cx${canvas_height}cx80 -Tdates_vs_goals.txt -N${FIG} -H2 -Ml,png -Vi -Zs -Gblack -K+fo+p -D12 \
 	-Lc0+jTR+o0.3/0.3+gwhite+h2p/-2p+r --FONT_TAG=14p --FORMAT_CLOCK_MAP=- --FORMAT_DATE_MAP=dd-mm-yyyy \
-	-Lc1+jTL+o0.3/0.3+gwhite+h2p/-2p+r -Fmp4
+	-Lc1+jTL+o0.3/0.3+gwhite+h2p/-2p+r # -Fmp4
+
+# 6. Delete temporary files
+	rm gmt.history Messi_Goals.txt
