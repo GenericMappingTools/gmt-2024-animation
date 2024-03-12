@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 #
-export http_proxy="http://proxy.fcen.uba.ar:8080"
 # Video 5 in this paper: WED-A_Vid_5.sh
 # https://github.com/GenericMappingTools/gmt-2024-animation
 #
@@ -28,8 +27,8 @@ cat << EOF > in.sh
 #	Region, projection, width map and offset in X/Y direction 
 	inset_map_region=PTC,ESC,GB,DE+R1/3/1/-3.5
 	inset_map_projection=M5.5c		# Mercator map of 5.5 cm width
-	Y=0.2c							# Shift plot in in Y-direction
-	X=8.5c							# Shift plot in in X-direction
+	Y=0.2c							# Shift plot in Y-direction
+	X=8.5c							# Shift plot in X-direction
 EOF
 
 # 3. Set up background script
@@ -90,4 +89,4 @@ gmt movie main.sh -Iin.sh -Sbpre.sh -C${canvas_width}cx${canvas_height}cx80 -Tda
 	-Lc1+jTL+o0.3/0.3+gwhite+h2p/-2p+r # -Fmp4
 
 # 6. Delete temporary files
-	rm gmt.history Messi_Goals.txt
+rm gmt.history Messi_Goals.txt
