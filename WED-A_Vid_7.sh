@@ -13,8 +13,8 @@
 FIG="WED-A_Vid_7" 
 
 # 0. Get the data from zenodo and unzip in the main directory
-cp data/${FIG}.zip .
-unzip -qq ${FIG}.zip
+#cp data/${FIG}.zip .
+#unzip -qq ${FIG}.zip
 
 # The following lines of code aggregate several components :
 #
@@ -299,4 +299,4 @@ gmt movie main.sh -Iinclude.sh -Sbpre.sh -Tmovie_frames.txt -N${FIG} -Ml,png \
 	-D21 -Zs -V -C1080p -Fmp4
 
 # Delete temporary files
-rm -rf ${FIG}.zip grids/ roi_results/
+#rm -rf ${FIG}.zip grids/ roi_results/
