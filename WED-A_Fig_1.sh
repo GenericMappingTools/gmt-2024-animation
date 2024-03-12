@@ -9,9 +9,9 @@
 #
 # Purpose: Plot of the general movie dimensions and label placements in a canvas.
 #--------------------------------------------------------------------------------
-FIG=WED-A_Fig_1
+NAME=WED-A_Fig_1
 
-gmt begin ${FIG} png
+gmt begin ${NAME} png
 	gmt set GMT_THEME cookbook
 	gmt basemap -R0/24/0/13.5 -Jx1c -B0
 	gmt plot -W0.5p,- <<- EOF

@@ -9,9 +9,9 @@
 #
 # Purpose: Show plot of the six movie progress indicators available.
 #--------------------------------------------------------------------------------
-FIG=WED-A_Fig_3
+NAME=WED-A_Fig_3
 
-gmt begin ${FIG} png
+gmt begin ${NAME} png
 	gmt set GMT_THEME cookbook
 	gmt set FONT_LABEL 12p
 	gmt subplot begin 5x1 -Fs15c/4c -A

@@ -10,7 +10,7 @@
 # Purpose: Simple movie with Indiana Jones flight.
 # The movie took 2.2 minutes to render on an 8-core Intel® Core™ i7-7700 CPU @ 3.60GHz.
 #--------------------------------------------------------------------------------
-FIG=WED-A_Vid_3
+NAME=WED-A_Vid_3
 
 # 1. Set up background script to create data files needed in the loop
 cat << 'EOF' > pre.sh
@@ -42,4 +42,4 @@ gmt end
 EOF
 
 # 3. Run the movie
-gmt movie main.sh -Sbpre.sh -N${FIG} -Tdistance_vs_frame.txt -Cfhd -Fmp4 -Zs -Mf,png -Vi
+gmt movie main.sh -Sbpre.sh -N${NAME} -Tdistance_vs_frame.txt -Cfhd -Fmp4 -Zs -Mf,png -Vi

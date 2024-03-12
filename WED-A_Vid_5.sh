@@ -11,7 +11,7 @@
 # around the world and with detail in western Europe.
 # The movie took almost 26 minutes to render on an 8-core Intel® Core™ i7-7700 CPU @ 3.60GHz.
 #--------------------------------------------------------------------------------
-FIG=WED-A_Vid_5
+NAME=WED-A_Vid_5
 
 # 0. Get data to the main directory
 cp data/Messi_Goals.txt .
@@ -50,7 +50,7 @@ gmt begin
 	gmt grdgradient @earth_relief_05m_p -Nt1.2 -A270 -Gmain_intensity.nc -R${main_map_region}
 
 #	b. Plot satellite image with shadow effect and coastlines
-	gmt grdimage  @earth_day_05m -Imain_intensity.nc -R${main_map_region} -J${main_map_projection}/\${MOVIE_WIDTH} -Y0 -X0
+	gmt grdimage @earth_day_05m -Imain_intensity.nc -R${main_map_region} -J${main_map_projection}/\${MOVIE_WIDTH} -Y0 -X0
 	gmt coast -N1/thinnest
 
 #	c. Create and draw CPT
@@ -84,9 +84,9 @@ gmt end
 EOF
 
 # 5. Run the movie
-gmt movie main.sh -Iin.sh -Sbpre.sh -C${canvas_width}cx${canvas_height}cx80 -Tdates_vs_goals.txt -N${FIG} -H2 -Ml,png -Vi -Zs -Gblack -K+fo+p -D12 \
+gmt movie main.sh -Iin.sh -Sbpre.sh -C${canvas_width}cx${canvas_height}cx80 -Tdates_vs_goals.txt -N${NAME} -H2 -Ml,png -Vi -Zs -Gblack -K+fo+p -D12 \
 	-Lc0+jTR+o0.3/0.3+gwhite+h2p/-2p+r --FONT_TAG=14p --FORMAT_CLOCK_MAP=- --FORMAT_DATE_MAP=dd-mm-yyyy \
-	-Lc1+jTL+o0.3/0.3+gwhite+h2p/-2p+r # -Fmp4
+	-Lc1+jTL+o0.3/0.3+gwhite+h2p/-2p+r -Fmp4
 
 # 6. Delete temporary files
 rm gmt.history Messi_Goals.txt

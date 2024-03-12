@@ -10,11 +10,11 @@
 # Purpose: Movie of a decade of precipitation around the world
 # The movie took 2 hours to render on an 8-core Intel® Core™ i7-7700 CPU @ 3.60GHz.
 #--------------------------------------------------------------------------------
-FIG="WED-A_Vid_7" 
+NAME="WED-A_Vid_7" 
 
 # 0. Get the data from zenodo and unzip in the main directory
-#cp data/${FIG}.zip .
-#unzip -qq ${FIG}.zip
+#cp data/${NAME}.zip .
+#unzip -qq ${NAME}.zip
 
 # The following lines of code aggregate several components :
 #
@@ -293,10 +293,10 @@ EOF
 #	-N & -M for filename and poster image respectively
 #	-P for the progress circle and -L for the timestamp labelling
 #	-C for the canvas size, -D for the frame rate and -F for the file format
-gmt movie main.sh -Iinclude.sh -Sbpre.sh -Tmovie_frames.txt -N${FIG} -Ml,png \
+gmt movie main.sh -Iinclude.sh -Sbpre.sh -Tmovie_frames.txt -N${NAME} -Ml,png \
 	-Pb+jTR+w0.75c -Lc+o4c/0c --FORMAT_DATE_MAP="dd o yyyy" --FORMAT_CLOCK_MAP=- \
 	-Pb+jTR+w0.75c -Lc+o4c/0c --FORMAT_DATE_MAP="dd o yyyy" --FORMAT_CLOCK_MAP=- \
 	-D21 -Zs -V -C1080p -Fmp4
 
 # Delete temporary files
-#rm -rf ${FIG}.zip grids/ roi_results/
+#rm -rf ${NAME}.zip grids/ roi_results/

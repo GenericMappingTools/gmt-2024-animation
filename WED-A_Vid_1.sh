@@ -10,7 +10,7 @@
 # Purpose: Show short movie of the life of two simple events.
 # The movie took 53 seconds to render on an 8-core Intel® Core™ i7-3700 CPU @ 3.60GHz.
 #--------------------------------------------------------------------------------
-FIG=WED-A_Vid_1
+NAME=WED-A_Vid_1
 #
 # Create a short MP4 showing the life of two simple events.
 # Both events starts at 0 and ends at 1, but we add rise
@@ -94,7 +94,7 @@ gmt end
 EOF
 
 # Run the movie and add frame counter and horizontal time-progress bar
-gmt movie -C22cx12cx100 main.sh -Sbpre.sh -N${FIG} -T-0.5/1.5/0.01 -D24 -Fmp4 -Lc0 -Lf+jTR \
+gmt movie -C22cx12cx100 main.sh -Sbpre.sh -N${NAME} -T-0.5/1.5/0.01 -D24 -Fmp4 -Lc0 -Lf+jTR \
 -Pf+jBC+o0/1.5c+ac -M75,png -Zs -Vi
 
 # Delete temporary files

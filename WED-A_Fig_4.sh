@@ -9,9 +9,9 @@
 #
 # Purpose: Plot of the time-line of a movie with optional title and fade sequence.
 #--------------------------------------------------------------------------------
-FIG=WED-A_Fig_4
+NAME=WED-A_Fig_4
 
-gmt begin ${FIG} png
+gmt begin ${NAME} png
 	gmt set GMT_THEME cookbook
 	cat <<- EOF > Custom_annot.txt
 	0	afg	0
@@ -42,6 +42,6 @@ gmt begin ${FIG} png
 	10.5 50 [REQUIRED]
 	10.5 120 ANIMATION SEQUENCE
 	EOF
-	# Clean up
+	# Delete temporary files
 	rm -f Custom_annot.txt Timeline.txt
 gmt end show
