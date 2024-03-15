@@ -49,9 +49,9 @@ cat <<- 'EOF' > include.sh
 	date_stop="2022-06-30"
 
 	date_start_interest="2012-01-01"
-	date_stop_interest="2022-01-01"
 	#date_stop_interest="2019-11-01"
-	
+	date_stop_interest="2022-01-01"
+		
 	# 1. Generate the list of dates
 	gmt math -T${date_start_interest}T/${date_stop_interest}T/1d -o0 T = timetable.txt
 
@@ -297,11 +297,7 @@ EOF
 gmt movie main.sh -Iinclude.sh -Sbpre.sh -Tmovie_frames.txt -N${NAME} -Ml,png \
 	-Pb+jTR+w0.75c -Lc+o4c/0c --FORMAT_DATE_MAP="dd o yyyy" --FORMAT_CLOCK_MAP=- \
 	-Pb+jTR+w0.75c -Lc+o4c/0c --FORMAT_DATE_MAP="dd o yyyy" --FORMAT_CLOCK_MAP=- \
-	-D21 -V -C1080p -Fmp4 #-Zs
+	-D60 -V -C1080p -Fmp4 -Zs
 
 # Delete temporary files
 #rm -rf ${NAME}.zip grids/ roi_results/
-
- #ffmpeg -loglevel warning -f image2 -framerate 60 -y -i "/home/thor/Github/Esteban82/gmt-2024-animation/WED-A_Vid_7/WED-A_Vid_7_%04d.png" -vcodec libx264  -pix_fmt yuv420p WED-A_Vid_7_60fps.mp4
-
-  #ffmpeg -loglevel warning -f image2 -framerate 60 -y -i "/home/thor/Github/Esteban82/gmt-2024-animation/WED-A_Vid_7/WED-A_Vid_7_%04d.png" -vcodec libx264  -pix_fmt yuv420p WED-A_Vid_7_60fps_trim.mp4
