@@ -296,7 +296,6 @@ EOF
 #	-C for the canvas size, -D for the frame rate and -F for the file format
 gmt movie main.sh -Iinclude.sh -Sbpre.sh -Tmovie_frames.txt -N${NAME} -Ml,png \
 	-Pb+jTR+w0.75c -Lc+o4c/0c --FORMAT_DATE_MAP="dd o yyyy" --FORMAT_CLOCK_MAP=- \
-	-Pb+jTR+w0.75c -Lc+o4c/0c --FORMAT_DATE_MAP="dd o yyyy" --FORMAT_CLOCK_MAP=- \
 	-D60 -V -C1080p -Fmp4 -Zs
 
 # Delete temporary files

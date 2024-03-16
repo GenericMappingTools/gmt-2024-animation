@@ -82,10 +82,6 @@ gmt end
 EOF
 
 # 5. Run the movie
-# For GMT 6.5 dev
-#gmt movie main.sh -Tdistance_vs_frame.txt -Iin.sh -Sbpre.sh -Etitle.sh+d6s+fo1s -N${NAME} \
-#	-Adata/IndianaJones_RaidersMarch.mp3+e -Cfhd -Fmp4+i"-thread_queue_size 4096" -Vi -D60 -K+p #-Zs
-# For GMT 6.5
 gmt movie main.sh -Tdistance_vs_frame.txt -Iin.sh -Sbpre.sh -Etitle.sh+d6s+fo1s -N${NAME} \
 	-AIndianaJones_RaidersMarch.mp3 -Cfhd -Fmp4 -Vi -D60 -K+p -Zs
 
