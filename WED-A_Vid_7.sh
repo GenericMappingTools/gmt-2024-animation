@@ -12,9 +12,11 @@
 #--------------------------------------------------------------------------------
 NAME="WED-A_Vid_7" 
 
-# 0. Get the data from zenodo and unzip in the main directory
+# 0. Get the data to the main directory
 #cp data/${NAME}.zip .
 #unzip -qq ${NAME}.zip
+mv data/grids/ .
+mv data/roi_results/ .
 
 # The following lines of code aggregate several components :
 #
@@ -49,7 +51,7 @@ cat <<- 'EOF' > include.sh
 	date_stop="2022-06-30"
 
 	date_start_interest="2012-01-01"
-	#date_stop_interest="2019-11-01"
+	#date_stop_interest="2019-11-01"  # Date used for the article
 	date_stop_interest="2022-01-01"
 		
 	# 1. Generate the list of dates
@@ -296,7 +298,9 @@ EOF
 #	-C for the canvas size, -D for the frame rate and -F for the file format
 gmt movie main.sh -Iinclude.sh -Sbpre.sh -Tmovie_frames.txt -N${NAME} -Ml,png \
 	-Pb+jTR+w0.75c -Lc+o4c/0c --FORMAT_DATE_MAP="dd o yyyy" --FORMAT_CLOCK_MAP=- \
-	-D60 -V -C1080p -Fmp4 -Zs
+	-D60 -V -C1080p #-Fmp4 -Zs
 
 # Delete temporary files
 #rm -rf ${NAME}.zip grids/ roi_results/
+mv grids/ data/
+mv roi_results/ data/

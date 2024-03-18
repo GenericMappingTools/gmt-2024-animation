@@ -76,7 +76,7 @@ gmt begin
 	# Draw the flight path from start to now
 	gmt events distance_vs_frame.txt -W3p,red -T${MOVIE_COL2} -Es -Ar
 
-	# Plot labels that appear/disappear when plan reaches the cities
+	# Plot labels that appear/disappear when plane reaches the cities
 	gmt events labels.txt -T${MOVIE_COL2} -L500 -Mt100+c100 -F+f18p+jTC -Dj1c -E+r100+f100+o-250 -Gred -Sc0.3c
 gmt end
 EOF

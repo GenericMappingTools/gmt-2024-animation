@@ -32,8 +32,7 @@ figs:
 
 movies:
 	for script in $(MOVIES) ; do\
-		time bash $$script 2> $$script.log ; \
-		gmt --version >> $$script.log ; \
+		bash $$script; \
 	done
 
 all:	figs movies
