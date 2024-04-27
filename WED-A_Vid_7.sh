@@ -45,7 +45,7 @@ mv data/roi_results/ .
 #		(7) Declare the paper/plots sizes and the text format for "time"
 #		(8) Declare the axis parameters for the time-series
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-cat <<- 'EOF' > include.sh
+cat <<- 'EOF' > in.sh
 	# Data period
 	date_start="2010-01-01"
 	date_stop="2022-06-30"
@@ -296,7 +296,7 @@ EOF
 #	-N & -M for filename and poster image respectively
 #	-P for the progress circle and -L for the timestamp labelling
 #	-C for the canvas size, -D for the frame rate and -F for the file format
-gmt movie main.sh -Iinclude.sh -Sbpre.sh -Tmovie_frames.txt -N${NAME} -Ml,png \
+gmt movie main.sh -Iin.sh -Sbpre.sh -Tmovie_frames.txt -N${NAME} -Ml,png \
 	-Pb+jTR+w0.75c -Lc+o4c/0c --FORMAT_DATE_MAP="dd o yyyy" --FORMAT_CLOCK_MAP=- \
 	-D60 -V -C1080p -Zs -Fmp4
 
