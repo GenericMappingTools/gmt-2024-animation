@@ -37,7 +37,7 @@ gmt begin
 	END
 
 	# Place the GMT logo and Indiana Jones movie logo along the bottom
-	gmt image data/IndianaJones_Logo.png -DjBR+jBR+w0/3c+o2/1c
+	gmt image IndianaJones_Logo.png -DjBR+jBR+w0/3c+o2/1c
 	gmt logo -DjBL+h3c+o2c/1c
 gmt end
 EOF
