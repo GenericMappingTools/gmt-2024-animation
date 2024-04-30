@@ -42,4 +42,4 @@ gmt end
 EOF
 
 # 3. Run the movie
-gmt movie main.sh -Sbpre.sh -N${NAME} -Tdistance_vs_frame.txt -Cfhd -Fmp4 -Zs -Mf,png -Vi
+gmt movie main.sh -Sbpre.sh -N${NAME} -Tdistance_vs_frame.txt -Cfhd -Fmp4 -Zs -Ml,png -Vi
