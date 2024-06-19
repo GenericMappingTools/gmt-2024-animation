@@ -9,4 +9,4 @@ Preprint version:
 Wessel, P., Esteban, F., & Delaviel‐Anger, G. (2024). The Generic Mapping Tools and Animations for the Masses. ESS Open Archive . March 25, 2024.
 DOI: 10.22541/essoar.171104119.93847599/v2
 
-For this scripts GMT version 6.5 should be used.
+For these scripts GMT version 6.5 should be used.
